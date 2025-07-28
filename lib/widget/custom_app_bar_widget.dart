@@ -6,8 +6,10 @@ class CustomAppBarWidget extends StatelessWidget implements PreferredSize {
   final double  height;
   final String title;
   final List<Widget> children;
+  final double ? radius;
+  final Color ? backgroundColor;
 
-  const CustomAppBarWidget({super.key, required this.height, required this.title, required this.children});
+  const CustomAppBarWidget({super.key, required this.height, required this.title, required this.children, this.backgroundColor, this.radius});
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +25,9 @@ class CustomAppBarWidget extends StatelessWidget implements PreferredSize {
           width: double.infinity, height: double.infinity,
 
           decoration: BoxDecoration(
-            color: Color.fromRGBO(230, 243, 253, 0.5),
+            color: backgroundColor ?? AppColors.primaryAppBarColor,
             borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(35.r)
+              bottom: Radius.circular(radius ?? 35.r)
             )
           ),
           child: Column(

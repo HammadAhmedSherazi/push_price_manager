@@ -103,6 +103,11 @@ class AppTheme {
       scaffoldBackgroundColor: Colors.white,
       bottomNavigationBarTheme: bottomNavigationBarLightTheme,
       inputDecorationTheme: inputDecorationLightTheme,
+      datePickerTheme:  DatePickerThemeData(
+  headerBackgroundColor: AppColors.primaryColor,
+  
+),
+      
       
       switchTheme: SwitchThemeData(
  

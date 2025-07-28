@@ -2,6 +2,7 @@
 import 'package:flutter/rendering.dart';
 import 'package:push_price_manager/utils/extension.dart';
 
+
 import '../../export_all.dart';
 
 class NavigationView extends StatefulWidget {
@@ -93,7 +94,37 @@ class _NavigationViewState extends State<NavigationView> {
   Widget build(BuildContext context) {
      final List<MenuDataModel> menuData = [
 
+    MenuDataModel(title: "Home", icon: Assets.home, onTap: () {
+      AppRouter.back();
+      setState(() {
+        selectIndex = 0;
+      });
+    }),
+    MenuDataModel(title: "Pending Listings", icon: Assets.pendingListing, onTap: () {
+      AppRouter.back();
+      setState(() {
+        selectIndex = 1;
+      });
+    }),
+     MenuDataModel(title: "Live Listings", icon: Assets.menuOrderIcon, onTap: () {
+      AppRouter.back();
+      setState(() {
+        selectIndex = 2;
+      });
+    }),
+     MenuDataModel(title: "Analytics", icon: Assets.menuAnaylicIcon, onTap: () {
+      AppRouter.push(AnalyticsView());
+    }),
+    MenuDataModel(title: "Profile", icon: Assets.profile, onTap: () {
+      AppRouter.back();
+      setState(() {
+        selectIndex = 3;
+      });
+    }),
     MenuDataModel(title: "Settings", icon: Assets.menuSettingIcon, onTap: () => AppRouter.push(SettingView())),
+    MenuDataModel(title: "Tutorial", icon: Assets.menuTutorialIcon, onTap: () {
+      AppRouter.push(TutorialView());
+    }),
     MenuDataModel(title: "Help & Feedback", icon: Assets.menuHelpIcon, onTap: () => AppRouter.push(HelpFeedbackView())),
   ];
     return Scaffold(
@@ -182,7 +213,7 @@ class _NavigationViewState extends State<NavigationView> {
                           final menu = menuData[index];
                           return ListTile(
                             onTap: menu.onTap,
-                            leading: SvgPicture.asset(menu.icon),
+                            leading: SvgPicture.asset(menu.icon,  width: 18.r, colorFilter: index != 2? ColorFilter.mode(AppColors.secondaryColor, BlendMode.srcIn): null, ),
                             title: Text(menu.title),
                             titleTextStyle: context.textStyle.displayMedium!.copyWith(fontSize: 16.sp),
                           );

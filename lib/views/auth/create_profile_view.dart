@@ -13,16 +13,16 @@ class CreateProfileView extends StatefulWidget {
 
 class _CreateProfileViewState extends State<CreateProfileView> {
   late final TextEditingController nameTextController;
-  late final TextEditingController addressTextController;
+  late final TextEditingController employeeIdTextController;
   late final TextEditingController phoneTextController;
   late final TextEditingController emailTextController;
 
   @override
   void initState() {
     nameTextController = TextEditingController(text: widget.isEdit! ?"John Smith" : null);
-    addressTextController = TextEditingController( text: widget.isEdit! ?"Abc street, Lorem Ipsum" : null);
+    employeeIdTextController = TextEditingController( text: widget.isEdit! ?"Abc street, Lorem Ipsum" : null);
     phoneTextController = TextEditingController(text: widget.isEdit! ?"00000000" : null);
-    emailTextController = TextEditingController(text: widget.isEdit! ?"Abc@domain.com" : null);
+    emailTextController = TextEditingController(text: widget.isEdit! ?"123 456 789" : null);
     super.initState();
   }
   @override
@@ -33,7 +33,7 @@ class _CreateProfileViewState extends State<CreateProfileView> {
           AppRouter.back();
         }
         else{
-        AppRouter.push(SubscriptionPlanView(isPro: true,));
+        
 
         }
       },
@@ -56,11 +56,11 @@ class _CreateProfileViewState extends State<CreateProfileView> {
           ),
         ),
         10.ph,
-        TextFormField(
-          controller: addressTextController,
+       TextFormField(
+          controller: emailTextController,
           decoration: InputDecoration(
-            labelText: "Address",
-            hintText: "Address (can add multiple addresses)"
+            labelText: "Email",
+            hintText: "Enter Email"
           ),
         ),
         10.ph,
@@ -75,12 +75,13 @@ class _CreateProfileViewState extends State<CreateProfileView> {
         ),
         10.ph,
         TextFormField(
-          controller: emailTextController,
+          controller: employeeIdTextController,
           decoration: InputDecoration(
-            labelText: "Email Address",
-            hintText: "Enter Email"
+            labelText: "Employee ID",
+            hintText: "Enter Employee ID"
           ),
         ),
+        
        
       ],
       

@@ -11,7 +11,8 @@ class CustomScreenTemplate extends StatelessWidget {
   final VoidCallback ? onButtonTap;
   final Widget? actionWidget;
   final Widget child;
-  const CustomScreenTemplate({super.key, required this.title, this.bottomButtonText, this.customBottomWidget, this.showBottomButton = false, this.onBackCall, this.onButtonTap, required this.child, this.actionWidget});
+  final PreferredSizeWidget? bottom;
+  const CustomScreenTemplate({super.key, required this.title, this.bottomButtonText, this.customBottomWidget, this.showBottomButton = false, this.onBackCall, this.onButtonTap, required this.child, this.actionWidget, this.bottom});
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +41,7 @@ class CustomScreenTemplate extends StatelessWidget {
               ),
             ),
             actions: actionWidget != null ? [actionWidget!] : null,
+            bottom: bottom,
         
           ),
           body: Column(

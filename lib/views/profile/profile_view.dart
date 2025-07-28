@@ -47,22 +47,42 @@ class _ProfileViewState extends State<ProfileView> {
                 child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Row(
+                    children: [
+                      Text("Personal Information", style: context.textStyle.displayMedium,)
+                    ],
+                  ),
+                  10.ph,
                     ProfileTitleWidget(
                       title: "Name",
                       value: "John Smith",
                     ),
-                    ProfileTitleWidget(
-                      title: "Address",
-                      value: "Abc street, Lorem Ipsum",
+                   ProfileTitleWidget(
+                      title: "Email Address",
+                      value: "Abc@domain.com",
                     ),
                     ProfileTitleWidget(
                       title: "Phone Number",
                       value: "00000000",
                     ),
                     ProfileTitleWidget(
-                      title: "Email Address",
-                      value: "Abc@domain.com",
+                      title: "Employee ID",
+                      value: "123 456 789",
                     ),
+                    10.ph,
+                     Row(
+                    children: [
+                      Text("Assigned Stores", style: context.textStyle.displayMedium,)
+                    ],
+                  ),
+                  10.ph,
+                  ProfileTitleWidget(title: "Store Branch Code / Name", value: "123 456 789"),
+                  ProfileTitleWidget(title: "Store Address", value: "Abc Street, lorem ipsum"),
+                  ProfileTitleWidget(title: "Operational Hours", value: "09AM To 6PM"),
+                  ProfileTitleWidget(title: "Store Branch Code / Name", value: "123 456 789"),
+                  ProfileTitleWidget(title: "Store Address", value: "Abc Street, lorem ipsum"),
+                  ProfileTitleWidget(title: "Operational Hours", value: "09AM To 6PM"),
+                  
                    
                 ],
                           ),

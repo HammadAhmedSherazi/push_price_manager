@@ -44,7 +44,7 @@ class CustomBottomNavBarWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               spacing: 10,
               children: [
-                  SvgPicture.asset(item.icon, colorFilter: ColorFilter.mode(selectColor, BlendMode.srcIn),),
+                  SvgPicture.asset( index != 2?item.icon : Assets.selectliveListing, colorFilter: index != 2? ColorFilter.mode(selectColor, BlendMode.srcIn) : null,),
                   Text(item.title, style: context.textStyle.displaySmall!.copyWith(
                     color: selectColor
                   ),)
