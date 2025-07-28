@@ -33,6 +33,9 @@ abstract class  Assets {
   static const String pendingListing = "${iconPath}pending_listing_icon.svg";
   static const String liveListing = "${iconPath}live_listing_icon.svg";
   static const String selectliveListing = "${iconPath}order_select_icon.svg";
+  static const String productListingIcon = "${iconPath}product_listing_icon.svg";
+  static const String productRequestIcon = "${iconPath}product_request_icon.svg";
+
  
 
 
@@ -42,6 +45,11 @@ abstract class  Assets {
   static const String menuSettingIcon = "${iconPath}menu_setting_icon.svg";
   static const String menuHelpIcon = "${iconPath}menu_help_icon.svg";
   static const String menuOrderIcon = "${iconPath}menu_order_icon.svg";
+  static const String menuPendingListingIcon = "${iconPath}menu_pending_listing_icon.svg";
+  static const String menuHomeIcon = "${iconPath}menu_home_icon.svg";
+  static const String menuProfileIcon = "${iconPath}menu_profile_icon.svg";
+  static const String menuProductRequestIcon = "${iconPath}menu_product_request_icon.svg";
+  static const String menuProductListIcon = "${iconPath}menu_product_list_icon.svg";
 
 
   static const String groceryBag = "${imagePath}grocery_bag.png";

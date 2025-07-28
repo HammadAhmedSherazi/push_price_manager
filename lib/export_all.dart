@@ -50,7 +50,13 @@ export './views/manager/analytics/analytics_view.dart';
 export './views/manager/analytics/sales_view.dart';
 export 'views/manager/analytics/user_favorite_view.dart';
 export './views/manager/analytics/user_favorite_product_detail_view.dart';
-
+export './views/employee/home/employee_home_view.dart';
+export './views/employee/list_request/employee_list_request_view.dart';
+export './views/employee/product_listing/product_listing_view.dart';
+export './views/employee/profile/employee_profile_view.dart';
+export './views/employee/list_product/list_product_view.dart';
+export './views/employee/list_request/list_request_product_detail_view.dart';
+export './views/employee/list_request/listing_product_view.dart';
 
 
 //WIDGETS
@@ -73,6 +79,7 @@ export './widget/select_chip_widget.dart';
 export './widget/product_list_title_widget.dart';
 export './widget/custom_drop_down_widget.dart';
 export './widget/custom_date_select_widget.dart';
+export './widget/product_display_widget.dart';
 
 
 

@@ -1,17 +1,16 @@
 import 'package:push_price_manager/utils/extension.dart';
+
 import '../../../export_all.dart';
 
-
-class HomeView extends StatefulWidget {
+class EmployeeHomeView extends StatefulWidget {
   final ScrollController scrollController;
-  const HomeView({super.key, required this.scrollController});
+  const EmployeeHomeView({super.key, required this.scrollController});
 
   @override
-  State<HomeView> createState() => _HomeViewState();
+  State<EmployeeHomeView> createState() => _EmployeeHomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
-
+class _EmployeeHomeViewState extends State<EmployeeHomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,17 +22,18 @@ class _HomeViewState extends State<HomeView> {
             children: [
               UserProfileWidget(radius: 18.r, imageUrl: Assets.userImage, borderWidth: 1.4,),
               10.pw,
-              Text("ABC BUSINESS", style: context.textStyle.displayMedium,),
-              Spacer(),
+              Expanded(child: Text("ABC BUSINESS", style: context.textStyle.displayMedium,)),
+            
               CustomButtonWidget(
                 height: 30.h,
-                width: 120.w,
+                width: 110.w,
                 title: "", onPressed: (){
-                  AppRouter.push(ListingRequestView());
+                  AppRouter.push(ListProductView());
                 }, child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.add),
-                  Text("Listing Request", style: context.textStyle.bodySmall!.copyWith(
+                  Text("List Product", style: context.textStyle.bodySmall!.copyWith(
                     color: Colors.white
                   ),)
                 ],
@@ -46,17 +46,17 @@ class _HomeViewState extends State<HomeView> {
         padding: EdgeInsets.all(AppTheme.horizontalPadding),
         controller: widget.scrollController,
         children: [
-          PendingListingSection(),
+          ListingRequestSection(),
           30.ph,
-          LiveListingSection()
+          ProductListingSection()
         ],
       ),
     );
   }
 }
 
-class PendingListingSection extends StatelessWidget {
-  const PendingListingSection({
+class ListingRequestSection extends StatelessWidget {
+  const ListingRequestSection({
     super.key,
   });
 
@@ -68,7 +68,7 @@ class PendingListingSection extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Pending Listings", style: context.textStyle.displayMedium,),
+              Text("Listing Request", style: context.textStyle.displayMedium,),
               TextButton(
                 style: ButtonStyle(
                   padding: WidgetStatePropertyAll(EdgeInsets.zero),
@@ -94,8 +94,8 @@ class PendingListingSection extends StatelessWidget {
   }
 }
 
-class LiveListingSection extends StatelessWidget {
-  const LiveListingSection({
+class ProductListingSection extends StatelessWidget {
+  const ProductListingSection({
     super.key,
   });
 
@@ -107,7 +107,7 @@ class LiveListingSection extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Live Listings", style: context.textStyle.displayMedium,),
+              Text("Product Listings", style: context.textStyle.displayMedium,),
               TextButton(
                 style: ButtonStyle(
                   padding: WidgetStatePropertyAll(EdgeInsets.zero),

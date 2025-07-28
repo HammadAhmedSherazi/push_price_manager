@@ -2,7 +2,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:push_price_manager/utils/extension.dart';
 
-
 import '../../export_all.dart';
 
 class NavigationView extends StatefulWidget {
@@ -34,7 +33,12 @@ class _NavigationViewState extends State<NavigationView> {
         setState(() => _isBottomBarVisible = true);
       }
     });
-    bottomNavItems = [
+    bottomNavItems = AppConstant.userType == UserType.employee ? [
+    BottomDataModel(title: "Home", icon: Assets.home, child: EmployeeHomeView(scrollController: scrollController ,)),
+    BottomDataModel(title: "Listing Requests", icon: Assets.productRequestIcon, child: EmployeeListRequestView(scrollController: scrollController,)),
+    BottomDataModel(title: "Product Listing", icon: Assets.productListingIcon, child: ProductListingView(scrollController: scrollController,)),
+    BottomDataModel(title: "Profile", icon: Assets.profile, child: EmployeeProfileView()),
+  ] :[
     BottomDataModel(title: "Home", icon: Assets.home, child: HomeView(scrollController: scrollController ,)),
     BottomDataModel(title: "Pending Listings", icon: Assets.pendingListing, child: PendingListingView(scrollController: scrollController,)),
     BottomDataModel(title: "Live Listing", icon: Assets.liveListing, child: LiveListingView(scrollController: scrollController,)),
@@ -92,15 +96,47 @@ class _NavigationViewState extends State<NavigationView> {
 
   @override
   Widget build(BuildContext context) {
-     final List<MenuDataModel> menuData = [
+     final List<MenuDataModel> menuData = AppConstant.userType == UserType.employee ? [
 
-    MenuDataModel(title: "Home", icon: Assets.home, onTap: () {
+    MenuDataModel(title: "Home", icon: Assets.menuHomeIcon, onTap: () {
       AppRouter.back();
       setState(() {
         selectIndex = 0;
       });
     }),
-    MenuDataModel(title: "Pending Listings", icon: Assets.pendingListing, onTap: () {
+    MenuDataModel(title: "Listing Request", icon: Assets.menuProductRequestIcon, onTap: () {
+      AppRouter.back();
+      setState(() {
+        selectIndex = 1;
+      });
+    }),
+     MenuDataModel(title: "Product Listing", icon: Assets.menuProductListIcon, onTap: () {
+      AppRouter.back();
+      setState(() {
+        selectIndex = 2;
+      });
+    }),
+    
+    MenuDataModel(title: "Profile", icon: Assets.menuProfileIcon, onTap: () {
+      AppRouter.back();
+      setState(() {
+        selectIndex = 3;
+      });
+    }),
+    MenuDataModel(title: "Settings", icon: Assets.menuSettingIcon, onTap: () => AppRouter.push(SettingView())),
+    MenuDataModel(title: "Tutorial", icon: Assets.menuTutorialIcon, onTap: () {
+      AppRouter.push(TutorialView());
+    }),
+    MenuDataModel(title: "Help & Feedback", icon: Assets.menuHelpIcon, onTap: () => AppRouter.push(HelpFeedbackView())),
+  ]: [
+
+    MenuDataModel(title: "Home", icon: Assets.menuHomeIcon, onTap: () {
+      AppRouter.back();
+      setState(() {
+        selectIndex = 0;
+      });
+    }),
+    MenuDataModel(title: "Pending Listings", icon: Assets.menuPendingListingIcon, onTap: () {
       AppRouter.back();
       setState(() {
         selectIndex = 1;
@@ -115,7 +151,7 @@ class _NavigationViewState extends State<NavigationView> {
      MenuDataModel(title: "Analytics", icon: Assets.menuAnaylicIcon, onTap: () {
       AppRouter.push(AnalyticsView());
     }),
-    MenuDataModel(title: "Profile", icon: Assets.profile, onTap: () {
+    MenuDataModel(title: "Profile", icon: Assets.menuProfileIcon, onTap: () {
       AppRouter.back();
       setState(() {
         selectIndex = 3;
@@ -213,7 +249,7 @@ class _NavigationViewState extends State<NavigationView> {
                           final menu = menuData[index];
                           return ListTile(
                             onTap: menu.onTap,
-                            leading: SvgPicture.asset(menu.icon,  width: 18.r, colorFilter: index != 2? ColorFilter.mode(AppColors.secondaryColor, BlendMode.srcIn): null, ),
+                            leading: SvgPicture.asset(menu.icon,  ),
                             title: Text(menu.title),
                             titleTextStyle: context.textStyle.displayMedium!.copyWith(fontSize: 16.sp),
                           );
