@@ -38,10 +38,19 @@ int quantity = 1;
       showBottomButton: true,
       bottomButtonText: "next",
       onButtonTap: (){
-        AppRouter.push(AddDiscountView(
+        if(AppConstant.userType == UserType.manager){
+          AppRouter.push(AddDiscountView(
           isInstant: types[1] == selectType,
           
         ));
+        }
+        else{
+          AppRouter.customback(
+                times:  2
+              );
+        AppRouter.push(SuccessListingRequestView(message: "Product Listing Edit Successful!"));
+        }
+        
       },
       title: widget.title, child: ListView(
         padding: EdgeInsets.symmetric(vertical: AppTheme.horizontalPadding),

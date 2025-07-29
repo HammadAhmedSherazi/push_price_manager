@@ -22,7 +22,15 @@ class _SelectListingTypeViewState extends State<SelectListingTypeView> {
     return CustomScreenTemplate(
       bottomButtonText: "next",
       onButtonTap: (){
+        if(AppConstant.userType == UserType.employee){
+       
+        AppRouter.push(ListingProductView(type: types[selectIndex],popTime: 6,));
+
+        }
+        else{
         AppRouter.push(SelectStoreView());
+
+        }
       },
       showBottomButton: true,
       title: "Listing Type", child: SizedBox(

@@ -12,7 +12,7 @@ class ListRequestProductDetailView extends StatelessWidget {
       showBottomButton: true,
       bottomButtonText: "next",
       onButtonTap: (){
-        AppRouter.push(ListingProductView(type: type));
+        AppRouter.push(ListingProductView(type: type, popTime: 2,));
       },
       title: "Product Listings - List Product", child: 
       ListView(

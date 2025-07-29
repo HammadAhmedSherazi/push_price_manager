@@ -4,7 +4,8 @@ import '../../../export_all.dart';
 
 class ListingProductView extends StatefulWidget {
   final String type;
-  const ListingProductView({super.key, required this.type});
+  final int popTime;
+  const ListingProductView({super.key, required this.type, required this.popTime});
 
   @override
   State<ListingProductView> createState() => _ListingProductViewState();
@@ -32,7 +33,7 @@ class _ListingProductViewState extends State<ListingProductView> {
       showBottomButton: true,
       bottomButtonText: "list now",
       onButtonTap: (){
-        AppRouter.customback(times: 2);
+        AppRouter.customback(times: widget.popTime);
         AppRouter.push(SuccessListingRequestView(message: "Product Listing Successful!"));
       },
       title: "List Product", child: Container(

@@ -28,7 +28,7 @@ class _EmployeeHomeViewState extends State<EmployeeHomeView> {
                 height: 30.h,
                 width: 110.w,
                 title: "", onPressed: (){
-                  AppRouter.push(ListProductView());
+                  AppRouter.push(ListingRequestView());
                 }, child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                 children: [

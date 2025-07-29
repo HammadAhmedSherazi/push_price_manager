@@ -26,7 +26,7 @@ class _PendingListingViewState extends State<PendingListingView> {
         height: context.screenheight * 0.22,
         backgroundColor: Colors.transparent,
         radius: 0.0,
-        title: "Pending Listing- Select Product",
+        title: AppConstant.userType == UserType.employee ? "Product Listings - Select Product" : "Pending Listing - Select Product",
         children: [
           15.ph,
           Expanded( 
@@ -52,7 +52,7 @@ class _PendingListingViewState extends State<PendingListingView> {
         setState(() {
           selectIndex = index;
         });
-        AppRouter.push(ProductAddDetailView(title: "Pending Listing- Select Product"));
+        // AppRouter.push(ProductAddDetailView(title: AppConstant.userType == UserType.employee ? "Product Listings - Select Product" : "Pending Listing - Select Product"));
 
       },
       child: Container(

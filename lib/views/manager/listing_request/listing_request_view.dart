@@ -7,81 +7,53 @@ class ListingRequestView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBarWidget(
-        height: context.screenheight * 0.15,
-        title: "Listing Request - Select Product",
+    return CustomScreenTemplate(
+      showBottomButton: true,
+      bottomButtonText: "scan",
+      onButtonTap: (){
+        AppRouter.push(ScanView());
+      },
+      title: AppConstant.userType == UserType.employee? "Search From Database": "Listing Request - Select Product", child: Column(
         children: [
-          CustomSearchBarWidget(
+          Padding(padding:EdgeInsets.all(AppTheme.horizontalPadding) , child:  CustomSearchBarWidget(
             hintText: "Hinted search text",
             suffixIcon: SvgPicture.asset(Assets.filterIcon),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Expanded(child: ListView.separated(
-            padding: EdgeInsets.all(AppTheme.horizontalPadding),
+          ),),
+           Expanded(child: ListView.separated(
+            padding: EdgeInsets.symmetric(horizontal: AppTheme.horizontalPadding),
             itemBuilder: (context, index)=>ProductDisplayWidget(
               onTap: (){},
-            ), separatorBuilder: (context, index)=> 10.ph, itemCount: 10)),
-          Padding(
-            padding: EdgeInsets.all(AppTheme.horizontalPadding),
-            child: CustomButtonWidget(title: "scan", onPressed: (){
-              AppRouter.push(ScanView());
-            }),
-          )
+            ), separatorBuilder: (context, index)=> 10.ph, itemCount: 10))
         ],
-      ),
-    );
+      ));
+    // return Scaffold(
+    //   appBar: CustomAppBarWidget(
+    //     height: context.screenheight * 0.15,
+    //     title: AppConstant.userType == UserType.employee? "Search From Database": "Listing Request - Select Product",
+    //     children: [
+          // CustomSearchBarWidget(
+          //   hintText: "Hinted search text",
+          //   suffixIcon: SvgPicture.asset(Assets.filterIcon),
+          // ),
+    //     ],
+    //   ),
+    //   body: Column(
+    //     children: [
+          // Expanded(child: ListView.separated(
+          //   padding: EdgeInsets.all(AppTheme.horizontalPadding),
+          //   itemBuilder: (context, index)=>ProductDisplayWidget(
+          //     onTap: (){},
+          //   ), separatorBuilder: (context, index)=> 10.ph, itemCount: 10)),
+    //       Padding(
+    //         padding: EdgeInsets.all(AppTheme.horizontalPadding),
+    //         child: CustomButtonWidget(title: "scan", onPressed: (){
+    //           AppRouter.push(ScanView());
+    //         }),
+    //       )
+    //     ],
+    //   ),
+    // );
   }
 }
 
-class ProductDisplayWidget extends StatelessWidget {
-  final VoidCallback onTap;
-  const ProductDisplayWidget({
-    super.key,
-    required this.onTap
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(
-                vertical: 10.r,
-                horizontal: 20.r,
-              ),
-      decoration: AppTheme.productBoxDecoration,
-      child: Row(
-        spacing: 10,
-        children: [
-          Image.asset(Assets.groceryBag, width: 57.w),
-          Expanded(child: Column(
-            spacing: 10,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("ABC Product", style: context.textStyle.bodyMedium,),
-              Row(
-                children: [
-                  Expanded(
-                    child: Text("ABC Category", style:  context.textStyle.bodySmall!.copyWith(
-                                      color: AppColors.primaryTextColor
-                                          .withValues(alpha: 0.7),
-                                    ),),
-                  ),
-                  Text("See Details", style: context.textStyle.bodySmall!.copyWith(
-                    color: AppColors.primaryColor,
-                    decoration: TextDecoration.underline
-                  ),)
-                ],
-              ),
-            ],
-          ))
-        ],
-      ),
-                ),
-    );
-  }
-}

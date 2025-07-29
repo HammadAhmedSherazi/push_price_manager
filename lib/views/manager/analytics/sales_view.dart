@@ -311,8 +311,8 @@ class _SalesViewState extends State<SalesView> {
             show: true,
             gradient: LinearGradient(
               colors: [
-                AppColors.secondaryColor.withOpacity(0.3),
-                AppColors.secondaryColor.withOpacity(0),
+                AppColors.secondaryColor.withValues(alpha: 0.3),
+                AppColors.secondaryColor.withValues(alpha:0.5),
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,

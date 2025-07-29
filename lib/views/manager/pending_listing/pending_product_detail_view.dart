@@ -15,11 +15,17 @@ class PendingProductDetailView extends StatelessWidget {
         child: Column(
           spacing: 10,
           children: [
+            if(AppConstant.userType == UserType.manager)
             CustomButtonWidget(title: "next", onPressed: (){
               
             }),
+            if(AppConstant.userType == UserType.employee)
+            CustomButtonWidget(title: "edit", onPressed: (){
+               AppRouter.push(ProductAddDetailView(title: "Product Listings - List Product"));
+            }),
+            if(AppConstant.userType == UserType.manager)
             CustomOutlineButtonWidget(title: "edit", onPressed: (){
-              AppRouter.push(ProductAddDetailView(title: "Product Listings - List Product"));
+              AppRouter.push(ProductAddDetailView(title: "Pending Listings - List Product"));
             }),
             CustomButtonWidget(title: "delete", onPressed: (){}, color: Color(0xffB80303),)
           ],

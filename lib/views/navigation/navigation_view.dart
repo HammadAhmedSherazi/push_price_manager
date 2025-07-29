@@ -36,8 +36,8 @@ class _NavigationViewState extends State<NavigationView> {
     bottomNavItems = AppConstant.userType == UserType.employee ? [
     BottomDataModel(title: "Home", icon: Assets.home, child: EmployeeHomeView(scrollController: scrollController ,)),
     BottomDataModel(title: "Listing Requests", icon: Assets.productRequestIcon, child: EmployeeListRequestView(scrollController: scrollController,)),
-    BottomDataModel(title: "Product Listing", icon: Assets.productListingIcon, child: ProductListingView(scrollController: scrollController,)),
-    BottomDataModel(title: "Profile", icon: Assets.profile, child: EmployeeProfileView()),
+    BottomDataModel(title: "Product Listing", icon: Assets.productListingIcon, child: PendingListingView(scrollController: scrollController,)),
+    BottomDataModel(title: "Profile", icon: Assets.profile, child: ProfileView()),
   ] :[
     BottomDataModel(title: "Home", icon: Assets.home, child: HomeView(scrollController: scrollController ,)),
     BottomDataModel(title: "Pending Listings", icon: Assets.pendingListing, child: PendingListingView(scrollController: scrollController,)),

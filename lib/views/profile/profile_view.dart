@@ -69,7 +69,8 @@ class _ProfileViewState extends State<ProfileView> {
                       title: "Employee ID",
                       value: "123 456 789",
                     ),
-                    10.ph,
+                    if(AppConstant.userType == UserType.manager)...[
+                        10.ph,
                      Row(
                     children: [
                       Text("Assigned Stores", style: context.textStyle.displayMedium,)
@@ -83,7 +84,16 @@ class _ProfileViewState extends State<ProfileView> {
                   ProfileTitleWidget(title: "Store Address", value: "Abc Street, lorem ipsum"),
                   ProfileTitleWidget(title: "Operational Hours", value: "09AM To 6PM"),
                   
-                   
+             
+                    ],
+                    if(AppConstant.userType == UserType.employee)...[
+                        ProfileTitleWidget(title: "Store Branch Code / Name", value: "123 456 789"),
+                  ProfileTitleWidget(title: "Store Address", value: "Abc Street, lorem ipsum"),
+                  ProfileTitleWidget(title: "Operational Hours", value: "09AM To 6PM"),
+                
+
+                    ]
+                        
                 ],
                           ),
               )),
