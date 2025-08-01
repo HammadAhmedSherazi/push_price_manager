@@ -63,10 +63,7 @@ _opacity = Tween<double>(begin: 0, end: 1).animate(
     return Scaffold(
       
       body: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: 50.r,
-          horizontal: AppTheme.horizontalPadding
-        ),
+        padding:  EdgeInsets.fromLTRB(AppTheme.horizontalPadding, 50.r, AppTheme.horizontalPadding, 10.r),
         width: double.infinity,
         height: double.infinity,
         child: Column(

@@ -20,32 +20,42 @@ class MyApp extends StatelessWidget {
     
       // Use builder only if you need to use library outside ScreenUtilInit context
       builder: (_ , child) {
-        return MaterialApp(
-          navigatorKey: AppRouter.navKey,
-    //       localizationsDelegates: [
-
-    //    GlobalMaterialLocalizations.delegate,
-
-    //    GlobalWidgetsLocalizations.delegate,
-
-    //    GlobalCupertinoLocalizations.delegate,
-
-    //  ],
-     supportedLocales: [
-
-       const Locale('en', ""), // English
-
-       const Locale('es', ""), // Spanish
-
-       // Add more languages here
-
-     ],
-
-     locale: Locale('en'),
-          debugShowCheckedModeBanner: false,
-          title: 'Push Price',
-          theme: AppTheme.lightTheme,
-          home: child,
+        return Container(
+          color: Colors.white,
+          child: SafeArea(
+            top: false,
+            bottom: false,
+            minimum: EdgeInsets.only(
+            bottom: MediaQuery.of(context).padding.bottom
+          ),
+            child: MaterialApp(
+              navigatorKey: AppRouter.navKey,
+                //       localizationsDelegates: [
+            
+                //    GlobalMaterialLocalizations.delegate,
+            
+                //    GlobalWidgetsLocalizations.delegate,
+            
+                //    GlobalCupertinoLocalizations.delegate,
+            
+                //  ],
+                 supportedLocales: [
+            
+                   const Locale('en', ""), // English
+            
+                   const Locale('es', ""), // Spanish
+            
+                   // Add more languages here
+            
+                 ],
+            
+                 locale: Locale('en'),
+              debugShowCheckedModeBanner: false,
+              title: 'Push Price Store',
+              theme: AppTheme.lightTheme,
+              home: child,
+            ),
+          ),
         );
       },
       useInheritedMediaQuery: true,

@@ -168,6 +168,8 @@ class _NavigationViewState extends State<NavigationView> {
       drawerEnableOpenDragGesture: false,
       extendBody: true,
       drawer: SafeArea(
+        top: true,
+        bottom: false,
         child: Drawer(
           width: context.screenwidth * 0.8,
           shape: RoundedRectangleBorder(
