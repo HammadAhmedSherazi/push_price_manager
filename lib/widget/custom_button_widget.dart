@@ -41,6 +41,7 @@ class CustomButtonWidget extends StatelessWidget {
       height: height ?? 40.h,
       child: ElevatedButton(
           style: ButtonStyle(
+            animationDuration: Duration(milliseconds: 300),
             elevation: isElevated!? null : const WidgetStatePropertyAll(0.0),
             alignment: Alignment.center,
             backgroundColor:
@@ -98,6 +99,7 @@ class CustomOutlineButtonWidget extends StatelessWidget {
       height: height ?? 40.h,
       child: OutlinedButton(
           style: ButtonStyle(
+            animationDuration: Duration(milliseconds: 300),
               elevation: const WidgetStatePropertyAll(0.0),
               alignment: Alignment.center,
               side: WidgetStatePropertyAll(

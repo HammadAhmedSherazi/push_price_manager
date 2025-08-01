@@ -81,6 +81,32 @@ class _CreateProfileViewState extends State<CreateProfileView> {
             hintText: "Enter Employee ID"
           ),
         ),
+        if(AppConstant.userType == UserType.employee)...[
+          10.ph,
+            TextFormField(
+          controller: employeeIdTextController,
+          decoration: InputDecoration(
+            labelText: "Store Branch Code/ Name",
+            hintText: "Enter Store Branch Code/Name"
+          ),
+        ),
+        10.ph,
+            TextFormField(
+          controller: employeeIdTextController,
+          decoration: InputDecoration(
+            labelText: "Store Address",
+            hintText: "Enter Store Address"
+          ),
+        ),
+        10.ph,
+            TextFormField(
+          controller: employeeIdTextController,
+          decoration: InputDecoration(
+            labelText: "Operational Hours",
+            hintText: "Enter Operational Hours"
+          ),
+        ),
+        ]
         
        
       ],

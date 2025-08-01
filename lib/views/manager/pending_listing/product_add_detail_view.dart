@@ -3,7 +3,8 @@ import '../../../export_all.dart';
 
 class ProductAddDetailView extends StatefulWidget {
   final String title;
-  const ProductAddDetailView({super.key, required this.title});
+  final String type;
+  const ProductAddDetailView({super.key, required this.title, required this.type});
 
   @override
   State<ProductAddDetailView> createState() => _ProductAddDetailViewState();
@@ -30,6 +31,13 @@ int quantity = 1;
         quantity--;
     });
     }
+    
+  }
+
+  @override
+  void initState() {
+    selectType = widget.type;
+    super.initState();
     
   }
   @override

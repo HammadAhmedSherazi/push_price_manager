@@ -54,6 +54,7 @@ export './views/employee/home/employee_home_view.dart';
 export './views/employee/list_request/employee_list_request_view.dart';
 export './views/employee/list_request/list_request_product_detail_view.dart';
 export './views/employee/list_request/listing_product_view.dart';
+export './views/manager/home/see_all_product_view.dart';
 
 
 //WIDGETS

@@ -77,7 +77,9 @@ class PendingListingSection extends StatelessWidget {
                     vertical: -4.0
                   )
                 ),
-                onPressed: (){}, child: Text("See All", style:   context.textStyle.displayMedium!.copyWith(
+                onPressed: (){
+                  AppRouter.push(SeeAllProductView(title: "Pending Listings"));
+                }, child: Text("See All", style:   context.textStyle.displayMedium!.copyWith(
                 color: AppColors.primaryColor,
                 decoration: TextDecoration.underline
               ),))
@@ -116,7 +118,9 @@ class LiveListingSection extends StatelessWidget {
                     vertical: -4.0
                   )
                 ),
-                onPressed: (){}, child: Text("See All", style:   context.textStyle.displayMedium!.copyWith(
+                onPressed: (){
+                  AppRouter.push(SeeAllProductView(title: "Live Listings"));
+                }, child: Text("See All", style:   context.textStyle.displayMedium!.copyWith(
                 color: AppColors.primaryColor,
                 decoration: TextDecoration.underline
               ),))

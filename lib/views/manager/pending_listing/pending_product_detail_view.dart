@@ -21,11 +21,11 @@ class PendingProductDetailView extends StatelessWidget {
             }),
             if(AppConstant.userType == UserType.employee)
             CustomButtonWidget(title: "edit", onPressed: (){
-               AppRouter.push(ProductAddDetailView(title: "Product Listings - List Product"));
+               AppRouter.push(ProductAddDetailView(title: "Product Listings - List Product", type: type,));
             }),
             if(AppConstant.userType == UserType.manager)
             CustomOutlineButtonWidget(title: "edit", onPressed: (){
-              AppRouter.push(ProductAddDetailView(title: "Pending Listings - List Product"));
+              AppRouter.push(ProductAddDetailView(title: "Pending Listings - List Product", type: type,));
             }),
             CustomButtonWidget(title: "delete", onPressed: (){}, color: Color(0xffB80303),)
           ],

@@ -77,7 +77,9 @@ class ListingRequestSection extends StatelessWidget {
                     vertical: -4.0
                   )
                 ),
-                onPressed: (){}, child: Text("See All", style:   context.textStyle.displayMedium!.copyWith(
+                onPressed: (){
+                  AppRouter.push(SeeAllProductView(title: "Listing Request"));
+                }, child: Text("See All", style:   context.textStyle.displayMedium!.copyWith(
                 color: AppColors.primaryColor,
                 decoration: TextDecoration.underline
               ),))
@@ -116,7 +118,9 @@ class ProductListingSection extends StatelessWidget {
                     vertical: -4.0
                   )
                 ),
-                onPressed: (){}, child: Text("See All", style:   context.textStyle.displayMedium!.copyWith(
+                onPressed: (){
+                  AppRouter.push(SeeAllProductView(title: "Product Listings"));
+                }, child: Text("See All", style:   context.textStyle.displayMedium!.copyWith(
                 color: AppColors.primaryColor,
                 decoration: TextDecoration.underline
               ),))

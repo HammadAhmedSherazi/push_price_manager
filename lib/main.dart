@@ -22,6 +22,26 @@ class MyApp extends StatelessWidget {
       builder: (_ , child) {
         return MaterialApp(
           navigatorKey: AppRouter.navKey,
+    //       localizationsDelegates: [
+
+    //    GlobalMaterialLocalizations.delegate,
+
+    //    GlobalWidgetsLocalizations.delegate,
+
+    //    GlobalCupertinoLocalizations.delegate,
+
+    //  ],
+     supportedLocales: [
+
+       const Locale('en', ""), // English
+
+       const Locale('es', ""), // Spanish
+
+       // Add more languages here
+
+     ],
+
+     locale: Locale('en'),
           debugShowCheckedModeBanner: false,
           title: 'Push Price',
           theme: AppTheme.lightTheme,
