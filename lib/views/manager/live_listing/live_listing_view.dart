@@ -88,6 +88,7 @@ class _LiveListingViewState extends State<LiveListingView> {
           ),
           Expanded(
             child: ListView.separated(
+              controller: widget.scrollController,
               padding: EdgeInsets.all(AppTheme.horizontalPadding).copyWith(
                 bottom: 100.r
               ),

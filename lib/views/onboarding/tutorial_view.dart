@@ -2,7 +2,8 @@ import 'package:push_price_manager/utils/extension.dart';
 import '../../export_all.dart';
 
 class TutorialView extends StatefulWidget {
-  const TutorialView({super.key});
+  bool? isOnboarding;
+  TutorialView({super.key, this.isOnboarding = true});
 
   @override
   State<TutorialView> createState() => _TutorialViewState();
@@ -12,7 +13,7 @@ class _TutorialViewState extends State<TutorialView> {
   @override
   Widget build(BuildContext context) {
     return CustomScreenTemplate(
-      showBottomButton: true,
+      showBottomButton: widget.isOnboarding,
       bottomButtonText: "Next",
       onButtonTap: (){
         AppRouter.push(LoginView());

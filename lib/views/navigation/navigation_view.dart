@@ -125,7 +125,7 @@ class _NavigationViewState extends State<NavigationView> {
     }),
     MenuDataModel(title: "Settings", icon: Assets.menuSettingIcon, onTap: () => AppRouter.push(SettingView())),
     MenuDataModel(title: "Tutorial", icon: Assets.menuTutorialIcon, onTap: () {
-      AppRouter.push(TutorialView());
+      AppRouter.push(TutorialView(isOnboarding: false,));
     }),
     MenuDataModel(title: "Help & Feedback", icon: Assets.menuHelpIcon, onTap: () => AppRouter.push(HelpFeedbackView())),
   ]: [

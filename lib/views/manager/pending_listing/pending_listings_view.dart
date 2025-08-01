@@ -29,55 +29,107 @@ class _PendingListingViewState extends State<PendingListingView> {
         title: AppConstant.userType == UserType.employee ? "Product Listings - Select Product" : "Pending Listing - Select Product",
         children: [
           15.ph,
-          Expanded( 
+             Expanded( 
             child: Container(
-              padding: EdgeInsets.all(15.r),
+              padding: EdgeInsets.symmetric(
+                horizontal: 15.r,
+                vertical: 8.r
+              ),
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: AppColors.primaryAppBarColor,
                 borderRadius: BorderRadius.circular(30.r)
               ),
-              child: GridView.builder(
-                padding: EdgeInsets.zero,
-  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-    crossAxisCount: 2, // 👈 2 items per row
-    crossAxisSpacing: 5,
-    mainAxisSpacing: 8,
-    childAspectRatio: 4.3, // Adjust this as needed
-  ),
-  itemCount: types.length,
-  itemBuilder: (context, index) {
-    final bool isSelect = selectIndex == index;
-    return GestureDetector(
-      onTap: (){
-        setState(() {
-          selectIndex = index;
-        });
-        // AppRouter.push(ProductAddDetailView(title: AppConstant.userType == UserType.employee ? "Product Listings - Select Product" : "Pending Listing - Select Product"));
-
-      },
-      child: Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: isSelect ? AppColors.primaryColor : Colors.transparent,
-            borderRadius: BorderRadius.horizontal(
-              right: Radius.circular(30.r),
-              left: Radius.circular(30.r)
+              child: Column(
+                spacing: 8,
+  children: [
+    for (int i = 0; i < types.length; i += 2)
+      Expanded(
+        child: Row(
+          spacing: 8,
+          children: [
+            // First item in the row
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectIndex = i;
+                  });
+                },
+                child: Container(
+                  // margin: EdgeInsets.only(bottom: 8),
+                  // padding: EdgeInsets.symmetric(vertical: 12),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: selectIndex == i
+                        ? AppColors.primaryColor
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(30.r),
+                    border: selectIndex == i
+                        ? null
+                        : Border.all(color: AppColors.borderColor),
+                  ),
+                  child: Text(
+                    types[i],
+                    style: selectIndex == i
+                        ? context.textStyle.displaySmall!
+                            .copyWith(color: Colors.white)
+                        : context.textStyle.bodySmall!
+                            .copyWith(color: AppColors.primaryTextColor),
+                  ),
+                ),
+              ),
             ),
-            border: !isSelect ? Border.all(color: AppColors.borderColor) : null
-          ),
-          child: Text(types[index], style: isSelect? context.textStyle.displaySmall!.copyWith(
-            color:  Colors.white ,
-      
-          ) : context.textStyle.bodySmall!.copyWith(
-            color: AppColors.primaryTextColor
-          ),),
+        
+          
+        
+            // Second item in the row (check if it exists)
+            if (i + 1 < types.length)
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectIndex = i + 1;
+                    });
+                  },
+                  child: Container(
+                    // margin: EdgeInsets.only(bottom: 8),
+                    // padding: EdgeInsets.symmetric(vertical: 12),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: selectIndex == i + 1
+                          ? AppColors.primaryColor
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(30.r),
+                      border: selectIndex == i + 1
+                          ? null
+                          : Border.all(color: AppColors.borderColor),
+                    ),
+                    child: Text(
+                      types[i + 1],
+                      style: selectIndex == i + 1
+                          ? context.textStyle.displaySmall!
+                              .copyWith(color: Colors.white)
+                          : context.textStyle.bodySmall!
+                              .copyWith(color: AppColors.primaryTextColor),
+                    ),
+                  ),
+                ),
+              )
+            else
+              Expanded(child: SizedBox()), // Filler if odd number
+          ],
+        ),
       ),
-    );
-  },
-),
+  
+  ],
+)
+
+
+            
             ),
           )
-        ],
+      ],
       ),
       body: Column(
         children: [
@@ -89,6 +141,7 @@ class _PendingListingViewState extends State<PendingListingView> {
           ),
           Expanded(
             child: ListView.separated(
+              controller: widget.scrollController,
               padding: EdgeInsets.all(AppTheme.horizontalPadding).copyWith(
                 bottom: 100.r
               ),

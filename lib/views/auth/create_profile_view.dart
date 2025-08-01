@@ -34,7 +34,7 @@ class _CreateProfileViewState extends State<CreateProfileView> {
         }
         else{
         
-
+          AppRouter.pushAndRemoveUntil(NavigationView());
         }
       },
       title: widget.isEdit!? "Edit Profile": "Create Profile", showBottomButton: true, bottomButtonText: widget.isEdit!?"save" :"continue", child: ListView(
