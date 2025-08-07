@@ -62,7 +62,11 @@ class _CustomDateSelectWidgetState extends State<CustomDateSelectWidget> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
       decoration: InputDecoration(
+
         //  labelText: widget.label,
           hintText: widget.hintText,
           suffixIcon: widget.suffixIcon ??

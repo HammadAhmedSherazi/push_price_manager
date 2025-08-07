@@ -24,6 +24,9 @@ class _NewPasswordViewState extends State<NewPasswordView> {
   Widget build(BuildContext context) {
     return AuthScreenTemplateWidget(
       title: "Forgot Password",
+      onBackTap: (){
+        AppRouter.customback(times: 2);
+      },
       childrens: [
         GenericPasswordTextField(
           controller: passwordTextController,

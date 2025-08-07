@@ -24,6 +24,9 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     return AuthScreenTemplateWidget(title: "Forgot Password", childrens: [
       TextFormField(
           controller: emailTextController,
+          onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             prefixIcon: Icon(

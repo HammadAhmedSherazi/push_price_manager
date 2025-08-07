@@ -24,6 +24,9 @@ class _GenericPasswordTextFieldState extends State<GenericPasswordTextField> {
     return TextFormField(
       controller: widget.controller,
       obscureText: showPass,
+      onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.lock, color: AppColors.secondaryColor),
         labelText: widget.label,
@@ -35,7 +38,7 @@ class _GenericPasswordTextFieldState extends State<GenericPasswordTextField> {
             });
           },
           icon: Icon(
-            showPass ? Icons.visibility : Icons.visibility_off,
+            !showPass ? Icons.visibility : Icons.visibility_off,
             color: AppColors.secondaryColor,
           ),
         ),

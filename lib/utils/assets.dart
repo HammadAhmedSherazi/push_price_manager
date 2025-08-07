@@ -11,6 +11,8 @@ abstract class  Assets {
   static const String engFlagIcon = "${imagePath}eng_flag.png";
   static const String spainFlagIcon = "${imagePath}spain_flag.png";
   static const String filterIcon = "${iconPath}filter_icon.svg";
+  static const String googleIcon = "${iconPath}google_icon.svg";
+  static const String appleIcon = "${iconPath}apple_icon.svg";
 
   static const String userAvatar = "${imagePath}user_avatar.webp";
     //Product Placeholder Image

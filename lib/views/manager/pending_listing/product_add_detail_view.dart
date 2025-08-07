@@ -78,16 +78,25 @@ int quantity = 1;
               spacing: 10,
               children: [
                 TextFormField(
+                  onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
                   decoration: InputDecoration(
                     hintText: "Product Name (Pre-filled)"
                   ),
                 ),
                 TextFormField(
+                  onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
                   decoration: InputDecoration(
                     hintText: "Store Name (Pre-filled)"
                   ),
                 ),
                 TextFormField(
+                  onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
                   minLines: 4,
                   maxLines: 4,
                   decoration: InputDecoration(
@@ -96,11 +105,17 @@ int quantity = 1;
                   ),
                 ),
                 TextFormField(
+                  onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
                   decoration: InputDecoration(
                     hintText: "Product Category (Pre-filled)"
                   ),
                 ),
                 TextFormField(
+                  onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
                   decoration: InputDecoration(
                     hintText: "Product Price (Pre-filled)"
                   ),

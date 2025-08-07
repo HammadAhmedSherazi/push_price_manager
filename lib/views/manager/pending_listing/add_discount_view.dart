@@ -49,6 +49,9 @@ int selectedIndex = -1;
       padding: EdgeInsets.all(AppTheme.horizontalPadding),
       children: [
          TextFormField(
+          onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
                   decoration: InputDecoration(
                     hintText: "Current Discount",
                     suffixIcon:  Icon(
@@ -59,6 +62,9 @@ int selectedIndex = -1;
                 ),
                 10.ph,
           TextFormField(
+            onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
                   decoration: InputDecoration(
                     hintText: "Daily Increasing Discount",
                     suffixIcon:  Icon(

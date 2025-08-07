@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:push_price_manager/utils/extension.dart';
 import 'package:push_price_manager/views/auth/otp_view.dart';
@@ -50,9 +52,9 @@ class _SignUpViewState extends State<SignUpView> {
                       color: context.colors.primary,
                     ),
                     recognizer: TapGestureRecognizer()
-          ..onTap = () {
-           AppRouter.pushReplacement(LoginView());
-          },
+                      ..onTap = () { 
+                        AppRouter.back();
+                      },
                   ),
                 ],
               ),
@@ -65,15 +67,21 @@ class _SignUpViewState extends State<SignUpView> {
                 ),
 
                 children: [
-                  TextSpan(text: "Terms & Conditions",  recognizer: TapGestureRecognizer()
-          ..onTap = () {
-           AppRouter.push(TermConditionsView());
-          },),
+                  TextSpan(
+                    text: "Terms & Conditions",
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        AppRouter.push(TermConditionsView());
+                      },
+                  ),
                   TextSpan(text: "  |  "),
-                  TextSpan(text: "Privacy Policy",  recognizer: TapGestureRecognizer()
-          ..onTap = () {
-           AppRouter.push(PrivacyPolicyView());
-          },),
+                  TextSpan(
+                    text: "Privacy Policy",
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        AppRouter.push(PrivacyPolicyView());
+                      },
+                  ),
                 ],
               ),
             ),
@@ -84,6 +92,9 @@ class _SignUpViewState extends State<SignUpView> {
       childrens: [
         TextFormField(
           controller: emailTextController,
+          onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             prefixIcon: Icon(
@@ -96,62 +107,79 @@ class _SignUpViewState extends State<SignUpView> {
           ),
         ),
         10.ph,
-        TextFormField(
+        GenericPasswordTextField(
           controller: passwordTextController,
-          obscureText: showPass,
-
-          decoration: InputDecoration(
-            prefixIcon: Icon(Icons.lock, color: AppColors.secondaryColor),
-
-            labelText: "Password",
-            hintText: "Enter Password",
-
-            suffixIcon: IconButton(
-              onPressed: () {
-                setState(() {
-                  showPass = !showPass;
-                });
-              },
-              icon: Icon(
-                showPass ? Icons.visibility : Icons.visibility_off,
-                color: AppColors.secondaryColor,
-              ),
-            ),
-          ),
+          label: "Password",
+          hint: "Enter Password",
         ),
         10.ph,
-        TextFormField(
+        GenericPasswordTextField(
           controller: confirmPasswordTextController,
-          obscureText: showConfirmPass,
+          label: "Confirm Password",
+          hint: "Enter Confirm Password",
+        ),
 
-          decoration: InputDecoration(
-            prefixIcon: Icon(Icons.lock, color: AppColors.secondaryColor),
-
-            labelText: "Confirm Password",
-            hintText: "Enter Confirm Password",
-
-            suffixIcon: IconButton(
-              onPressed: () {
-                setState(() {
-                  showConfirmPass = !showConfirmPass;
-                });
-              },
-              icon: Icon(
-                showPass ? Icons.visibility : Icons.visibility_off,
-                color: AppColors.secondaryColor,
+        // 10.ph,
+        20.ph,
+        CustomButtonWidget(
+          title: "sign up",
+          onPressed: () {
+            AppRouter.push(OtpView(isSignup: true));
+          },
+        ),
+        10.ph,
+        CustomOutlineButtonWidget(
+          title: "Continue with Google",
+          onPressed: () {
+            AppRouter.pushAndRemoveUntil(NavigationView());
+          },
+          child: Row(
+            spacing: 20,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(Assets.googleIcon),
+              SizedBox(
+                // color: Colors.red,
+                width: context.screenwidth * 0.45,
+                child: Text(
+                  "Continue with Google",
+                  style: context.textStyle.displayMedium!.copyWith(
+                    fontSize: 16.sp,
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         ),
-        // 10.ph,
         
-        20.ph,
-        CustomButtonWidget(title: "sign up", onPressed: () {
-          AppRouter.push(OtpView(
-            isSignup: true,
-          ));
-        }),
-      ],);
-
+        if (Platform.isIOS) ...[
+          10.ph,
+          CustomOutlineButtonWidget(
+            title: "Continue with Google",
+            onPressed: () {
+              AppRouter.pushAndRemoveUntil(NavigationView());
+            },
+            child: Row(
+              spacing: 20,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(Assets.appleIcon),
+                SizedBox(
+                  // color: Colors.red,
+                  width: context.screenwidth * 0.45,
+                  child: Text(
+                    "Continue with Apple",
+                    style: context.textStyle.displayMedium!.copyWith(
+                      fontSize: 16.sp,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+     
+      ],
+    );
   }
 }

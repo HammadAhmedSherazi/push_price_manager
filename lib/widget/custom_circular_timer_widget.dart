@@ -7,6 +7,8 @@ class CustomCircularCountdownTimer extends StatefulWidget {
   final Color progressColor;
   final TextStyle? textStyle;
   final VoidCallback? onComplete;
+  final bool reset;
+
 
   const CustomCircularCountdownTimer({
     super.key,
@@ -16,6 +18,8 @@ class CustomCircularCountdownTimer extends StatefulWidget {
     this.progressColor = Colors.teal,
     this.textStyle,
     this.onComplete,
+    this.reset = false, 
+  
   });
 
   @override
@@ -39,14 +43,23 @@ class _CustomCircularCountdownTimerState
       vsync: this,
       duration: Duration(seconds: widget.durationInSeconds),
     )..addStatusListener((status) {
-        if (status == AnimationStatus.dismissed && widget.onComplete != null) {
+        if (status== AnimationStatus.dismissed && widget.onComplete != null) {
           widget.onComplete!(); // ✅ Call user-defined function
         }
+      
       });
 
     _controller.reverse(from: 1.0); // Start the countdown
   }
+  @override
+void didUpdateWidget(covariant CustomCircularCountdownTimer oldWidget) {
+  super.didUpdateWidget(oldWidget);
 
+  if (!widget.reset && oldWidget.reset) {
+    _controller.reset();
+    _controller.reverse(from: 1.0);
+  }
+}
   @override
   void dispose() {
     _controller.dispose();

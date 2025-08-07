@@ -51,7 +51,7 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     recognizer: TapGestureRecognizer()
           ..onTap = () {
-            AppRouter.pushReplacement(SignUpView());
+            AppRouter.push(SignUpView());
           },
                   ),
                 ],
@@ -87,6 +87,9 @@ class _LoginViewState extends State<LoginView> {
         TextFormField(
           controller: emailTextController,
           keyboardType: TextInputType.emailAddress,
+          onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
           decoration: InputDecoration(
             prefixIcon: Icon(
               Icons.email_outlined,

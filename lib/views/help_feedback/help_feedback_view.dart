@@ -109,6 +109,9 @@ Future<void> _pickImage() async {
       padding: EdgeInsets.all(AppTheme.horizontalPadding),
       children: [
         TextFormField(
+          onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
           decoration: InputDecoration(
             labelText: "Subject",
             hintText: "Enter Subject"
@@ -116,6 +119,9 @@ Future<void> _pickImage() async {
         ),
         10.ph,
         TextFormField(
+          onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
           maxLines: 6,
           minLines: 6,
           decoration: InputDecoration(

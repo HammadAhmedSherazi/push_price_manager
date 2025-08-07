@@ -42,6 +42,9 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   fl_chart: ^1.0.0
   flutter_localization: ^0.3.3
+  intl_phone_field: ^3.2.0
+  phone_numbers_parser: ^9.0.3
+  intl_phone_number_input: ^0.7.4
 
 dev_dependencies:
   flutter_test:

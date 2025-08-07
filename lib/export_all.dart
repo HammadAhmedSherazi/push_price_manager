@@ -55,6 +55,8 @@ export './views/employee/list_request/employee_list_request_view.dart';
 export './views/employee/list_request/list_request_product_detail_view.dart';
 export './views/employee/list_request/listing_product_view.dart';
 export './views/manager/home/see_all_product_view.dart';
+export './views/auth/new_password_view.dart';
+
 
 
 //WIDGETS
@@ -79,6 +81,7 @@ export './widget/custom_drop_down_widget.dart';
 export './widget/custom_date_select_widget.dart';
 export 'widget/product_display_box_widget.dart';
 export './widget/product_display_widget.dart';
+export './widget/custom_phone_textfield_widget.dart';
 
 
 //MODELS

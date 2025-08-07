@@ -19,6 +19,9 @@ class AppRouter {
   }
   focusScope.unfocus();
 }
+static closeKeyboard (){
+   FocusScope.of(navKey.currentContext!).unfocus();
+}
   static push(page, {Function()? fun}) async {
     await Navigator.push(
       navKey.currentContext!,

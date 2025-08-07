@@ -20,9 +20,9 @@ class _CreateProfileViewState extends State<CreateProfileView> {
   @override
   void initState() {
     nameTextController = TextEditingController(text: widget.isEdit! ?"John Smith" : null);
-    employeeIdTextController = TextEditingController( text: widget.isEdit! ?"Abc street, Lorem Ipsum" : null);
+    employeeIdTextController = TextEditingController( text: widget.isEdit! ?"123 456 789" : null);
     phoneTextController = TextEditingController(text: widget.isEdit! ?"00000000" : null);
-    emailTextController = TextEditingController(text: widget.isEdit! ?"123 456 789" : null);
+    emailTextController = TextEditingController(text: widget.isEdit! ?"Abc@gmail.com" : null);
     super.initState();
   }
   @override
@@ -50,6 +50,9 @@ class _CreateProfileViewState extends State<CreateProfileView> {
         20.ph,
         TextFormField(
           controller: nameTextController,
+          onTapOutside: (event) {
+ FocusScope.of(context).unfocus();
+},
           decoration: InputDecoration(
             labelText: "Name",
             hintText: "Enter Name"
@@ -57,25 +60,37 @@ class _CreateProfileViewState extends State<CreateProfileView> {
         ),
         10.ph,
        TextFormField(
+          readOnly: widget.isEdit ?? false,
+          onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
           controller: emailTextController,
           decoration: InputDecoration(
             labelText: "Email",
-            hintText: "Enter Email"
+            hintText: "Enter Email",
+            suffixIcon: Icon(Icons.check_circle_rounded, color: AppColors.secondaryColor,)
           ),
         ),
         10.ph,
-        TextFormField(
-          controller: phoneTextController,
-          keyboardType: TextInputType.phone,
-          decoration: InputDecoration(
+        // TextFormField(
+//           controller: phoneTextController,
+//           onTapOutside: (event) {
+//   FocusScope.of(context).unfocus();
+// },
+//           keyboardType: TextInputType.phone,
+//           decoration: InputDecoration(
             
-            labelText: "Phone Number",
-            hintText: "Enter Phone Number"
-          ),
-        ),
+//             labelText: "Phone Number",
+//             hintText: "Enter Phone Number"
+//           ),
+//         ),
+CustomPhoneTextfieldWidget(phoneNumberController: phoneTextController, initialCountryCode: "US", onCountryChanged: (phone){}),
         10.ph,
         TextFormField(
           controller: employeeIdTextController,
+          onTapOutside: (event) {
+  AppRouter.closeKeyboard();
+},
           decoration: InputDecoration(
             labelText: "Employee ID",
             hintText: "Enter Employee ID"
@@ -85,6 +100,9 @@ class _CreateProfileViewState extends State<CreateProfileView> {
           10.ph,
             TextFormField(
           controller: employeeIdTextController,
+          onTapOutside: (event) {
+ AppRouter.closeKeyboard();
+},
           decoration: InputDecoration(
             labelText: "Store Branch Code/ Name",
             hintText: "Enter Store Branch Code/Name"
@@ -93,6 +111,9 @@ class _CreateProfileViewState extends State<CreateProfileView> {
         10.ph,
             TextFormField(
           controller: employeeIdTextController,
+          onTapOutside: (event) {
+   AppRouter.closeKeyboard();
+},
           decoration: InputDecoration(
             labelText: "Store Address",
             hintText: "Enter Store Address"
@@ -101,6 +122,9 @@ class _CreateProfileViewState extends State<CreateProfileView> {
         10.ph,
             TextFormField(
           controller: employeeIdTextController,
+          onTapOutside: (event) {
+  AppRouter.closeKeyboard();
+},
           decoration: InputDecoration(
             labelText: "Operational Hours",
             hintText: "Enter Operational Hours"

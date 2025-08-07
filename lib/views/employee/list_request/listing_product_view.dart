@@ -48,6 +48,9 @@ class _ListingProductViewState extends State<ListingProductView> {
         children: [
           if(widget.type == "Weighted Items")...[
              TextFormField(
+              onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
             decoration: InputDecoration(
               hintText: "Best By Date"
             ),
@@ -55,12 +58,18 @@ class _ListingProductViewState extends State<ListingProductView> {
           ],
           if(widget.type == "Best By Products")...[
              TextFormField(
+              onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
             decoration: InputDecoration(
               hintText: "Product Name (Pre-filled)"
             ),
           ),
           ],
           TextFormField(
+            onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
             decoration: InputDecoration(
               hintText: "Quantity"
             ),
@@ -101,11 +110,17 @@ class _ListingProductViewState extends State<ListingProductView> {
                   ),
                   if(widget.type == "Weighted Items")...[
                      TextFormField(
+                      onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
             decoration: InputDecoration(
               hintText: "Price 1"
             ),
           ),
             TextFormField(
+              onTapOutside: (event) {
+  FocusScope.of(context).unfocus();
+},
             decoration: InputDecoration(
               hintText: "Price 2"
             ),
