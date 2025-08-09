@@ -16,6 +16,10 @@ class ListingRequestView extends StatelessWidget {
       title: AppConstant.userType == UserType.employee? "Search From Database": "Listing Request - Select Product", child: Column(
         children: [
           Padding(padding:EdgeInsets.all(AppTheme.horizontalPadding) , child:  CustomSearchBarWidget(
+            onTapOutside: (v){
+               FocusScope.of(context).unfocus();
+              
+            },
             hintText: "Hinted search text",
             suffixIcon: SvgPicture.asset(Assets.filterIcon),
           ),),

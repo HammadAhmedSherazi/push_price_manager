@@ -29,7 +29,7 @@ class ScanView extends StatelessWidget {
           Padding(padding: EdgeInsets.symmetric(
             vertical: 20.r,
             horizontal: 50.r
-          ), child: Text("Align Bar Code Within The Frame To Scan", textAlign: TextAlign.center, style: context.textStyle.displayMedium!.copyWith(
+          ), child: Text("Align Barcode Within The Frame To Scan", textAlign: TextAlign.center, style: context.textStyle.displayMedium!.copyWith(
             fontSize: 16.sp
           ),),)
 

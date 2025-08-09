@@ -14,6 +14,10 @@ class UserFavoriteView extends StatelessWidget {
            child: CustomSearchBarWidget(
             hintText: "Hinted search text",
             suffixIcon: SvgPicture.asset(Assets.filterIcon),
+            onTapOutside: (v){
+               FocusScope.of(context).unfocus();
+              
+            }
                    ),
          ),
            Expanded(

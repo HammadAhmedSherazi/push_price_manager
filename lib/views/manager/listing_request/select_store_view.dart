@@ -50,7 +50,12 @@ class _SelectStoreViewState extends State<SelectStoreView> {
         children: [
           Padding(
             padding: EdgeInsets.all(AppTheme.horizontalPadding),
-            child: CustomSearchBarWidget(hintText: "Hinted search text", controller: searchTextEditController, onChanged: (v){
+            child: CustomSearchBarWidget(
+              onTapOutside: (v){
+               FocusScope.of(context).unfocus();
+              
+            },
+              hintText: "Hinted search text", controller: searchTextEditController, onChanged: (v){
               setState(() {
                 
               });

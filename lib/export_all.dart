@@ -82,6 +82,7 @@ export './widget/custom_date_select_widget.dart';
 export 'widget/product_display_box_widget.dart';
 export './widget/product_display_widget.dart';
 export './widget/custom_phone_textfield_widget.dart';
+export './widget/quantity_selector_widget.dart';
 
 
 //MODELS

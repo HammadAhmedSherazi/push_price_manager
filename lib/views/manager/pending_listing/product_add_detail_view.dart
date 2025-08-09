@@ -18,21 +18,21 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
   "Promotional Products"
 ];
 String selectType = "";
-int quantity = 1;
-  addQuantity(){
+// int quantity = 1;
+//   addQuantity(){
    
-    setState(() {
-       quantity++;
-    });
-  }
-  removeQuantity(){
-    if(quantity > 1){
-      setState(() {
-        quantity--;
-    });
-    }
+//     setState(() {
+//        quantity++;
+//     });
+//   }
+//   removeQuantity(){
+//     if(quantity > 1){
+//       setState(() {
+//         quantity--;
+//     });
+//     }
     
-  }
+//   }
 
   @override
   void initState() {
@@ -141,39 +141,40 @@ int quantity = 1;
                     Text("Product Qunatity", style: context.textStyle.displayMedium,),
                   ],
                 ),
-                Row(
-                    spacing: 10,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          removeQuantity();
-                        },
-                        child: SvgPicture.asset(Assets.minusSquareIcon, width: 25.r, height: 25.r,),
-                      ),
-                      Container(
-                        height: 24.h,
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 20.r
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: AppColors.borderColor
-                          ),
-                          borderRadius: BorderRadius.horizontal(
-                            left: Radius.circular(5.r),
-                            right: Radius.circular(5  .r)
-                          )
-                        ),
-                        child: Text("$quantity", style: context.textStyle.displayMedium)),
-                      GestureDetector(
-                        onTap: () {
-                          addQuantity();
-                        },
-                        child: SvgPicture.asset(Assets.plusSquareIcon, width: 25.r,),
-                      ),
-                    ],
-                  ),
+                // Row(
+                //     spacing: 10,
+                //     children: [
+                //       GestureDetector(
+                //         onTap: () {
+                //           removeQuantity();
+                //         },
+                //         child: SvgPicture.asset(Assets.minusSquareIcon, width: 25.r, height: 25.r,),
+                //       ),
+                //       Container(
+                //         height: 24.h,
+                //         alignment: Alignment.center,
+                //         padding: EdgeInsets.symmetric(
+                //           horizontal: 20.r
+                //         ),
+                //         decoration: BoxDecoration(
+                //           border: Border.all(
+                //             color: AppColors.borderColor
+                //           ),
+                //           borderRadius: BorderRadius.horizontal(
+                //             left: Radius.circular(5.r),
+                //             right: Radius.circular(5  .r)
+                //           )
+                //         ),
+                //         child: Text("$quantity", style: context.textStyle.displayMedium)),
+                //       GestureDetector(
+                //         onTap: () {
+                //           addQuantity();
+                //         },
+                //         child: SvgPicture.asset(Assets.plusSquareIcon, width: 25.r,),
+                //       ),
+                //     ],
+                //   ),
+                QuantitySelector()
               ],
             ),
           ),

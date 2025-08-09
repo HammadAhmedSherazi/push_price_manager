@@ -58,7 +58,10 @@ class _SelectProductViewState extends State<SelectProductView> {
               setState(() {
                 
               });
-            },),
+            },onTapOutside: (v){
+               FocusScope.of(context).unfocus();
+              
+            }),
           ),
           if (selectedProducts.isNotEmpty && searchTextEditController.text == "") ...[
             Padding(

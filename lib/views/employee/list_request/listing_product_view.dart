@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:push_price_manager/utils/extension.dart';
 
 import '../../../export_all.dart';
@@ -12,21 +13,21 @@ class ListingProductView extends StatefulWidget {
 }
 
 class _ListingProductViewState extends State<ListingProductView> {
-  int quantity = 1;
-  addQuantity(){
+  // int quantity = 1;
+  // addQuantity(){
    
-    setState(() {
-       quantity++;
-    });
-  }
-  removeQuantity(){
-    if(quantity > 1){
-      setState(() {
-        quantity--;
-    });
-    }
+  //   setState(() {
+  //      quantity++;
+  //   });
+  // }
+  // removeQuantity(){
+  //   if(quantity > 1){
+  //     setState(() {
+  //       quantity--;
+  //   });
+  //   }
     
-  }
+  // }
   @override
   Widget build(BuildContext context) {
     return CustomScreenTemplate(
@@ -75,40 +76,8 @@ class _ListingProductViewState extends State<ListingProductView> {
             ),
           ),
           Text("Product Qunatity", style: context.textStyle.bodyMedium,),
-           Row(
-                    spacing: 10,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          removeQuantity();
-                        },
-                        child: SvgPicture.asset(Assets.minusSquareIcon, width: 25.r, height: 25.r,),
-                      ),
-                      Container(
-                        height: 24.h,
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 20.r
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: AppColors.borderColor
-                          ),
-                          borderRadius: BorderRadius.horizontal(
-                            left: Radius.circular(5.r),
-                            right: Radius.circular(5  .r)
-                          )
-                        ),
-                        child: Text("$quantity", style: context.textStyle.displayMedium)),
-                      GestureDetector(
-                        onTap: () {
-                          addQuantity();
-                        },
-                        child: SvgPicture.asset(Assets.plusSquareIcon, width: 25.r,),
-                      ),
-                    ],
-                  ),
-                  if(widget.type == "Weighted Items")...[
+          QuantitySelector(),     
+          if(widget.type == "Weighted Items")...[
                      TextFormField(
                       onTapOutside: (event) {
   FocusScope.of(context).unfocus();
@@ -132,3 +101,5 @@ class _ListingProductViewState extends State<ListingProductView> {
     ));
   }
 }
+
+

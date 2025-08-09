@@ -84,7 +84,10 @@ class _LiveListingViewState extends State<LiveListingView> {
             padding:  EdgeInsets.symmetric(
               horizontal: AppTheme.horizontalPadding
             ),
-            child: CustomSearchBarWidget(hintText: "Hinted search text", suffixIcon: SvgPicture.asset(Assets.filterIcon), ),
+            child: CustomSearchBarWidget(hintText: "Hinted search text", suffixIcon: SvgPicture.asset(Assets.filterIcon), onTapOutside: (v){
+               FocusScope.of(context).unfocus();
+              
+            }),
           ),
           Expanded(
             child: ListView.separated(

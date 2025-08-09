@@ -47,6 +47,10 @@ class _SalesViewState extends State<SalesView> {
         CustomSearchBarWidget(
           hintText: "Hinted search text",
           suffixIcon: SvgPicture.asset(Assets.filterIcon),
+          onTapOutside: (v){
+               FocusScope.of(context).unfocus();
+              
+            }
         ),
         20.ph,
         Row(
