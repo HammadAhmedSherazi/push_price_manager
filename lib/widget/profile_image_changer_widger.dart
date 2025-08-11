@@ -1,5 +1,8 @@
 import 'dart:io';
 
+
+import 'package:push_price_manager/utils/extension.dart';
+
 import '../export_all.dart';
 
 class ProfileImageChanger extends StatefulWidget {
@@ -50,6 +53,21 @@ class _ProfileImageChangerState extends State<ProfileImageChanger> {
                   title: const Text('Choose from gallery'),
                   onTap: () => Navigator.pop(context, ImageSource.gallery),
                 ),
+                if(widget.profileUrl != null)...[
+                  ListTile(
+                  
+                  leading: const Icon(Icons.delete, color: Colors.red,),
+                  title:  Text('Remove profile picture', style: context.textStyle.displayMedium!.copyWith(
+                    color: Colors.red
+                  ),),
+                  onTap: () {
+                    setState(() {
+                      widget.profileUrl = null;
+                    });
+                    AppRouter.back();
+                  },
+                ),
+                ]
               ],
             ),
           ),
