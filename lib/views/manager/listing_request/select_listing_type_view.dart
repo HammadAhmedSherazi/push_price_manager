@@ -12,10 +12,10 @@ class SelectListingTypeView extends StatefulWidget {
 class _SelectListingTypeViewState extends State<SelectListingTypeView> {
   int selectIndex = 0;
   List<String> types = [
-    "best by products",
-    "instant sales",
-    "weighted items",
-    "promotional products",
+    "Best By Products",
+    "Instant Sales",
+    "Weighted Items",
+    "Promotional Products",
   ];
   @override
   Widget build(BuildContext context) {

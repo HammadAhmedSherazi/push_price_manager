@@ -28,9 +28,10 @@ class _AnalyticsViewState extends State<AnalyticsView> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return CustomScreenTemplate(title: "Analytics", bottom:PreferredSize(
-          preferredSize: Size.fromHeight(30.h),
+          preferredSize: Size.fromHeight(50.h),
           child: Column(
             children: [
+              
               TabBar(
                 padding: EdgeInsets.symmetric(
                   horizontal: 10.r

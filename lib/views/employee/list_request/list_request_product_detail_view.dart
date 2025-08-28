@@ -16,6 +16,8 @@ class ListRequestProductDetailView extends StatelessWidget {
       },
       title: "Product Listings - List Product", child: 
       ListView(
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(vertical: AppTheme.horizontalPadding),
         children: [
           Container(

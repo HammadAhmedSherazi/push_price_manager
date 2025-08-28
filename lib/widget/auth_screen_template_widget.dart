@@ -50,6 +50,8 @@ class _AuthScreenTemplateWidgetState extends State<AuthScreenTemplateWidget> wit
     return CustomScreenTemplate(
       onBackCall: widget.onBackTap,
       title: widget.title, showBottomButton: widget.bottomWidget != null, customBottomWidget: widget.bottomWidget, child: ListView(
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
       padding: EdgeInsets.symmetric(
         horizontal: AppTheme.horizontalPadding,
         vertical: 20.r

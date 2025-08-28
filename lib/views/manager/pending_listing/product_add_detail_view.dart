@@ -40,6 +40,35 @@ String selectType = "";
     super.initState();
     
   }
+  List<TextEditingController?> priceControllers = [];
+  int quantity = 0;
+
+void changeQuantity(int value) {
+  if (value<= 0){
+    if(priceControllers.isNotEmpty){
+      setState(() {
+        quantity = value;
+        priceControllers.clear();
+      });
+    }
+   
+    return;
+  } // Prevent invalid quantity
+
+  setState(() {
+    if (value > quantity) {
+      // Add controllers for the extra values
+      priceControllers.addAll(
+        List.generate(value - quantity, (_) => TextEditingController()),
+      );
+    } else if (value < quantity) {
+      // Remove extra controllers safely
+      priceControllers.removeRange(value, priceControllers.length);
+    }
+
+    quantity = value; // Update the current quantity
+  });
+}
   @override
   Widget build(BuildContext context) {
     return CustomScreenTemplate(
@@ -61,6 +90,8 @@ String selectType = "";
         
       },
       title: widget.title, child: ListView(
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(vertical: AppTheme.horizontalPadding),
         children: [
           Container(
@@ -138,7 +169,7 @@ String selectType = "";
                 CustomDateSelectWidget(label: "Date", hintText: "Select a Best Date", onDateSelected: (date){}),
                 Row(
                   children: [
-                    Text("Product Qunatity", style: context.textStyle.displayMedium,),
+                    Text("Product Quantity", style: context.textStyle.displayMedium,),
                   ],
                 ),
                 // Row(
@@ -174,7 +205,24 @@ String selectType = "";
                 //       ),
                 //     ],
                 //   ),
-                QuantitySelector()
+                QuantitySelector(
+                  initialQuantity: quantity,
+                  onQuantityChanged: changeQuantity,
+                ),
+                if(widget.type.toLowerCase().contains("weighted") && quantity >0)...[
+                         ...List.generate(
+                      priceControllers.length,
+                      (index) => TextFormField(
+                        onTapOutside: (event) {
+                          FocusScope.of(context).unfocus();
+                        },
+                        decoration: InputDecoration(
+                          hintText: "Price ${index + 1}",
+                        ),
+                      ),
+                    ),
+                ],
+
               ],
             ),
           ),

@@ -2,7 +2,8 @@ import 'package:push_price_manager/export_all.dart';
 
 class SeeAllProductView extends StatelessWidget {
   final String title;
-  const SeeAllProductView({super.key, required this.title});
+  // final VoidCallback onTap;
+  const SeeAllProductView({super.key, required this.title, });
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +20,35 @@ class SeeAllProductView extends StatelessWidget {
                   childAspectRatio: 0.999,
                   maxCrossAxisExtent: 200,
                 ),
-                itemCount: 10,
+                itemCount: 4,
                 itemBuilder: (context, index) {
                   return SizedBox(
                         width: double.infinity,
                         height: double.infinity,
-                        child: ProductDisplayBoxWidget());
+                        child: GestureDetector(
+                          onTap: (){
+                            if(title ==  "Listing Request"){
+                              AppRouter.push(
+                             ListingProductDetailView(isRequest: true, type: setType(index),));
+                       
+                            }
+                            else if(title == "Product Listings"){
+                               AppRouter.push(PendingProductDetailView(
+                    type: setType(index),
+                  ));
+                            }
+                            else if(title == "Pending Listings"){
+                               AppRouter.push(PendingProductDetailView(
+                    type: setType(index),
+                  ));
+                            }
+                            else{
+                                 AppRouter.push(ProductLiveListingDetailView(
+          type: setType(index),
+         ));
+                            }
+                          },
+                          child: ProductDisplayBoxWidget()));
                 },
               ),
            );

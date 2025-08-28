@@ -22,10 +22,10 @@ Widget build(BuildContext context) {
   return InternationalPhoneNumberInput(
     
     onInputChanged: (PhoneNumber number) {
-      print(number.phoneNumber);
+      // print(number.phoneNumber);
     },
     onInputValidated: (bool value) {
-      print(value);
+      // print(value);
     },
   
     selectorConfig: SelectorConfig(
@@ -53,7 +53,7 @@ Widget build(BuildContext context) {
       
     ),
     onSaved: (PhoneNumber number) {
-      print('On Saved: $number');
+      // print('On Saved: $number');
     },
   );
 }

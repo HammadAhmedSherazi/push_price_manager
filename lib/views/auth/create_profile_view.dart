@@ -28,6 +28,7 @@ class _CreateProfileViewState extends State<CreateProfileView> {
   @override
   Widget build(BuildContext context) {
     return CustomScreenTemplate(
+      
       onButtonTap: (){
         if(widget.isEdit!){
           AppRouter.back();
@@ -38,6 +39,8 @@ class _CreateProfileViewState extends State<CreateProfileView> {
         }
       },
       title: widget.isEdit!? "Edit Profile": "Create Profile", showBottomButton: true, bottomButtonText: widget.isEdit!?"save" :"continue", child: ListView(
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
       padding: EdgeInsets.symmetric(
         horizontal: AppTheme.horizontalPadding
       ),

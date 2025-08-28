@@ -78,7 +78,13 @@ class ListingRequestSection extends StatelessWidget {
                   )
                 ),
                 onPressed: (){
-                  AppRouter.push(SeeAllProductView(title: "Listing Request"));
+                  AppRouter.push(SeeAllProductView(title: "Listing Request"
+                  // ,onTap: (){
+                            
+                  //           AppRouter.push(
+                  //            ListingProductDetailView(isRequest: true, type: setType(-1),));
+                  //         },
+                          ));
                 }, child: Text("See All", style:   context.textStyle.displayMedium!.copyWith(
                 color: AppColors.primaryColor,
                 decoration: TextDecoration.underline
@@ -89,7 +95,11 @@ class ListingRequestSection extends StatelessWidget {
                     height: 125.h,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index)=>ProductDisplayBoxWidget(), separatorBuilder: (context, index)=> 10.pw, itemCount: 5),
+                      itemBuilder: (context, index)=>GestureDetector(
+                        onTap: (){
+                          AppRouter.push( ListingProductDetailView(isRequest: true, type:setType(index)));
+                        },
+                        child: ProductDisplayBoxWidget()), separatorBuilder: (context, index)=> 10.pw, itemCount: 4),
                   )
         ],
     );
@@ -119,7 +129,15 @@ class ProductListingSection extends StatelessWidget {
                   )
                 ),
                 onPressed: (){
-                  AppRouter.push(SeeAllProductView(title: "Product Listings"));
+                  AppRouter.push(SeeAllProductView(title: "Product Listings"
+                  // , onTap: (){
+                  //           AppRouter.push(PendingProductDetailView(
+                  //   type: "Best By Products",
+                  // ));
+                  //           // AppRouter.push(
+                  //           // ListingProductDetailView());
+                  //         },
+                          ));
                 }, child: Text("See All", style:   context.textStyle.displayMedium!.copyWith(
                 color: AppColors.primaryColor,
                 decoration: TextDecoration.underline
@@ -130,7 +148,13 @@ class ProductListingSection extends StatelessWidget {
                     height: 125.h,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index)=>ProductDisplayBoxWidget(), separatorBuilder: (context, index)=> 10.pw, itemCount: 5),
+                      itemBuilder: (context, index)=>GestureDetector(
+                        onTap: (){
+                           AppRouter.push(PendingProductDetailView(
+                    type: setType(index),
+                  ));
+                        },
+                        child: ProductDisplayBoxWidget()), separatorBuilder: (context, index)=> 10.pw, itemCount: 4),
                   )
         ],
     );
@@ -139,3 +163,24 @@ class ProductListingSection extends StatelessWidget {
 
 
 
+String setType(int index){
+  switch (index) {
+    case 0:
+     return "Best By Products";
+    case 1:
+    return "Instant Sales";
+    case 2:
+    return "Weighted Items";
+    case 3:
+    return "Promotional Products"; 
+    default: 
+    return "Best By Products";
+
+  }
+}
+  // List<String> types = [
+  //   "Best By Products",
+  //   "Instant Sales",
+  //   "Weighted Items",
+  //   "Promotional Products"
+  // ];

@@ -26,7 +26,10 @@ class ListingRequestView extends StatelessWidget {
            Expanded(child: ListView.separated(
             padding: EdgeInsets.symmetric(horizontal: AppTheme.horizontalPadding),
             itemBuilder: (context, index)=>ProductDisplayWidget(
-              onTap: (){},
+              onTap: (){
+               AppRouter.push(
+                             ListingProductDetailView());
+              },
             ), separatorBuilder: (context, index)=> 10.ph, itemCount: 10))
         ],
       ));

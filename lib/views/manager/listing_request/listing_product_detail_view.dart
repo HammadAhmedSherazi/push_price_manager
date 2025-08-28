@@ -3,7 +3,9 @@ import 'package:push_price_manager/utils/extension.dart';
 import '../../../export_all.dart';
 
 class ListingProductDetailView extends StatelessWidget {
-  const ListingProductDetailView({super.key});
+  final bool? isRequest;
+  final String ? type;
+  const ListingProductDetailView({super.key, this.isRequest = false, this.type = ""});
 
   @override
   Widget build(BuildContext context) {
@@ -11,10 +13,26 @@ class ListingProductDetailView extends StatelessWidget {
       bottomButtonText: "next",
       showBottomButton: true,
       onButtonTap: () {
-        AppRouter.push(SelectListingTypeView());
+         if(AppConstant.userType == UserType.employee){
+       
+       
+         if(isRequest!){
+           AppRouter.push(ListingProductView(type: type!,popTime: 6,));
+        }
+        else{
+          AppRouter.push(SelectListingTypeView());
+        }
+
+        }
+       else{
+         AppRouter.push(SelectListingTypeView());
+       }
+        
       },
       title: "Product Listings - List Product",
       child: ListView(
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(vertical: AppTheme.horizontalPadding),
         children: [
           Container(

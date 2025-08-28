@@ -15,7 +15,7 @@ extension ThemeExtension on BuildContext {
 
   TextTheme get textStyle => theme.textTheme;
 
-  InputDecorationTheme get inputTheme => theme.inputDecorationTheme;
+  InputDecorationThemeData get inputTheme => theme.inputDecorationTheme;
 
   BottomNavigationBarThemeData get bottomAppStyle =>
       theme.bottomNavigationBarTheme;

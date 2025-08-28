@@ -78,7 +78,13 @@ class PendingListingSection extends StatelessWidget {
                   )
                 ),
                 onPressed: (){
-                  AppRouter.push(SeeAllProductView(title: "Pending Listings"));
+                  AppRouter.push(SeeAllProductView(title: "Pending Listings"
+                //   , onTap: (){
+                //   AppRouter.push(PendingProductDetailView(
+                //     type: "Best By Products",
+                //   ));
+                // },
+                ));
                 }, child: Text("See All", style:   context.textStyle.displayMedium!.copyWith(
                 color: AppColors.primaryColor,
                 decoration: TextDecoration.underline
@@ -89,7 +95,13 @@ class PendingListingSection extends StatelessWidget {
                     height: 125.h,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index)=>ProductDisplayBoxWidget(), separatorBuilder: (context, index)=> 10.pw, itemCount: 5),
+                      itemBuilder: (context, index)=>GestureDetector(
+                        onTap: (){
+                           AppRouter.push(PendingProductDetailView(
+                    type: "Best By Products",
+                  ));
+                        },
+                        child: ProductDisplayBoxWidget()), separatorBuilder: (context, index)=> 10.pw, itemCount: 5),
                   )
         ],
     );
@@ -119,7 +131,13 @@ class LiveListingSection extends StatelessWidget {
                   )
                 ),
                 onPressed: (){
-                  AppRouter.push(SeeAllProductView(title: "Live Listings"));
+                  AppRouter.push(SeeAllProductView(title: "Live Listings"
+        //           , onTap: (){
+        //            AppRouter.push(ProductLiveListingDetailView(
+        //   type: "Best By Products",
+        //  ));
+        //         }
+                ));
                 }, child: Text("See All", style:   context.textStyle.displayMedium!.copyWith(
                 color: AppColors.primaryColor,
                 decoration: TextDecoration.underline
@@ -130,7 +148,13 @@ class LiveListingSection extends StatelessWidget {
                     height: 125.h,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index)=>ProductDisplayBoxWidget(), separatorBuilder: (context, index)=> 10.pw, itemCount: 5),
+                      itemBuilder: (context, index)=>GestureDetector(
+                        onTap: (){
+                          AppRouter.push(ProductLiveListingDetailView(
+          type: "Best By Products",
+         ));
+                        },
+                        child: ProductDisplayBoxWidget()), separatorBuilder: (context, index)=> 10.pw, itemCount: 5),
                   )
         ],
     );

@@ -13,7 +13,7 @@ class ProductLiveListingDetailView extends StatelessWidget {
     return [
       InfoDataModel(title: "Listing Type", description: selectedType),
       InfoDataModel(title: "Best By Date", description: Helper.selectDateFormat(DateTime.now())),
-      InfoDataModel(title: "Product Qunatity", description: "50"),
+      InfoDataModel(title: "Product Quantity", description: "50"),
       InfoDataModel(title: "Current Discount", description: "30%"),
       InfoDataModel(title: "Daily Increasing Discount", description: "5%"),
       InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(DateTime.now())),
@@ -21,7 +21,7 @@ class ProductLiveListingDetailView extends StatelessWidget {
   } else if (type == "Instant Sales") {
     return [
       InfoDataModel(title: "Listing Type", description: selectedType),
-      InfoDataModel(title: "Product Qunatity", description: "50"),
+      InfoDataModel(title: "Product Quantity", description: "50"),
       InfoDataModel(title: "Current Discount", description: "30%"),
       InfoDataModel(title: "Hourly Increasing Discount", description: "5%"),
       InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(DateTime.now())), 
@@ -30,7 +30,7 @@ class ProductLiveListingDetailView extends StatelessWidget {
     return [
       InfoDataModel(title: "Listing Type", description: selectedType),
       InfoDataModel(title: "Best By Date", description: Helper.selectDateFormat(DateTime.now())),
-      InfoDataModel(title: "Product Qunatity", description: "50"),
+      InfoDataModel(title: "Product Quantity", description: "50"),
       InfoDataModel(title: "Price 1", description: "\$199.99"),
       InfoDataModel(title: "Price 2", description: "\$199.99"),
       InfoDataModel(title: "Average Price", description: "\$199.99"),
@@ -39,7 +39,7 @@ class ProductLiveListingDetailView extends StatelessWidget {
   } else {
     return [
       InfoDataModel(title: "Listing Type", description: selectedType),
-      InfoDataModel(title: "Product Qunatity", description: "50"),
+      InfoDataModel(title: "Product Quantity", description: "50"),
       InfoDataModel(title: "Discount", description: "30%"),
       InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(DateTime.now())), 
     ];
@@ -48,13 +48,35 @@ class ProductLiveListingDetailView extends StatelessWidget {
 
  
     return CustomScreenTemplate(
-      showBottomButton: type == "Promotional Products",
-      bottomButtonText: "pause",
+      showBottomButton: true,
+      bottomButtonText: "",
       onButtonTap: (){
         
       },
+      customBottomWidget: Padding(
+        padding:  EdgeInsets.symmetric(
+          horizontal: AppTheme.horizontalPadding 
+        ),
+        child: Column(
+          spacing: 10,
+          children: [
+            if(type == "Promotional Products")
+            CustomButtonWidget(title: "Pause", onPressed: (){}),
+            
+              
+        
+              CustomOutlineButtonWidget(title: "edit", onPressed: (){
+                AppRouter.push(ProductAddDetailView(title: "Product Listings - List Product", type: type,));
+              }),
+              CustomButtonWidget(title: "delete", onPressed: (){}, color: Color(0xffB80303),)
+           
+          ],
+        ),
+      ),
       title: "Product Listings - List Product",
       child: ListView(
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(vertical: AppTheme.horizontalPadding),
         children: [
           Container(

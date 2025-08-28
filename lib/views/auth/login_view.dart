@@ -37,26 +37,26 @@ class _LoginViewState extends State<LoginView> {
           spacing: 8.h,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                style: context.textStyle.bodyMedium!,
+          //   RichText(
+          //     textAlign: TextAlign.center,
+          //     text: TextSpan(
+          //       style: context.textStyle.bodyMedium!,
 
-                children: [
-                  TextSpan(text: "Don't have an account?"),
-                  TextSpan(
-                    text: " Sign Up",
-                    style: context.textStyle.bodyMedium!.copyWith(
-                      color: context.colors.primary,
-                    ),
-                    recognizer: TapGestureRecognizer()
-          ..onTap = () {
-            AppRouter.push(SignUpView());
-          },
-                  ),
-                ],
-              ),
-            ),
+          //       children: [
+          //         TextSpan(text: "Don't have an account?"),
+          //         TextSpan(
+          //           text: " Sign Up",
+          //           style: context.textStyle.bodyMedium!.copyWith(
+          //             color: context.colors.primary,
+          //           ),
+          //           recognizer: TapGestureRecognizer()
+          // ..onTap = () {
+          //   AppRouter.push(SignUpView());
+          // },
+          //         ),
+          //       ],
+          //     ),
+          //   ),
             RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
@@ -133,7 +133,7 @@ class _LoginViewState extends State<LoginView> {
         ),
         20.ph,
         CustomButtonWidget(title: "login", onPressed: () {
-          AppRouter.push(NavigationView());
+          AppRouter.pushAndRemoveUntil(NavigationView());
         }),
       ],
     );

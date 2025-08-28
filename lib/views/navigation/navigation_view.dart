@@ -1,5 +1,4 @@
 
-import 'package:flutter/rendering.dart';
 import 'package:push_price_manager/utils/extension.dart';
 
 import '../../export_all.dart';
@@ -15,7 +14,7 @@ class _NavigationViewState extends State<NavigationView> {
  
 
   int selectIndex = 0;
-  bool _isBottomBarVisible = true;
+  // bool _isBottomBarVisible = true;
 
   final ScrollController scrollController = ScrollController();
   final ScrollController drawerScrollController = ScrollController();
@@ -25,14 +24,14 @@ class _NavigationViewState extends State<NavigationView> {
   void initState() {
     super.initState();
 
-    scrollController.addListener(() {
-      final direction = scrollController.position.userScrollDirection;
-      if (direction == ScrollDirection.reverse && _isBottomBarVisible) {
-        setState(() => _isBottomBarVisible = false);
-      } else if (direction == ScrollDirection.forward && !_isBottomBarVisible) {
-        setState(() => _isBottomBarVisible = true);
-      }
-    });
+    // scrollController.addListener(() {
+    //   final direction = scrollController.position.userScrollDirection;
+    //   if (direction == ScrollDirection.reverse && _isBottomBarVisible) {
+    //     setState(() => _isBottomBarVisible = false);
+    //   } else if (direction == ScrollDirection.forward && !_isBottomBarVisible) {
+    //     setState(() => _isBottomBarVisible = true);
+    //   }
+    // });
     bottomNavItems = AppConstant.userType == UserType.employee ? [
     BottomDataModel(title: "Home", icon: Assets.home, child: EmployeeHomeView(scrollController: scrollController ,)),
     BottomDataModel(title: "Listing Requests", icon: Assets.productRequestIcon, child: EmployeeListRequestView(scrollController: scrollController,)),
@@ -196,7 +195,7 @@ class _NavigationViewState extends State<NavigationView> {
               ),
               Positioned(
                 left: 0,
-                bottom: 80.r,
+                bottom: 60.r,
                 child: GestureDetector(
                   onTap: () => showLogoutDialog(context),
                   child: Container(
@@ -238,7 +237,7 @@ class _NavigationViewState extends State<NavigationView> {
                     ),
                   ),
                   SizedBox(
-                    height: context.screenheight * 0.40,
+                    height: context.screenheight * 0.48,
                     child: Scrollbar(
                       trackVisibility: true,
                       thumbVisibility: true,
@@ -246,11 +245,18 @@ class _NavigationViewState extends State<NavigationView> {
                       child: ListView(
                         primary: false,
                         controller: drawerScrollController,
-                        padding: EdgeInsets.all(20.r),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20.r
+                        ).copyWith(
+                          top: 20.r
+                        ),
                         children: List.generate(menuData.length, (index) {
                           final menu = menuData[index];
                           return ListTile(
                             onTap: menu.onTap,
+                            visualDensity: VisualDensity(
+                              vertical: -2.0
+                            ),
                             leading: SvgPicture.asset(menu.icon,  ),
                             title: Text(menu.title),
                             titleTextStyle: context.textStyle.displayMedium!.copyWith(fontSize: 16.sp),
@@ -266,17 +272,25 @@ class _NavigationViewState extends State<NavigationView> {
         ),
       ),
       body: bottomNavItems[selectIndex].child,
-      bottomNavigationBar: AnimatedSlide(
-        offset: _isBottomBarVisible ? Offset.zero : const Offset(0, 1),
-        duration: const Duration(milliseconds: 300),
-        child: CustomBottomNavBarWidget(
+      
+      bottomNavigationBar:CustomBottomNavBarWidget(
           items: bottomNavItems,
           currentIndex: selectIndex,
           onTap: (index) {
             setState(() => selectIndex = index);
           },
-        ),
-      ),
+        )
+      //  AnimatedSlide(
+      //   offset: _isBottomBarVisible ? Offset.zero : const Offset(0, 100),
+      //   duration: const Duration(milliseconds: 2000),
+      //   child: CustomBottomNavBarWidget(
+      //     items: bottomNavItems,
+      //     currentIndex: selectIndex,
+      //     onTap: (index) {
+      //       setState(() => selectIndex = index);
+      //     },
+      //   ),
+      // ),
     );
   }
 }

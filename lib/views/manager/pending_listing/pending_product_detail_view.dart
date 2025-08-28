@@ -17,7 +17,10 @@ class PendingProductDetailView extends StatelessWidget {
           children: [
             if(AppConstant.userType == UserType.manager)
             CustomButtonWidget(title: "next", onPressed: (){
-              
+                AppRouter.push(AddDiscountView(
+          isInstant: type == "Instant Sales",
+          
+        ));
             }),
             if(AppConstant.userType == UserType.employee)
             CustomButtonWidget(title: "edit", onPressed: (){
@@ -33,6 +36,8 @@ class PendingProductDetailView extends StatelessWidget {
       ),
       title: "Product Listings - List Product", child: 
       ListView(
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(vertical: AppTheme.horizontalPadding),
         children: [
           Container(
@@ -68,9 +73,14 @@ class PendingProductDetailView extends StatelessWidget {
                 ),
                 ProductTitleWidget(title: "Price", value: "\$199.99"),
                 ProductTitleWidget(title: "Listing Type", value: type),
-                if(type.toLowerCase().contains("best"))
+                if(type.toLowerCase().contains("best") || type.toLowerCase().contains("weighted"))
                 ProductTitleWidget(title: "Best by Date", value: "April 22, 2025"),
                 ProductTitleWidget(title: "Product Quantity", value: "2"),
+                if(type.toLowerCase().contains("weighted"))...[
+                  ProductTitleWidget(title: "Price 1", value: "\$199.99"),
+                  ProductTitleWidget(title: "Price 2", value: "\$199.99"),
+
+                ]
               ],
             ),
           ),

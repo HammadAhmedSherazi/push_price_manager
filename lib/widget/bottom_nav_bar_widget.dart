@@ -15,8 +15,8 @@ class CustomBottomNavBarWidget extends StatelessWidget {
     Container(
       width: double.infinity,
      padding: EdgeInsets.only(
-      left: 20.r,
-      right: 20.r,
+      // left: 10.r,
+      // right: 10.r,
       top: 15.r,
       bottom: 30.r
      ),
@@ -32,6 +32,7 @@ class CustomBottomNavBarWidget extends StatelessWidget {
         )
       ),
       child: Row(
+        // spacing: 10,
         children:List.generate(items.length, (index) {
           final item = items[index];
           final Color selectColor = currentIndex == index? AppColors.primaryColor : AppColors.primaryColor.withValues(alpha: 0.6);
@@ -42,6 +43,7 @@ class CustomBottomNavBarWidget extends StatelessWidget {
               },
               child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
               spacing: 10,
               children: [
                 AppConstant.userType == UserType.manager?

@@ -1,11 +1,16 @@
 import 'package:flutter/services.dart';
-import 'package:push_price_manager/utils/extension.dart';
-
+import '../../utils/extension.dart';
 import '../export_all.dart';
 
 class QuantitySelector extends StatefulWidget {
   final int initialQuantity;
-  const QuantitySelector({super.key, this.initialQuantity = 1});
+  final ValueChanged<int>? onQuantityChanged; // Callback to return quantity
+
+  const QuantitySelector({
+    super.key,
+    this.initialQuantity = 0,
+    this.onQuantityChanged,
+  });
 
   @override
   State<QuantitySelector> createState() => _QuantitySelectorState();
@@ -13,7 +18,7 @@ class QuantitySelector extends StatefulWidget {
 
 class _QuantitySelectorState extends State<QuantitySelector> {
   late TextEditingController _controller;
-  int quantity = 1;
+  int quantity = 0;
 
   @override
   void initState() {
@@ -27,23 +32,26 @@ class _QuantitySelectorState extends State<QuantitySelector> {
       quantity++;
       _controller.text = quantity.toString();
     });
+    widget.onQuantityChanged?.call(quantity); // Notify parent
   }
 
   void removeQuantity() {
     setState(() {
-      if (quantity > 1) {
+      if (quantity > 0) {
         quantity--;
         _controller.text = quantity.toString();
       }
     });
+    widget.onQuantityChanged?.call(quantity); // Notify parent
   }
 
-  void onQuantityChanged(String value) {
+  void onQuantityChangedManually(String value) {
     final int? newQuantity = int.tryParse(value);
-    if (newQuantity != null && newQuantity > 0) {
+    if (newQuantity != null ) {
       setState(() {
         quantity = newQuantity;
       });
+      widget.onQuantityChanged?.call(quantity); // Notify parent
     }
   }
 
@@ -78,7 +86,7 @@ class _QuantitySelectorState extends State<QuantitySelector> {
               ],
               textAlign: TextAlign.center,
               style: context.textStyle.displayMedium,
-              onChanged: onQuantityChanged,
+              onChanged: onQuantityChangedManually,
               decoration: const InputDecoration(
                 isDense: true,
                 border: InputBorder.none,
