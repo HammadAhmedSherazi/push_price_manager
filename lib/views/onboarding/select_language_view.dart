@@ -106,11 +106,11 @@ class SelectLanguageWidget extends StatelessWidget {
         child: Row(
           spacing: 10,
           children: [
-            CircleAvatar(
-              radius: 20.r,
-              backgroundColor: Colors.transparent,
-              backgroundImage: AssetImage(icon),
-            ),
+            // CircleAvatar(
+            //   radius: 20.r,
+            //   backgroundColor: Colors.transparent,
+            //   backgroundImage: AssetImage(icon),
+            // ),
             Expanded(child: Text(title, style: context.textStyle.bodyMedium)),
             Icon(
               isSelect ? Icons.check_circle : Icons.circle_outlined,
