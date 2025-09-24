@@ -97,7 +97,10 @@ class SelectLanguageWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         // height: 60.h,
-        padding: EdgeInsets.all(10),
+         padding: EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 18
+        ),
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.r),
