@@ -1,4 +1,5 @@
 import 'package:push_price_manager/utils/extension.dart';
+import '../../../services/product_service.dart';
 
 import '../../../export_all.dart';
 
@@ -18,6 +19,28 @@ class _EmployeeListRequestViewState extends State<EmployeeListRequestView> {
     "Promotional Products"
   ];
   int selectIndex = 0;
+  List<ProductSelectionDataModel> products = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProducts();
+  }
+
+  Future<void> _loadProducts() async {
+    try {
+      final productSelectionModels = await ProductService.getProductSelectionModels();
+      setState(() {
+        products = productSelectionModels;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -181,18 +204,22 @@ class _EmployeeListRequestViewState extends State<EmployeeListRequestView> {
             }, ),
           ),
           Expanded(
-            child: ListView.separated(
-              controller: widget.scrollController,
-              padding: EdgeInsets.all(AppTheme.horizontalPadding).copyWith(
-                bottom: 100.r
-              ),
-              itemBuilder: (context, index)=>ProductDisplayWidget(
-                onTap: (){
-                  AppRouter.push(ListRequestProductDetailView(
-                    type: types[selectIndex],
-                  ));
-                },
-              ), separatorBuilder: (context, index)=> 10.ph, itemCount: 10),
+            child: isLoading 
+              ? Center(child: CircularProgressIndicator())
+              : ListView.separated(
+                  controller: widget.scrollController,
+                  padding: EdgeInsets.all(AppTheme.horizontalPadding).copyWith(
+                    bottom: 100.r
+                  ),
+                  itemBuilder: (context, index)=>ProductDisplayWidget(
+                    product: products[index],
+                    onTap: (){
+                      AppRouter.push(ListRequestProductDetailView(
+                        type: types[selectIndex],
+                        product: products[index],
+                      ));
+                    },
+                  ), separatorBuilder: (context, index)=> 10.ph, itemCount: products.length),
           )
         ],
       ),

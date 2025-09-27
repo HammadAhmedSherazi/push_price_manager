@@ -1,4 +1,5 @@
 import 'package:push_price_manager/utils/extension.dart';
+import '../../../services/product_service.dart';
 
 import '../../../export_all.dart';
 
@@ -22,7 +23,7 @@ class _EmployeeHomeViewState extends State<EmployeeHomeView> {
             children: [
               UserProfileWidget(radius: 18.r, imageUrl: Assets.userImage, borderWidth: 1.4,),
               10.pw,
-              Expanded(child: Text("ABC BUSINESS", style: context.textStyle.displayMedium,)),
+              Expanded(child: Text("GROCERY STORE", style: context.textStyle.displayMedium,)),
             
               CustomButtonWidget(
                 height: 30.h,
@@ -55,10 +56,38 @@ class _EmployeeHomeViewState extends State<EmployeeHomeView> {
   }
 }
 
-class ListingRequestSection extends StatelessWidget {
+class ListingRequestSection extends StatefulWidget {
   const ListingRequestSection({
     super.key,
   });
+
+  @override
+  State<ListingRequestSection> createState() => _ListingRequestSectionState();
+}
+
+class _ListingRequestSectionState extends State<ListingRequestSection> {
+  List<ProductSelectionDataModel> products = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProducts();
+  }
+
+  Future<void> _loadProducts() async {
+    try {
+      final productSelectionModels = await ProductService.getProductSelectionModels();
+      setState(() {
+        products = productSelectionModels.take(4).toList(); // Show first 4 products
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,23 +122,55 @@ class ListingRequestSection extends StatelessWidget {
           ),
           SizedBox(
                     height: 125.h,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index)=>GestureDetector(
-                        onTap: (){
-                          AppRouter.push( ListingProductDetailView(isRequest: true, type:setType(index)));
-                        },
-                        child: ProductDisplayBoxWidget()), separatorBuilder: (context, index)=> 10.pw, itemCount: 4),
-                  )
+                    child: isLoading 
+                      ? Center(child: CircularProgressIndicator())
+                      : ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index)=>GestureDetector(
+                            onTap: (){
+                              AppRouter.push( ListingProductDetailView(isRequest: true, type:setType(index), product: products[index]));
+                            },
+                            child: ProductDisplayBoxWidget(product: products[index])), 
+                          separatorBuilder: (context, index)=> 10.pw, 
+                          itemCount: products.length),
+                        )
         ],
     );
   }
 }
 
-class ProductListingSection extends StatelessWidget {
+class ProductListingSection extends StatefulWidget {
   const ProductListingSection({
     super.key,
   });
+
+  @override
+  State<ProductListingSection> createState() => _ProductListingSectionState();
+}
+
+class _ProductListingSectionState extends State<ProductListingSection> {
+  List<ProductSelectionDataModel> products = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProducts();
+  }
+
+  Future<void> _loadProducts() async {
+    try {
+      final productSelectionModels = await ProductService.getProductSelectionModels();
+      setState(() {
+        products = productSelectionModels.skip(1).take(4).toList(); // Show different products
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,16 +207,21 @@ class ProductListingSection extends StatelessWidget {
           ),
           SizedBox(
                     height: 125.h,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index)=>GestureDetector(
-                        onTap: (){
-                           AppRouter.push(PendingProductDetailView(
-                    type: setType(index),
-                  ));
-                        },
-                        child: ProductDisplayBoxWidget()), separatorBuilder: (context, index)=> 10.pw, itemCount: 4),
-                  )
+                    child: isLoading 
+                      ? Center(child: CircularProgressIndicator())
+                      : ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index)=>GestureDetector(
+                            onTap: (){
+                               AppRouter.push(PendingProductDetailView(
+                        type: setType(index),
+                        product: products[index],
+                      ));
+                            },
+                            child: ProductDisplayBoxWidget(product: products[index])), 
+                          separatorBuilder: (context, index)=> 10.pw, 
+                          itemCount: products.length),
+                        )
         ],
     );
   }

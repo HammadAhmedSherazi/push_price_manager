@@ -1,10 +1,51 @@
 import 'package:push_price_manager/utils/extension.dart';
+import '../../../services/product_service.dart';
 
 import '../../../export_all.dart';
 
-class PendingProductDetailView extends StatelessWidget {
+class PendingProductDetailView extends StatefulWidget {
   final String type;
-  const PendingProductDetailView({super.key, required this.type});
+  final ProductSelectionDataModel? product;
+  const PendingProductDetailView({super.key, required this.type, this.product});
+
+  @override
+  State<PendingProductDetailView> createState() => _PendingProductDetailViewState();
+}
+
+class _PendingProductDetailViewState extends State<PendingProductDetailView> {
+  RealProductDataModel? selectedProduct;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProduct();
+  }
+
+  Future<void> _loadProduct() async {
+    try {
+      if (widget.product != null) {
+        // Convert ProductSelectionDataModel to RealProductDataModel
+        final products = await ProductService.getAllProducts();
+        selectedProduct = products.firstWhere(
+          (product) => product.item == widget.product!.title,
+          orElse: () => products.first,
+        );
+      } else {
+        final products = await ProductService.getAllProducts();
+        if (products.isNotEmpty) {
+          selectedProduct = products.first;
+        }
+      }
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,74 +59,95 @@ class PendingProductDetailView extends StatelessWidget {
             if(AppConstant.userType == UserType.manager)
             CustomButtonWidget(title: "next", onPressed: (){
                 AppRouter.push(AddDiscountView(
-          isInstant: type == "Instant Sales",
+          isInstant: widget.type == "Instant Sales",
           
         ));
             }),
             if(AppConstant.userType == UserType.employee)
             CustomButtonWidget(title: "edit", onPressed: (){
-               AppRouter.push(ProductAddDetailView(title: "Product Listings - List Product", type: type,));
+               AppRouter.push(ProductAddDetailView(title: "Product Listings - List Product", type: widget.type,));
             }),
             if(AppConstant.userType == UserType.manager)
             CustomOutlineButtonWidget(title: "edit", onPressed: (){
-              AppRouter.push(ProductAddDetailView(title: "Pending Listings - List Product", type: type,));
+              AppRouter.push(ProductAddDetailView(title: "Pending Listings - List Product", type: widget.type,));
             }),
             CustomButtonWidget(title: "delete", onPressed: (){}, color: Color(0xffB80303),)
           ],
         ),
       ),
       title: "Product Listings - List Product", child: 
-      ListView(
-        shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(vertical: AppTheme.horizontalPadding),
-        children: [
-          Container(
-            padding: EdgeInsets.all(30.r),
-            height: context.screenheight * 0.18,
-            color: AppColors.primaryAppBarColor,
-            child: Image.asset(Assets.groceryBag),
-          ),
-          Padding(
-            padding: EdgeInsetsGeometry.symmetric(
-              vertical: 10.r,
-              horizontal: AppTheme.horizontalPadding,
-            ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      isLoading 
+        ? Center(child: CircularProgressIndicator())
+        : ListView(
+            shrinkWrap: true,
+            physics: BouncingScrollPhysics(),
+            padding: EdgeInsets.symmetric(vertical: AppTheme.horizontalPadding),
+            children: [
+              Container(
+                padding: EdgeInsets.all(30.r),
+                height: context.screenheight * 0.18,
+                color: AppColors.primaryAppBarColor,
+                child: selectedProduct?.image != null 
+                  ? selectedProduct!.image!.startsWith('http')
+                    ? CachedNetworkImage(
+                        imageUrl: selectedProduct!.image!,
+                        fit: BoxFit.contain,
+                        placeholder: (context, url) => Container(
+                          color: Colors.grey[200],
+                          child: Icon(Icons.image, size: 50.r),
+                        ),
+                        errorWidget: (context, url, error) => Image.asset(Assets.groceryBag),
+                      )
+                    : Image.asset(
+                        selectedProduct!.image!,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(Assets.groceryBag);
+                        },
+                      )
+                  : Image.asset(Assets.groceryBag),
+              ),
+              Padding(
+                padding: EdgeInsetsGeometry.symmetric(
+                  vertical: 10.r,
+                  horizontal: AppTheme.horizontalPadding,
+                ),
+                child: selectedProduct != null ? Column(
                   children: [
-                    Text(
-                      "ABC Product",
-                      style: context.textStyle.displayMedium!.copyWith(
-                        fontSize: 16.sp,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            selectedProduct!.item,
+                            style: context.textStyle.displayMedium!.copyWith(
+                              fontSize: 16.sp,
+                            ),
+                          ),
+                        ),
+                        Text("Today 3:45pm", style: context.textStyle.bodySmall),
+                      ],
                     ),
-                    Text("Today 3:45pm", style: context.textStyle.bodySmall),
+                    10.ph,
+                    ProductTitleWidget(title: "Category", value: selectedProduct!.category ?? "Grocery"),
+                    ProductTitleWidget(title: "Regular Price", value: "\$${selectedProduct!.regularPrice.toStringAsFixed(2)}"),
+                    ProductTitleWidget(title: "Best Buy Price", value: "\$${selectedProduct!.bestBuyPrice.toStringAsFixed(2)}"),
+                    ProductTitleWidget(title: "Listing Type", value: widget.type),
+                    ProductTitleWidget(title: "Best by Date", value: selectedProduct!.bestByDate),
+                    ProductTitleWidget(title: "Product Quantity", value: "2"),
+                    if(widget.type.toLowerCase().contains("weighted"))...[
+                      ProductTitleWidget(title: "Price 1", value: "\$${selectedProduct!.regularPrice.toStringAsFixed(2)}"),
+                      ProductTitleWidget(title: "Price 2", value: "\$${selectedProduct!.bestBuyPrice.toStringAsFixed(2)}"),
+                    ]
+                  ],
+                ) : Column(
+                  children: [
+                    Text("No product data available", style: context.textStyle.bodyMedium),
                   ],
                 ),
-                10.ph,
-                ProductTitleWidget(title: "Category", value: "ABC Category"),
-                ProductTitleWidget(
-                  title: "Product Details",
-                  value: "Lorem Ipsum Dor",
-                ),
-                ProductTitleWidget(title: "Price", value: "\$199.99"),
-                ProductTitleWidget(title: "Listing Type", value: type),
-                if(type.toLowerCase().contains("best") || type.toLowerCase().contains("weighted"))
-                ProductTitleWidget(title: "Best by Date", value: "April 22, 2025"),
-                ProductTitleWidget(title: "Product Quantity", value: "2"),
-                if(type.toLowerCase().contains("weighted"))...[
-                  ProductTitleWidget(title: "Price 1", value: "\$199.99"),
-                  ProductTitleWidget(title: "Price 2", value: "\$199.99"),
-
-                ]
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 }

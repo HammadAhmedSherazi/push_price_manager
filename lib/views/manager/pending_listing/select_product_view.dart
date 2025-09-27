@@ -1,4 +1,5 @@
 import 'package:push_price_manager/utils/extension.dart';
+import '../../../services/product_service.dart';
 
 import '../../../export_all.dart';
 
@@ -11,31 +12,71 @@ class SelectProductView extends StatefulWidget {
 }
 
 class _SelectProductViewState extends State<SelectProductView> {
-  List<ProductSelectionDataModel> recentStores = List.generate(
-    2,
-    (index) => ProductSelectionDataModel(
-      title: "ABC Store",
-      description: "Abc Category",
-      image: Assets.groceryBag, isSelect: false,
-      
-    ),
-  );
+  List<ProductSelectionDataModel> recentStores = [];
   List<ProductSelectionDataModel> selectedProducts = [];
-  addSelectProduct(int index) {
-    final product = recentStores[index];
+  List<ProductSelectionDataModel> filteredProducts = [];
+  bool isLoading = true;
+  
+  late TextEditingController searchTextEditController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProducts();
+    searchTextEditController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    searchTextEditController.removeListener(_onSearchChanged);
+    searchTextEditController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadProducts() async {
+    try {
+      final productSelectionModels = await ProductService.getProductSelectionModels();
+      setState(() {
+        recentStores = productSelectionModels;
+        filteredProducts = productSelectionModels;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  void _onSearchChanged() {
+    final query = searchTextEditController.text.toLowerCase();
     setState(() {
-      selectedProducts.add(product.copyWith(isSelect: true));
-    recentStores.removeAt(index);
+      if (query.isEmpty) {
+        filteredProducts = recentStores.where((product) => !selectedProducts.any((selected) => selected.title == product.title)).toList();
+      } else {
+        filteredProducts = recentStores.where((product) => 
+          product.title.toLowerCase().contains(query) &&
+          !selectedProducts.any((selected) => selected.title == product.title)
+        ).toList();
+      }
     });
   }
+
+  addSelectProduct(int index) {
+    final product = filteredProducts[index];
+    setState(() {
+      selectedProducts.add(product.copyWith(isSelect: true));
+      filteredProducts.removeAt(index);
+    });
+  }
+  
   removeProduct(int index){
     final product = selectedProducts[index];
     setState(() {
-      recentStores.add(product.copyWith(isSelect: false));
-    selectedProducts.removeAt(index);
+      filteredProducts.add(product.copyWith(isSelect: false));
+      selectedProducts.removeAt(index);
     });
   }
-  late TextEditingController searchTextEditController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +134,7 @@ class _SelectProductViewState extends State<SelectProductView> {
                       SizedBox(
                         width: double.infinity,
                         height: double.infinity,
-                        child: ProductDisplayBoxWidget()),
+                        child: ProductDisplayBoxWidget(product: selectedProducts[index])),
                         Positioned(
                       right: 0,
                       child: Checkbox(
@@ -114,12 +155,14 @@ class _SelectProductViewState extends State<SelectProductView> {
             ),
             10.ph,
           ],
-          if(recentStores.isNotEmpty )...[
+          if(isLoading) 
+            Expanded(child: Center(child: CircularProgressIndicator()))
+          else if(filteredProducts.isNotEmpty) ...[
             Padding(
             padding: EdgeInsets.symmetric(
               horizontal: AppTheme.horizontalPadding,
             ),
-            child: Text(searchTextEditController.text == ""? "Recent" : "Search Result", style: context.textStyle.displayMedium),
+            child: Text(searchTextEditController.text == ""? "Available Products" : "Search Result", style: context.textStyle.displayMedium),
           ),
           10.ph,
           Expanded(
@@ -134,14 +177,14 @@ class _SelectProductViewState extends State<SelectProductView> {
                 childAspectRatio:
                     1.09, // Adjust if you want different box shapes
               ),
-              itemCount: recentStores.length, // Set how many items you want
+              itemCount: filteredProducts.length, // Set how many items you want
               itemBuilder: (context, index) {
                 return Stack(
                   children: [
                     SizedBox(
                       width: double.infinity,
                       height: double.infinity,
-                      child: ProductDisplayBoxWidget()),
+                      child: ProductDisplayBoxWidget(product: filteredProducts[index])),
                     Positioned(
                       right: 0,
                       child: Checkbox(
@@ -152,7 +195,7 @@ class _SelectProductViewState extends State<SelectProductView> {
                         side: BorderSide(
                           color: AppColors.secondaryColor
                         ),
-                        value: recentStores[index].isSelect, onChanged: (value){
+                        value: filteredProducts[index].isSelect, onChanged: (value){
                           addSelectProduct(index);
                         }))
                   ],
@@ -160,7 +203,17 @@ class _SelectProductViewState extends State<SelectProductView> {
               },
             ),
           ),
-          ],
+          ]
+          else ...[
+            Expanded(
+              child: Center(
+                child: Text(
+                  "No products found", 
+                  style: context.textStyle.bodyMedium
+                )
+              )
+            )
+          ]
 
           
         ],
