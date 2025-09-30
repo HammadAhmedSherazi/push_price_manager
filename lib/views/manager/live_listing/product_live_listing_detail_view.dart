@@ -171,7 +171,9 @@ class _ProductLiveListingDetailViewState extends State<ProductLiveListingDetailV
                       ],
                     ),
                     10.ph,
-                    ProductTitleWidget(title: "Category", value: selectedProduct!.category ?? "Grocery"),
+                      ProductTitleWidget(title: "Category", value: selectedProduct!.category ?? "Grocery"),
+                        ProductTitleWidget(title: "Store", value: "Store 1"),
+
                     ProductTitleWidget(title: "Regular Price", value: "\$${selectedProduct!.regularPrice.toStringAsFixed(2)}"),
                     ProductTitleWidget(title: "Best Buy Price", value: "\$${selectedProduct!.bestBuyPrice.toStringAsFixed(2)}"),
                 ...List.generate(getInfoList(widget.type).length, (index)=> ProductTitleWidget(

@@ -130,7 +130,7 @@ class _PendingProductDetailViewState extends State<PendingProductDetailView> {
                     ),
                     10.ph,
                     ProductTitleWidget(title: "Category", value: selectedProduct!.category ?? "Grocery"),
-                        ProductTitleWidget(title: "Store", value: "Dunkin Store"),
+                        ProductTitleWidget(title: "Store", value: "Store 1"),
                     ProductTitleWidget(title: "Regular Price", value: "\$${selectedProduct!.regularPrice.toStringAsFixed(2)}"),
                          ProductTitleWidget(title: "Listing Type", value: widget.type ?? "Best By Products"),
                         ProductTitleWidget(title: "Best By Date", value: selectedProduct!.bestByDate),

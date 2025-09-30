@@ -1,5 +1,4 @@
 import 'package:push_price_manager/utils/extension.dart';
-import '../listing_request/select_store_view.dart';
 
 import '../../../export_all.dart';
 
@@ -21,8 +20,7 @@ class _AddDiscountViewState extends State<AddDiscountView> {
 ];
 
 
-List<bool> values = [false, false, true];
-int selectedIndex = -1;
+List<bool> values = [false, false, false];
   @override
   void initState() {
     if(widget.isPromotionalDiscount!){
@@ -36,13 +34,16 @@ int selectedIndex = -1;
   Widget build(BuildContext context) {
     return CustomScreenTemplate(
       showBottomButton: true,
-      bottomButtonText: "next",
+      bottomButtonText: "List Now",
       onButtonTap: (){
         if(widget.isInstant!){
           AppRouter.push(ListScheduleCalenderView());
         }
         else{
-           AppRouter.push(SelectStoreView());
+          // AppRouter.push(SelectStoreView());
+                  AppRouter.push(SuccessListingRequestView(message: "Listing Request Sent Successfully!"));
+
+           
         }
         
       },
@@ -97,9 +98,9 @@ int selectedIndex = -1;
           side: BorderSide(
             color: AppColors.secondaryColor
           ),
-          value: index == selectedIndex, onChanged: (v){
+          value: values[index], onChanged: (v){
           setState(() {
-            selectedIndex = index;
+            values[index] = v ?? false;
           });
         },activeColor: AppColors.secondaryColor, ),
         // Radio<int>(

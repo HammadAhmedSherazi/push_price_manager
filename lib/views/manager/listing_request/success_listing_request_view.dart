@@ -28,7 +28,9 @@ class SuccessListingRequestView extends StatelessWidget {
             ),),
            
             CustomButtonWidget(title: "go home", onPressed: (){
-              AppRouter.back();
+                AppRouter.customback(
+                times: 6
+              );
               // AppRouter.pushAndRemoveUntil(NavigationView());
             })
           ],

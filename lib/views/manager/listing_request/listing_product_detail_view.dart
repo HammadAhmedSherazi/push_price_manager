@@ -131,7 +131,7 @@ class _ListingProductDetailViewState extends State<ListingProductDetailView> {
                         ProductTitleWidget(title: "Category", value: selectedProduct!.category ?? "Grocery"),
                         ProductTitleWidget(title: "Best By Price", value: "\$${selectedProduct!.bestBuyPrice.toStringAsFixed(2)}"),
                         ProductTitleWidget(title: "Discounted Price", value: "\$${(selectedProduct!.regularPrice - selectedProduct!.bestBuyPrice).toStringAsFixed(2)}"),
-                        ProductTitleWidget(title: "Store", value: "Dunkin Store"),
+                        ProductTitleWidget(title: "Store", value: "Store 1"),
                         ProductTitleWidget(title: "Product Quantity", value: "4"),
                         ProductTitleWidget(title: "Listing Type", value: widget.type ?? "Best By Products"),
                         ProductTitleWidget(title: "Best By Date", value: selectedProduct!.bestByDate),
@@ -139,7 +139,7 @@ class _ListingProductDetailViewState extends State<ListingProductDetailView> {
                     else
                       ...[
                         if (AppConstant.userType == UserType.employee)
-                          ProductTitleWidget(title: "Store Name", value: "Dunkin Store"),
+                        ProductTitleWidget(title: "Store", value: "Store 1"),
                         ProductTitleWidget(title: "Category", value: selectedProduct!.category ?? "Grocery"),
                         ProductTitleWidget(title: "Regular Price", value: "\$${selectedProduct!.regularPrice.toStringAsFixed(2)}"),
                         if (widget.isRequest == true)

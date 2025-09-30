@@ -13,8 +13,8 @@ class _SelectStoreViewState extends State<SelectStoreView> {
   List<StoreSelectDataModel> recentStores = List.generate(
     2,
     (index) => StoreSelectDataModel(
-      title: "ABC Store",
-      address: "abc street, lorem ipsum",
+      title: "Store ${index + 1}",
+      address: "",
       rating: 4.0,
       icon: Assets.store,
       isSelected: false,
@@ -179,16 +179,16 @@ class StoreCardWidget extends StatelessWidget {
               data.title,
               style: context.textStyle.bodyMedium!.copyWith(color: textColor),
             ),
-            Text(
-              data.rating.toString(),
-              style: context.textStyle.titleSmall!.copyWith(color: textColor),
-            ),
-            Text(
-              data.address,
-              style: context.textStyle.titleSmall!.copyWith(color: textColor),
-              maxLines: 1,
-              textAlign: TextAlign.center,
-            ),
+            // Text(
+            //   data.rating.toString(),
+            //   style: context.textStyle.titleSmall!.copyWith(color: textColor),
+            // ),
+            // Text(
+            //   data.address,
+            //   style: context.textStyle.titleSmall!.copyWith(color: textColor),
+            //   maxLines: 1,
+            //   textAlign: TextAlign.center,
+            // ),
             data.isSelected
                 ? Expanded(
                     child: Icon(
@@ -199,8 +199,8 @@ class StoreCardWidget extends StatelessWidget {
                   )
                 : Expanded(
                     child: Container(
-                      // height: 12.r,
-                      // width: 12.r,
+                      height: 15.r,
+                      width: 15.r,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(color: AppColors.secondaryColor),
