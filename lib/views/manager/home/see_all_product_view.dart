@@ -65,9 +65,10 @@ class _SeeAllProductViewState extends State<SeeAllProductView> {
                    
                         }
                         else if(widget.title == "Product Listings"){
-                           AppRouter.push(PendingProductDetailView(
+                           AppRouter.push(ListingProductDetailView(
                   type: setType(index),
                   product: products[index],
+                  source: "product_listing",
                 ));
                         }
                         else if(widget.title == "Pending Listings"){

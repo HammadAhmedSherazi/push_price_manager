@@ -7,7 +7,8 @@ class ListingProductDetailView extends StatefulWidget {
   final bool? isRequest;
   final String ? type;
   final ProductSelectionDataModel? product;
-  const ListingProductDetailView({super.key, this.isRequest = false, this.type = "", this.product});
+  final String? source; // To identify the source flow
+  const ListingProductDetailView({super.key, this.isRequest = false, this.type = "", this.product, this.source});
 
   @override
   State<ListingProductDetailView> createState() => _ListingProductDetailViewState();
@@ -124,10 +125,25 @@ class _ListingProductDetailViewState extends State<ListingProductDetailView> {
                       ],
                     ),
                     10.ph,
-                    ProductTitleWidget(title: "Category", value: selectedProduct!.category ?? "Grocery"),
-                    ProductTitleWidget(title: "Regular Price", value: "\$${selectedProduct!.regularPrice.toStringAsFixed(2)}"),
-                    ProductTitleWidget(title: "Best Buy Price", value: "\$${selectedProduct!.bestBuyPrice.toStringAsFixed(2)}"),
-                    ProductTitleWidget(title: "Best By Date", value: selectedProduct!.bestByDate),
+                    // Different fields based on source
+                    if (widget.source == "product_listing")
+                      ...[
+                        ProductTitleWidget(title: "Category", value: selectedProduct!.category ?? "Grocery"),
+                        ProductTitleWidget(title: "Best By Price", value: "\$${selectedProduct!.bestBuyPrice.toStringAsFixed(2)}"),
+                        ProductTitleWidget(title: "Discounted Price", value: "\$${(selectedProduct!.regularPrice - selectedProduct!.bestBuyPrice).toStringAsFixed(2)}"),
+                        ProductTitleWidget(title: "Store", value: "Dunkin Store"),
+                        ProductTitleWidget(title: "Product Quantity", value: "4"),
+                        ProductTitleWidget(title: "Listing Type", value: widget.type ?? "Best By Products"),
+                        ProductTitleWidget(title: "Best By Date", value: selectedProduct!.bestByDate),
+                      ]
+                    else
+                      ...[
+                        ProductTitleWidget(title: "Store Name", value: "Dunkin Store"),
+                        ProductTitleWidget(title: "Category", value: selectedProduct!.category ?? "Grocery"),
+                        ProductTitleWidget(title: "Regular Price", value: "\$${selectedProduct!.regularPrice.toStringAsFixed(2)}"),
+                        if (widget.isRequest == true)
+                          ProductTitleWidget(title: "Listing Type", value: "Best By Date"),
+                      ],
                   ],
                 ) : Column(
                   children: [

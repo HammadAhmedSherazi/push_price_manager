@@ -57,35 +57,35 @@ class _ProductLiveListingDetailViewState extends State<ProductLiveListingDetailV
     return [
       InfoDataModel(title: "Listing Type", description: selectedType),
       InfoDataModel(title: "Best By Date", description: bestByDate),
-      InfoDataModel(title: "Product Quantity", description: "50"),
-      InfoDataModel(title: "Current Discount", description: "30%"),
+      InfoDataModel(title: "Product Quantity", description: "4"),
+      InfoDataModel(title: "Current Discount", description: "10%"),
       InfoDataModel(title: "Daily Increasing Discount", description: "5%"),
-      InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(DateTime.now())),
+      InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(DateTime.now().add(Duration(days: 20)))),
     ];
   } else if (widget.type == "Instant Sales") {
     return [
       InfoDataModel(title: "Listing Type", description: selectedType),
-      InfoDataModel(title: "Product Quantity", description: "50"),
-      InfoDataModel(title: "Current Discount", description: "30%"),
+      InfoDataModel(title: "Product Quantity", description: "4"),
+      InfoDataModel(title: "Current Discount", description: "10%"),
       InfoDataModel(title: "Hourly Increasing Discount", description: "5%"),
-      InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(DateTime.now())), 
+      InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(DateTime.now().add(Duration(days: 20)))),
     ];
   } else if (selectedType == "Weighted Items") {
     return [
       InfoDataModel(title: "Listing Type", description: selectedType),
       InfoDataModel(title: "Best By Date", description: bestByDate),
-      InfoDataModel(title: "Product Quantity", description: "50"),
+      InfoDataModel(title: "Product Quantity", description: "4"),
       InfoDataModel(title: "Price 1", description: "\$${regularPrice.toStringAsFixed(2)}"),
       InfoDataModel(title: "Price 2", description: "\$${bestBuyPrice.toStringAsFixed(2)}"),
       InfoDataModel(title: "Average Price", description: "\$${((regularPrice + bestBuyPrice) / 2).toStringAsFixed(2)}"),
-      InfoDataModel(title: "Current Discount", description: "30%"),
+      InfoDataModel(title: "Current Discount", description: "10%"),
      ];
   } else {
     return [
       InfoDataModel(title: "Listing Type", description: selectedType),
-      InfoDataModel(title: "Product Quantity", description: "50"),
-      InfoDataModel(title: "Discount", description: "30%"),
-      InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(DateTime.now())), 
+      InfoDataModel(title: "Product Quantity", description: "4"),
+      InfoDataModel(title: "Discount", description: "10%"),
+      InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(DateTime.now().add(Duration(days: 20)))),
     ];
   }
 }

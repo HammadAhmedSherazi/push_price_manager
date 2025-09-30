@@ -205,14 +205,14 @@ void changeQuantity(int value) {
                     ),
                   ],
                   if (widget.type == "Best By Products") ...[
-                    TextFormField(
-                      onTapOutside: (event) {
-                        FocusScope.of(context).unfocus();
-                      },
-                      decoration: InputDecoration(
-                        hintText: "Product Name (Pre-filled)",
-                      ),
-                    ),
+                    // TextFormField(
+                    //   onTapOutside: (event) {
+                    //     FocusScope.of(context).unfocus();
+                    //   },
+                    //   decoration: InputDecoration(
+                    //     hintText: "Product Name (Pre-filled)",
+                    //   ),
+                    // ),
                   ],
                   //           TextFormField(
                   //             onTapOutside: (event) {

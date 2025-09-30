@@ -1,4 +1,5 @@
 import 'package:push_price_manager/utils/extension.dart';
+import '../listing_request/select_store_view.dart';
 
 import '../../../export_all.dart';
 
@@ -41,7 +42,7 @@ int selectedIndex = -1;
           AppRouter.push(ListScheduleCalenderView());
         }
         else{
-           AppRouter.push(SelectProductView());
+           AppRouter.push(SelectStoreView());
         }
         
       },

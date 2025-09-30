@@ -111,9 +111,7 @@ class _ListRequestProductDetailViewState extends State<ListRequestProductDetailV
                     10.ph,
                     ProductTitleWidget(title: "Category", value: selectedProduct!.category ?? "Grocery"),
                     ProductTitleWidget(title: "Regular Price", value: "\$${selectedProduct!.regularPrice.toStringAsFixed(2)}"),
-                    ProductTitleWidget(title: "Best Buy Price", value: "\$${selectedProduct!.bestBuyPrice.toStringAsFixed(2)}"),
-                    ProductTitleWidget(title: "Best By Date", value: selectedProduct!.bestByDate),
-                    ProductTitleWidget(title: "Listing Type", value: widget.type),
+                    // ProductTitleWidget(title: "Listing Type", value: widget.type),
                   ],
                 ) : Column(
                   children: [

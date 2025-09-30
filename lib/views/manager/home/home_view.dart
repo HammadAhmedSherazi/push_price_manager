@@ -30,7 +30,7 @@ class _HomeViewState extends State<HomeView> {
                 height: 30.h,
                 width: 120.w,
                 title: "", onPressed: (){
-                  AppRouter.push(ListingRequestView());
+                  AppRouter.push(PendingListingView(scrollController: ScrollController()));
                 }, child: Row(
                 children: [
                   Icon(Icons.add),
