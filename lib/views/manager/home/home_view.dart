@@ -1,5 +1,6 @@
 import 'package:push_price_manager/utils/extension.dart';
 import '../../../services/product_service.dart';
+import '../listing_request/listing_request_view.dart';
 import '../../../export_all.dart';
 
 
@@ -30,7 +31,7 @@ class _HomeViewState extends State<HomeView> {
                 height: 30.h,
                 width: 120.w,
                 title: "", onPressed: (){
-                  AppRouter.push(PendingListingView(scrollController: ScrollController()));
+                  AppRouter.push(ListingRequestView());
                 }, child: Row(
                 children: [
                   Icon(Icons.add),

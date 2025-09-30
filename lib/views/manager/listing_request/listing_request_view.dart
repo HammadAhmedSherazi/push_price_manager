@@ -98,6 +98,7 @@ class _ListingRequestViewState extends State<ListingRequestView> {
                     itemBuilder: (context, index) => ProductDisplayWidget(
                       product: filteredProducts[index].toProductSelectionDataModel(),
                       onTap: (){
+                        // Manager flow - go to product detail view
                         AppRouter.push(
                           ListingProductDetailView(
                             type: "Best By Products", // Default type, can be made dynamic
