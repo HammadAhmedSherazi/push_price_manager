@@ -80,7 +80,7 @@ class _PendingListingSectionState extends State<PendingListingSection> {
     try {
       final productSelectionModels = await ProductService.getProductSelectionModels();
       setState(() {
-        products = productSelectionModels.take(5).toList(); // Show first 5 products
+        products = productSelectionModels.toList(); // Show all 5 products in same order
         isLoading = false;
       });
     } catch (e) {
@@ -166,7 +166,7 @@ class _LiveListingSectionState extends State<LiveListingSection> {
     try {
       final productSelectionModels = await ProductService.getProductSelectionModels();
       setState(() {
-        products = productSelectionModels.skip(2).take(5).toList(); // Show different products for variety
+        products = productSelectionModels.toList(); // Show all 5 products in same order
         isLoading = false;
       });
     } catch (e) {

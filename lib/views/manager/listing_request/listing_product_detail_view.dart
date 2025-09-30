@@ -121,7 +121,7 @@ class _ListingProductDetailViewState extends State<ListingProductDetailView> {
                             ),
                           ),
                         ),
-                        Text("Today 3:45pm", style: context.textStyle.bodySmall),
+                        Text("", style: context.textStyle.bodySmall),
                       ],
                     ),
                     10.ph,
@@ -133,7 +133,7 @@ class _ListingProductDetailViewState extends State<ListingProductDetailView> {
                         ProductTitleWidget(title: "Discounted Price", value: "\$${(selectedProduct!.regularPrice - selectedProduct!.bestBuyPrice).toStringAsFixed(2)}"),
                         ProductTitleWidget(title: "Store", value: "Store 1"),
                         ProductTitleWidget(title: "Product Quantity", value: "4"),
-                        ProductTitleWidget(title: "Listing Type", value: widget.type ?? "Best By Products"),
+                        ProductTitleWidget(title: "Listing Type", value: "Best By Products"),
                         ProductTitleWidget(title: "Best By Date", value: selectedProduct!.bestByDate),
                       ]
                     else
@@ -143,7 +143,7 @@ class _ListingProductDetailViewState extends State<ListingProductDetailView> {
                         ProductTitleWidget(title: "Category", value: selectedProduct!.category ?? "Grocery"),
                         ProductTitleWidget(title: "Regular Price", value: "\$${selectedProduct!.regularPrice.toStringAsFixed(2)}"),
                         if (widget.isRequest == true)
-                          ProductTitleWidget(title: "Listing Type", value: "Best By Date"),
+                        ProductTitleWidget(title: "Listing Type", value:  "Best By Products"),
                       ],
                   ],
                 ) : Column(

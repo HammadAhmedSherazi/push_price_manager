@@ -105,7 +105,7 @@ class _ListRequestProductDetailViewState extends State<ListRequestProductDetailV
                             ),
                           ),
                         ),
-                        Text("Today 3:45pm", style: context.textStyle.bodySmall),
+                        Text("", style: context.textStyle.bodySmall),
                       ],
                     ),
                     10.ph,

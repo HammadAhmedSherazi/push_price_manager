@@ -55,7 +55,8 @@ class _ProductLiveListingDetailViewState extends State<ProductLiveListingDetailV
   
   if (widget.type ==  "Best By Products") {
     return [
-      InfoDataModel(title: "Listing Type", description: selectedType),
+      
+      InfoDataModel(title: "Listing Type", description: "Best By Products"),
       InfoDataModel(title: "Best By Date", description: bestByDate),
       InfoDataModel(title: "Product Quantity", description: "4"),
       InfoDataModel(title: "Current Discount", description: "10%"),
@@ -64,7 +65,7 @@ class _ProductLiveListingDetailViewState extends State<ProductLiveListingDetailV
     ];
   } else if (widget.type == "Instant Sales") {
     return [
-      InfoDataModel(title: "Listing Type", description: selectedType),
+      InfoDataModel(title: "Listing Type", description: "Best By Products"),
       InfoDataModel(title: "Product Quantity", description: "4"),
       InfoDataModel(title: "Current Discount", description: "10%"),
       InfoDataModel(title: "Hourly Increasing Discount", description: "5%"),
@@ -72,7 +73,7 @@ class _ProductLiveListingDetailViewState extends State<ProductLiveListingDetailV
     ];
   } else if (selectedType == "Weighted Items") {
     return [
-      InfoDataModel(title: "Listing Type", description: selectedType),
+      InfoDataModel(title: "Listing Type", description: "Best By Products"),
       InfoDataModel(title: "Best By Date", description: bestByDate),
       InfoDataModel(title: "Product Quantity", description: "4"),
       InfoDataModel(title: "Price 1", description: "\$${regularPrice.toStringAsFixed(2)}"),
@@ -82,7 +83,7 @@ class _ProductLiveListingDetailViewState extends State<ProductLiveListingDetailV
      ];
   } else {
     return [
-      InfoDataModel(title: "Listing Type", description: selectedType),
+      InfoDataModel(title: "Listing Type", description: "Best By Products"),
       InfoDataModel(title: "Product Quantity", description: "4"),
       InfoDataModel(title: "Discount", description: "10%"),
       InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(DateTime.now().add(Duration(days: 20)))),
@@ -167,7 +168,7 @@ class _ProductLiveListingDetailViewState extends State<ProductLiveListingDetailV
                             ),
                           ),
                         ),
-                        Text("Today 3:45pm", style: context.textStyle.bodySmall),
+                        Text("", style: context.textStyle.bodySmall),
                       ],
                     ),
                     10.ph,
