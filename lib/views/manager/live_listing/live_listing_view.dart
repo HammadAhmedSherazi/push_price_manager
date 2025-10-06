@@ -89,20 +89,20 @@ class _LiveListingViewState extends State<LiveListingView> {
               
             }),
           ),
-          Expanded(
-            child: ListView.separated(
-              controller: widget.scrollController,
-              padding: EdgeInsets.all(AppTheme.horizontalPadding).copyWith(
-                bottom: 100.r
-              ),
-              itemBuilder: (context, index)=>ProductDisplayWidget(
-                onTap: (){
-                   AppRouter.push(ProductLiveListingDetailView(
-          type: types[selectIndex],
-         ));
-                },
-              ), separatorBuilder: (context, index)=> 10.ph, itemCount: 10),
-          )
+        //   Expanded(
+        //     child: ListView.separated(
+        //       controller: widget.scrollController,
+        //       padding: EdgeInsets.all(AppTheme.horizontalPadding).copyWith(
+        //         bottom: 100.r
+        //       ),
+        //       itemBuilder: (context, index)=>ProductDisplayWidget(
+        //         onTap: (){
+        //            AppRouter.push(ProductLiveListingDetailView(
+        //   type: types[selectIndex],
+        //  ));
+        //         },
+        //       ), separatorBuilder: (context, index)=> 10.ph, itemCount: 10),
+        //   )
         ],
       ),
     );

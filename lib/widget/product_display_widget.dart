@@ -4,9 +4,12 @@ import '../export_all.dart';
 
 class ProductDisplayWidget extends StatelessWidget {
   final VoidCallback onTap;
+  final ProductDataModel data;
   const ProductDisplayWidget({
     super.key,
-    required this.onTap
+    required this.onTap,
+    required this.data
+
   });
 
   @override
@@ -22,16 +25,16 @@ class ProductDisplayWidget extends StatelessWidget {
       child: Row(
         spacing: 10,
         children: [
-          Image.asset(Assets.groceryBag, width: 57.w),
+          DisplayNetworkImage(imageUrl: data.image,width: 57.w,),
           Expanded(child: Column(
             spacing: 10,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("ABC Product", style: context.textStyle.bodyMedium,),
+              Text(data.title, style: context.textStyle.bodyMedium,),
               Row(
                 children: [
                   Expanded(
-                    child: Text("ABC Category", style:  context.textStyle.bodySmall!.copyWith(
+                    child: Text(data.description, style:  context.textStyle.bodySmall!.copyWith(
                                       color: AppColors.primaryTextColor
                                           .withValues(alpha: 0.7),
                                     ),),

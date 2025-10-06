@@ -20,23 +20,23 @@ class UserFavoriteView extends StatelessWidget {
             }
                    ),
          ),
-           Expanded(
-            child: ListView.separated(
-              padding: EdgeInsets.all(AppTheme.horizontalPadding).copyWith(
-                bottom: 100.r
-              ),
-              itemBuilder: (context, index)=>Stack(
-                children: [
+          //  Expanded(
+          //   child: ListView.separated(
+          //     padding: EdgeInsets.all(AppTheme.horizontalPadding).copyWith(
+          //       bottom: 100.r
+          //     ),
+          //     itemBuilder: (context, index)=>Stack(
+          //       children: [
                   
-                  ProductDisplayWidget(
-                    onTap: (){
-                      AppRouter.push(UserFavoriteProductDetailView());
-                    },
-                  ),
-                  Positioned(right: 20.r, top: 20.r,child: Text("300+", style: context.textStyle.bodySmall,),),
-                ],
-              ), separatorBuilder: (context, index)=> 10.ph, itemCount: 10),
-          )
+          //         ProductDisplayWidget(
+          //           onTap: (){
+          //             AppRouter.push(UserFavoriteProductDetailView());
+          //           },
+          //         ),
+          //         Positioned(right: 20.r, top: 20.r,child: Text("300+", style: context.textStyle.bodySmall,),),
+          //       ],
+          //     ), separatorBuilder: (context, index)=> 10.ph, itemCount: 10),
+          // )
        
        
       ],

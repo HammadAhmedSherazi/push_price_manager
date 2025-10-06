@@ -57,7 +57,7 @@ class _SelectLanguageViewState extends State<SelectLanguageView> {
                   child: CustomOutlineButtonWidget(
                     title: "SKIP",
                     onPressed: () {
-                      AppRouter.push(SelectUserView());
+                      AppRouter.push(TutorialView());
                     },
                   ),
                 ),
@@ -65,7 +65,7 @@ class _SelectLanguageViewState extends State<SelectLanguageView> {
                   child: CustomButtonWidget(
                     title: "CONTINUE",
                     onPressed: () {
-                      AppRouter.push(SelectUserView());
+                      AppRouter.push(TutorialView());
                     },
                   ),
                 ),

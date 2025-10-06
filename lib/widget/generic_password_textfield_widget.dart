@@ -4,12 +4,14 @@ class GenericPasswordTextField extends StatefulWidget {
   final TextEditingController controller;
   final String label;
   final String hint;
+  final String? Function(String?)? validator;
 
   const GenericPasswordTextField({
     super.key,
     required this.controller,
     this.label = "Password",
     this.hint = "Enter Password",
+    this.validator
   });
 
   @override
@@ -24,6 +26,7 @@ class _GenericPasswordTextFieldState extends State<GenericPasswordTextField> {
     return TextFormField(
       controller: widget.controller,
       obscureText: showPass,
+      validator: widget.validator,
       onTapOutside: (event) {
   FocusScope.of(context).unfocus();
 },

@@ -31,6 +31,108 @@ extension StringExtension on String {
     }).join(' ');
   }
 }
+extension StringValidation on String {
+  /// ✅ Only alphabets (A-Z a-z) and spaces allowed
+  String? validateAlphabetOnly(String fieldName) {
+    if (trim().isEmpty) return '$fieldName is required';
+    final regex = RegExp(r'^[A-Za-z\s]+$');
+    if (!regex.hasMatch(trim())) {
+      return '$fieldName should only contain alphabets';
+    }
+    return null;
+  }
+
+  /// ✅ Username must be at least 3 characters & alphabets only
+  String? validateUsername() {
+    if (trim().isEmpty) return 'Username is required';
+    if (trim().length < 3) return 'Username must be at least 3 characters';
+    final regex = RegExp(r'^[A-Za-z\s]+$');
+    if (!regex.hasMatch(trim())) {
+      return 'Username should only contain alphabets';
+    }
+    return null;
+  }
+  String? validateGeneralField({required String fieldName, required int minStrLen }) {
+    if (trim().isEmpty) return '$fieldName is required';
+    if (trim().length < minStrLen) return '$fieldName must be at least $minStrLen characters';
+   
+    return null;
+  }
+  
+
+  /// ✅ Email validation
+  String? validateEmail() {
+    if (trim().isEmpty) return 'Email is required';
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(trim())) return 'Enter a valid email address';
+    return null;
+  }
+
+  /// ✅ Password validation
+  String? validatePassword() {
+    if (trim().isEmpty) return 'Password is required';
+    if (trim().length < 6) return 'Password must be at least 6 characters';
+    // final hasLetter = contains(RegExp(r'[A-Za-z]'));
+    // final hasNumber = contains(RegExp(r'[0-9]'));
+    // if (!hasLetter || !hasNumber) {
+    //   return 'Password must contain letters and numbers';
+    // }
+    return null;
+  }
+
+  /// ✅ Confirm password
+  String? validateConfirmPassword(String originalPassword) {
+    if (trim().isEmpty) return 'Confirm password is required';
+    if (this != originalPassword) return 'Passwords do not match';
+    return null;
+  }
+
+  /// ✅ Phone number validation (accepts only digits, 10-15 length)
+  
+  String? validatePhoneNumber() {
+    final input = trim();
+    if (input.isEmpty) return 'Phone number is required';
+
+    final regex = RegExp(r'^[0-9]{10,15}$'); // ✅ only 10–15 digits
+    if (!regex.hasMatch(input)) {
+      return 'Enter a valid phone number (10-15 digits)';
+    }
+    return null;
+  }
+  /// ✅ Weight validation
+ String? validateWeight() {
+  if (trim().isEmpty) return 'Weight is required';
+
+  // ✅ Only numbers with optional decimal part
+  final weightRegex = RegExp(r'^\d+(\.\d+)?$');
+  if (!weightRegex.hasMatch(trim())) {
+    return 'Enter a valid weight (numbers only, e.g. 70 or 70.5)';
+  }
+
+  final value = double.tryParse(trim());
+  if (value == null || value < 30 || value > 300) {
+    return 'Weight must be between 30 and 300';
+  }
+
+  return null;
+}
+
+  /// ✅ Weight validation
+String? validateHeight() {
+  if (trim().isEmpty) return 'Height is required';
+
+  final heightRegex = RegExp(r'^\d+(\.\d+)?$');
+  if (!heightRegex.hasMatch(trim())) {
+    return 'Enter a valid height (e.g. 5.6)';
+  }
+
+  final value = double.tryParse(trim());
+  if (value == null || value < 3.0 || value > 8.0) {
+    return 'Height must be between 3.0 and 8.0 feet';
+  }
+
+  return null;
+}}
 enum OrderStatus {
   inProcess,
   completed,

@@ -3,7 +3,11 @@ import 'export_all.dart';
 
 void main() async {
   await ScreenUtil.ensureScreenSize();
-  runApp(const MyApp());
+  SharedPreferenceManager.init();
+   runApp(
+    // Adding ProviderScope enables Riverpod for the entire project
+    const ProviderScope(child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
