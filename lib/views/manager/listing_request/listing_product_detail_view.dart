@@ -21,12 +21,20 @@ class ListingProductDetailView extends StatelessWidget {
            AppRouter.push(ListingProductView(type: type!,popTime: 6,));
         }
         else{
-          AppRouter.push(SelectListingTypeView());
+          AppRouter.push(SelectListingTypeView(),settings: RouteSettings(
+            arguments: {
+              "product_id": data.id!
+            }
+          ));
         }
 
         }
        else{
-         AppRouter.push(SelectListingTypeView());
+         AppRouter.push(SelectListingTypeView(), settings: RouteSettings(
+            arguments: {
+              "product_id": data.id!
+            }
+          ));
        }
         
       },

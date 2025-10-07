@@ -22,10 +22,10 @@ class AppRouter {
 static closeKeyboard (){
    FocusScope.of(navKey.currentContext!).unfocus();
 }
-  static push(page, {Function()? fun}) async {
+  static push(page, {Function()? fun,RouteSettings? settings} ) async {
     await Navigator.push(
       navKey.currentContext!,
-      MaterialPageRoute(builder: (context) => page),
+      MaterialPageRoute(builder: (context) => page, settings: settings),
     ).then((c) {
       if (fun != null) {
         fun();
