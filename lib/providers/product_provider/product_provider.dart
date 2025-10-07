@@ -7,7 +7,7 @@ import 'package:push_price_manager/providers/product_provider/product_state.dart
 class ProductProvider extends Notifier<ProductState> {
   @override
   ProductState build() {
-    return ProductState(productApiResponse: ApiResponse.undertermined(),products: []);
+    return ProductState(productApiResponse: ApiResponse.undertermined(),products: [], getProductReponse: ApiResponse.loading());
   }
 
   FutureOr<void> getProductfromDatabase({required int limit, required int offset ,  String? searchText, num? minPrice, num ? maxPrice, int? categoryId })async{

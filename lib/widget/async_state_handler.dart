@@ -51,7 +51,7 @@ class AsyncStateHandler<T> extends StatelessWidget {
 
       return  customSuccessWidget  ??  ListView.separated(
         controller: scrollController,
-        shrinkWrap: true,
+        // shrinkWrap: true,
         physics: const AlwaysScrollableScrollPhysics(),
         padding: padding ?? const EdgeInsets.symmetric(horizontal: 16),
         itemBuilder: (context, index) {

@@ -3,11 +3,12 @@ import '../../export_all.dart';
 
 class ProductState {
   final ApiResponse productApiResponse;
+  final ApiResponse<ProductDataModel> getProductReponse;
   final List<ProductDataModel>? products;
   final String? searchText;
   final int? offset;
-  ProductState({required this.productApiResponse, this.products , this.searchText, this.offset });
+  ProductState({required this.productApiResponse, this.products , this.searchText, this.offset,required this.getProductReponse  });
 
-  ProductState copyWith({ApiResponse? productApiResponse,List<ProductDataModel>? products,String? searchText, int? offset})=> ProductState(productApiResponse:productApiResponse ?? this.productApiResponse, products: products ?? this.products, offset: offset ?? this.offset,searchText:  searchText ?? this.searchText );
+  ProductState copyWith({ApiResponse? productApiResponse,List<ProductDataModel>? products,String? searchText, int? offset, ApiResponse<ProductDataModel>? getProductReponse})=> ProductState(productApiResponse:productApiResponse ?? this.productApiResponse, products: products ?? this.products, offset: offset ?? this.offset,searchText:  searchText ?? this.searchText, getProductReponse: getProductReponse ?? this.getProductReponse );
 
 }
