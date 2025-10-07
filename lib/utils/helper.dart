@@ -1,3 +1,5 @@
+import 'package:push_price_manager/utils/extension.dart';
+
 import '../export_all.dart';
 
 class Helper {
@@ -45,6 +47,43 @@ class Helper {
       ),
     );
   }
-
+/// Show full-screen loading overlay. Non-dismissible by default.
+static void showFullScreenLoader(BuildContext context, {bool dismissible = false}) {
+  showDialog(
+    context: context,
+    barrierDismissible: dismissible,
+    barrierColor: Colors.black54, // semi-transparent background
+    useRootNavigator: true,
+    builder: (context) {
+      // Use WillPopScope if you want to prevent back button dismissal
+      return PopScope(
+        canPop: dismissible,
+        child:  Material(
+          color: Colors.transparent, // keep barrierColor visible
+          child: Center(
+            child: SizedBox(
+              width: 80,
+              height: 80,
+              child: Card(
+                elevation: 6,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: CircularProgressIndicator(
+                      color: context.colors.primary,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
   
 }

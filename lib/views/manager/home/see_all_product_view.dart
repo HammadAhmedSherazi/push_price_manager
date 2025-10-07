@@ -28,8 +28,8 @@ class SeeAllProductView extends StatelessWidget {
                         child: GestureDetector(
                           onTap: (){
                             if(title ==  "Listing Request"){
-                              AppRouter.push(
-                             ListingProductDetailView(isRequest: true, type: setType(index),));
+                              // AppRouter.push(
+                            //  ListingProductDetailView(isRequest: true, type: setType(index),));
                        
                             }
                             else if(title == "Product Listings"){

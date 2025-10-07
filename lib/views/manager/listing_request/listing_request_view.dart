@@ -104,7 +104,9 @@ void dispose() {
                       return ProductDisplayWidget(
                         data: product,
                       onTap: () {
-                        AppRouter.push(ListingProductDetailView());
+                        AppRouter.push(ListingProductDetailView(
+                          data: product,
+                        ));
                       },
                     );
                     },

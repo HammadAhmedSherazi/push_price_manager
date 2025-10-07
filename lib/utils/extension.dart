@@ -1,6 +1,7 @@
 
 
 import '../export_all.dart';
+import 'package:intl/intl.dart';
 
 extension Spacing on num {
   SizedBox get ph => SizedBox(height: toDouble().h);
@@ -132,7 +133,36 @@ String? validateHeight() {
   }
 
   return null;
-}}
+}
+}
+extension ReadableDateTime on DateTime {
+  String toReadableString() {
+    final now = DateTime.now();
+    final localDate = toLocal();
+
+    final dateFormat = DateFormat('MM/dd/yyyy');
+    final timeFormat = DateFormat('hh:mm a');
+
+    final difference = now.difference(localDate).inDays;
+
+    String dayLabel;
+    if (difference == 0 &&
+        localDate.day == now.day &&
+        localDate.month == now.month &&
+        localDate.year == now.year) {
+      dayLabel = 'Today';
+    } else if (difference == 1 ||
+        (now.day - localDate.day == 1 &&
+            localDate.month == now.month &&
+            localDate.year == now.year)) {
+      dayLabel = 'Yesterday';
+    } else {
+      dayLabel = dateFormat.format(localDate);
+    }
+
+    return '$dayLabel ${timeFormat.format(localDate)}';
+  }
+}
 enum OrderStatus {
   inProcess,
   completed,

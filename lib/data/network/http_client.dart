@@ -438,6 +438,10 @@ class MyHttpClient extends BaseApiServices {
           // }, query: GraphQLQueries.refreshTokenQuery);
           // SharedPreferenceManager.sharedInstance.clearRefreshToken();
           // SharedPreferenceManager.sharedInstance.clearToken();
+          SharedPreferenceManager.sharedInstance.clearAll();
+
+          AppRouter.pushAndRemoveUntil(const LoginView());
+          Helper.showMessage( AppRouter.navKey.currentContext!,message: "Please login again!");
         } else {
           SharedPreferenceManager.sharedInstance.clearAll();
 

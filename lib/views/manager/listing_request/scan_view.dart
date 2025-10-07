@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:push_price_manager/providers/product_provider/product_provider.dart';
 import 'package:push_price_manager/utils/extension.dart';
 
 import '../../../export_all.dart';
@@ -19,63 +20,85 @@ class _ScanViewState extends State<ScanView> {
    
     return CustomScreenTemplate(
       title: "Barcode",
-      showBottomButton: true,
+      showBottomButton: false,
       bottomButtonText: "scan now",
-      onButtonTap: (){
-        AppRouter.push(ScanProductView());
-      },
+      // onButtonTap: (){
+      //   AppRouter.push(ScanProductView());
+      // },
       
       child: ListView(
         padding: EdgeInsets.all(AppTheme.horizontalPadding), children: [
-          Platform.isIOS ?
-          GestureDetector(
-            onTap: ()async{
-              String? res = await SimpleBarcodeScanner.scanBarcode(
-                  context,
-                  // barcodeAppBar: const BarcodeAppBar(
-                  //   appBarTitle: 'Test',
-                  //   centerTitle: false,
-                  //   enableBackButton: true,
-                  //   backButtonIcon: Icon(Icons.arrow_back_ios),
-                  // ),
-                  isShowFlashIcon: true,
-                  delayMillis: 2000,
-               
-                );
-               print(res);
-            },
-            child: Container(
-              height: context.screenheight * 0.42,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.r),
-                color: Color.fromRGBO(50, 50, 50, 1)
-              ),
-              child: SvgPicture.asset(Assets.scanIcon),
-            ),
+           Platform.isIOS ?
+          Consumer(
+            builder: (context, ref, child) {
+              final providerVM = ref.watch(productProvider);
+              return GestureDetector(
+                onTap: ()async{
+                  String? res = await SimpleBarcodeScanner.scanBarcode(
+                      context,
+                      cameraFace: CameraFace.front,
+                      barcodeAppBar: const BarcodeAppBar(
+                        appBarTitle: 'Test',
+                        centerTitle: false,
+                        enableBackButton: true,
+                        backButtonIcon: Icon(Icons.arrow_back_ios),
+                      ),
+                      isShowFlashIcon: true,
+                      delayMillis: 2000,
+                   
+                    );
+                    if(providerVM.getProductReponse.status != Status.loading && res != null){
+                      if(!context.mounted) return;
+                                Helper.showFullScreenLoader(context);
+                                ref.read(productProvider.notifier).getProductData(res);
+                              }
+                },
+                child: Container(
+                  height: context.screenheight * 0.42,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.r),
+                    color: Color.fromRGBO(50, 50, 50, 1)
+                  ),
+                  child: SvgPicture.asset(Assets.scanIcon),
+                ),
+              );
+            }
           ): 
            ClipRRect(
             borderRadius: BorderRadius.circular(20.r),
-             child: SizedBox(
-                  width: 200,
-                  height: context.screenheight * 0.42,
-                  child: SimpleBarcodeScanner(
-                    // scanType: ScanType.qr,
-                    scaleHeight: 200,
-                    
-                    scaleWidth: 500,
-                    onScanned: (code) {
-                      print("My Scan" + code);
-                      // setState(() {
-                      //   result = code;
-                      // });
-                    },
-                    
-                    
-                    onBarcodeViewCreated: (BarcodeViewController controller) {
-                      this.controller = controller;
-                    },
-                  )),
+             child: Consumer(
+               builder: (context, ref, child) {
+                final providerVM = ref.watch(productProvider);
+                 return SizedBox(
+                      width: 200,
+                      height: context.screenheight * 0.42,
+                      child: SimpleBarcodeScanner(
+                        // scanType: ScanType.qr,
+                        scaleHeight: 200,
+                        delayMillis: 2000,
+                        scaleWidth: 500,
+                        continuous: true,
+    
+                        onScanned: (code) {
+                          
+                          if(providerVM.getProductReponse.status != Status.loading){
+                            Helper.showFullScreenLoader(context);
+                            ref.read(productProvider.notifier).getProductData(code);
+                          }
+                         
+                          // setState(() {
+                          //   result = code;
+                          // });
+                        },
+                        
+                        
+                        onBarcodeViewCreated: (BarcodeViewController controller) {
+                          this.controller = controller;
+                        },
+                      ));
+               }
+             ),
            ),
           Padding(padding: EdgeInsets.symmetric(
             vertical: 20.r,

@@ -7,6 +7,7 @@ class ProductDataModel {
   final num? price;
   final int? id;
   final int ? chainId;
+  final DateTime ? createdAt;
   final CategoryDataModel? category;
 
   const ProductDataModel({
@@ -16,7 +17,8 @@ class ProductDataModel {
     this.price,
     this.id,
     this.category,
-    this.chainId
+    this.chainId,
+    this.createdAt
   });
 
   factory ProductDataModel.fromJson(Map<String, dynamic> json) {
@@ -27,7 +29,8 @@ class ProductDataModel {
       image: json['product_image'] ?? '',
       price: (json['base_price'] as num?) ?? 0,
       category: json['category'] != null ? CategoryDataModel.fromJson(json['category']) : null,
-      chainId: json['chain_id'] ?? -1
+      chainId: json['chain_id'] ?? -1,
+      createdAt: DateTime.tryParse(json['created_at']) ?? DateTime.now()
     );
   }
 

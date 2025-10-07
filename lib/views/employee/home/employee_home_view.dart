@@ -97,7 +97,7 @@ class ListingRequestSection extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index)=>GestureDetector(
                         onTap: (){
-                          AppRouter.push( ListingProductDetailView(isRequest: true, type:setType(index)));
+                          // AppRouter.push( ListingProductDetailView(isRequest: true, type:setType(index)));
                         },
                         child: ProductDisplayBoxWidget()), separatorBuilder: (context, index)=> 10.pw, itemCount: 4),
                   )

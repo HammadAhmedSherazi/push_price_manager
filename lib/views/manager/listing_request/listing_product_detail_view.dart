@@ -5,7 +5,8 @@ import '../../../export_all.dart';
 class ListingProductDetailView extends StatelessWidget {
   final bool? isRequest;
   final String ? type;
-  const ListingProductDetailView({super.key, this.isRequest = false, this.type = ""});
+  final ProductDataModel data;
+  const ListingProductDetailView({super.key, this.isRequest = false, this.type = "", required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,12 @@ class ListingProductDetailView extends StatelessWidget {
             padding: EdgeInsets.all(30.r),
             height: context.screenheight * 0.18,
             color: AppColors.primaryAppBarColor,
-            child: Image.asset(Assets.groceryBag),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                DisplayNetworkImage(imageUrl: data.image, height: 60.r, width: 60.r,),
+              ],
+            ),
           ),
           Padding(
             padding: EdgeInsetsGeometry.symmetric(
@@ -52,21 +58,21 @@ class ListingProductDetailView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "ABC Product",
+                      data.title,
                       style: context.textStyle.displayMedium!.copyWith(
                         fontSize: 16.sp,
                       ),
                     ),
-                    Text("Today 3:45pm", style: context.textStyle.bodySmall),
+                    Text(data.createdAt!.toReadableString(), style: context.textStyle.bodySmall),
                   ],
                 ),
                 10.ph,
-                ProductTitleWidget(title: "Category", value: "ABC Category"),
+                ProductTitleWidget(title: "Category", value: "${data.category?.title}"),
                 ProductTitleWidget(
                   title: "Product Details",
-                  value: "Lorem Ipsum Dor",
+                  value: data.description,
                 ),
-                ProductTitleWidget(title: "Price", value: "\$199.99"),
+                ProductTitleWidget(title: "Price", value: "\$${data.price!.toStringAsFixed(2)}"),
               ],
             ),
           ),
