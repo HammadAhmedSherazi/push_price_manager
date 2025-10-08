@@ -1,16 +1,26 @@
+
 import 'package:push_price_manager/utils/extension.dart';
 
 import '../../../export_all.dart';
 
-class EmployeeHomeView extends StatefulWidget {
+class EmployeeHomeView extends ConsumerStatefulWidget {
   final ScrollController scrollController;
   const EmployeeHomeView({super.key, required this.scrollController});
 
   @override
-  State<EmployeeHomeView> createState() => _EmployeeHomeViewState();
+  ConsumerState<EmployeeHomeView> createState() => _EmployeeHomeViewState();
 }
 
-class _EmployeeHomeViewState extends State<EmployeeHomeView> {
+class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
+  @override
+  void initState() {
+    // Future.microtask((){
+    //   ref.read(productProvider.notifier).getListApprovedProducts(limit: 10);
+    //   ref.read(productProvider.notifier).getListRequestProducts(limit: 10);
+      
+    // });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +109,10 @@ class ListingRequestSection extends StatelessWidget {
                         onTap: (){
                           // AppRouter.push( ListingProductDetailView(isRequest: true, type:setType(index)));
                         },
-                        child: ProductDisplayBoxWidget()), separatorBuilder: (context, index)=> 10.pw, itemCount: 4),
+                        child:
+                        SizedBox.shrink()
+                        //  ProductDisplayBoxWidget()
+                        ), separatorBuilder: (context, index)=> 10.pw, itemCount: 4),
                   )
         ],
     );
@@ -150,11 +163,14 @@ class ProductListingSection extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index)=>GestureDetector(
                         onTap: (){
-                           AppRouter.push(PendingProductDetailView(
-                    type: setType(index),
-                  ));
+                  //          AppRouter.push(PendingProductDetailView(
+                  //   type: setType(index),
+                  // ));
                         },
-                        child: ProductDisplayBoxWidget()), separatorBuilder: (context, index)=> 10.pw, itemCount: 4),
+                        child:
+                        SizedBox.shrink()
+                        //  ProductDisplayBoxWidget()
+                         ), separatorBuilder: (context, index)=> 10.pw, itemCount: 4),
                   )
         ],
     );

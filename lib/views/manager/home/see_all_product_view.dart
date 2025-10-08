@@ -33,22 +33,25 @@ class SeeAllProductView extends StatelessWidget {
                        
                             }
                             else if(title == "Product Listings"){
-                               AppRouter.push(PendingProductDetailView(
-                    type: setType(index),
-                  ));
+                  //              AppRouter.push(PendingProductDetailView(
+                  //   type: setType(index),
+                  // ));
                             }
                             else if(title == "Pending Listings"){
-                               AppRouter.push(PendingProductDetailView(
-                    type: setType(index),
-                  ));
+                  //              AppRouter.push(PendingProductDetailView(
+                  //   type: setType(index),
+                  // ));
                             }
                             else{
-                                 AppRouter.push(ProductLiveListingDetailView(
-          type: setType(index),
-         ));
+        //                          AppRouter.push(ProductLiveListingDetailView(
+        //   type: setType(index),
+        //  ));
                             }
                           },
-                          child: ProductDisplayBoxWidget()));
+                          child: 
+                          SizedBox.shrink()
+                          // ProductDisplayBoxWidget()
+                          ));
                 },
               ),
            );

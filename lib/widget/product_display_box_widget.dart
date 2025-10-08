@@ -3,8 +3,10 @@ import 'package:push_price_manager/utils/extension.dart';
 import '../export_all.dart';
 
 class ProductDisplayBoxWidget extends StatelessWidget {
+  final ProductDataModel data;
   const ProductDisplayBoxWidget({
     super.key,
+    required this.data
   });
 
   @override
@@ -22,22 +24,23 @@ class ProductDisplayBoxWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       spacing: 3,
       children: [
-        Image.asset(Assets.groceryBag, width: 40.r,),
+        DisplayNetworkImage(imageUrl: data.image, width: 40.r, height: 40.r,),
+        
         5.ph,
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text("Abc Product", style: context.textStyle.displaySmall,),
+            Text(data.title, style: context.textStyle.displaySmall,),
           ],
         ),
         Row(
           children: [
-            Text("Abc Category", style: context.textStyle.bodySmall,),
+            Text("${data.category?.title}", style: context.textStyle.bodySmall,),
           ],
         ),
         Row(
           children: [
-            Expanded(child: Text("\$ 199.99", style: context.textStyle.titleSmall,)),
+            Expanded(child: Text("\$ ${data.price?.toStringAsFixed(2)}", style: context.textStyle.titleSmall,)),
             
           ],
         ),

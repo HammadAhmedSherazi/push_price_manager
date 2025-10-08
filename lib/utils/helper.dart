@@ -85,5 +85,18 @@ static void showFullScreenLoader(BuildContext context, {bool dismissible = false
     },
   );
 }
-  
+static  String getTypeTitle(String type) {
+  switch (type) {
+    case "BEST_BY_PRODUCTS":
+      return "Best By Products";
+    case "INSTANT_SALE":
+      return "Instant Sales";
+    case "PROMOTIONAL_PRODUCTS":
+      return "Promotional Products";
+    case "WEIGHTED_ITEMS":
+      return "Weighted Items";
+    default:
+      return "";
+  }
+}
 }

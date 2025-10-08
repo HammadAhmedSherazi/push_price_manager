@@ -1,3 +1,4 @@
+import 'package:push_price_manager/providers/product_provider/product_provider.dart';
 import 'package:push_price_manager/utils/extension.dart';
 
 import '../../../export_all.dart';
@@ -34,6 +35,7 @@ class _ListingProductViewState extends State<ListingProductView> {
   TextEditingController? dateTextController;
   List<TextEditingController?> priceControllers = [];
   int quantity = 0;
+  DateTime? pickedDate;
 
 void changeQuantity(int value) {
   if (value <= 0) return; // Prevent invalid quantity
@@ -62,19 +64,44 @@ void changeQuantity(int value) {
   Widget build(BuildContext context) {
     return CustomScreenTemplate(
       showBottomButton: true,
+      
       bottomButtonText: "list now",
-      onButtonTap: () {
-        if(quantity == 0){
-          Helper.showMessage(context, message: "Please add quantity of product");
+      customBottomWidget: Padding(
+        padding:  EdgeInsets.symmetric(
+          horizontal: AppTheme.horizontalPadding
+        ),
+        child: Consumer(
+          builder: (context, ref, child) {
+            return CustomButtonWidget(
+              isLoad: ref.watch(productProvider).listNowApiResponse.status == Status.loading,
+              title: "list now", onPressed:  () {
+              if(quantity == 0){
+                Helper.showMessage(context, message: "Please add quantity of product");
+              }
+              else{
+                if(dateTextController!.text.isEmpty && (widget.type == "Weighted Items" ||
+                        widget.type == "Best By Products")){
+                
+                   Helper.showMessage(context, message: "Please select a date");
+                   return;
+                }
+                final route = ModalRoute.of(context);
+        final args = route?.settings.arguments;
+              Map<String, dynamic> data = {};
+               if (args is Map<String, dynamic>) {
+          data = Map<String, dynamic>.from(args);
         }
-        else{
-          AppRouter.customback(times: widget.popTime);
-        AppRouter.push(
-          SuccessListingRequestView(message: "Product Listing Successful!"),
-        );
-        }
-        
-      },
+        data['quantity'] = quantity;
+        data['best_by_date'] = pickedDate!.toIso8601String();
+       
+               ref.read(productProvider.notifier).listNow(input: data, popTime: widget.popTime);
+              }
+              
+            });
+          }
+        ),
+      ),
+     
       title: "List Product",
       child: Container(
         width: double.infinity,
@@ -100,7 +127,7 @@ void changeQuantity(int value) {
                         readOnly: true,
                         onTap: () async {
                           DateTime now = DateTime.now();
-                          final DateTime? pickedDate = await showDatePicker(
+                         pickedDate = await showDatePicker(
                             context: context,
                             initialDate: now,
                             firstDate: DateTime(2000),
@@ -118,16 +145,16 @@ void changeQuantity(int value) {
                         },
                       ),
                     ],
-                    if (widget.type == "Best By Products") ...[
-                      TextFormField(
-                        onTapOutside: (event) {
-                          FocusScope.of(context).unfocus();
-                        },
-                        decoration: InputDecoration(
-                          hintText: "Product Name (Pre-filled)",
-                        ),
-                      ),
-                    ],
+                    // if (widget.type == "Best By Products") ...[
+                    //   TextFormField(
+                    //     onTapOutside: (event) {
+                    //       FocusScope.of(context).unfocus();
+                    //     },
+                    //     decoration: InputDecoration(
+                    //       hintText: "Product Name (Pre-filled)",
+                    //     ),
+                    //   ),
+                    // ],
                     //           TextFormField(
                     //             onTapOutside: (event) {
                     //   FocusScope.of(context).unfocus();
@@ -186,7 +213,7 @@ void changeQuantity(int value) {
                       readOnly: true,
                       onTap: () async {
                         DateTime now = DateTime.now();
-                        final DateTime? pickedDate = await showDatePicker(
+                        pickedDate = await showDatePicker(
                           context: context,
                           initialDate: now,
                           firstDate: DateTime(2000),
@@ -204,16 +231,16 @@ void changeQuantity(int value) {
                       },
                     ),
                   ],
-                  if (widget.type == "Best By Products") ...[
-                    TextFormField(
-                      onTapOutside: (event) {
-                        FocusScope.of(context).unfocus();
-                      },
-                      decoration: InputDecoration(
-                        hintText: "Product Name (Pre-filled)",
-                      ),
-                    ),
-                  ],
+                  // if (widget.type == "Best By Products") ...[
+                  //   TextFormField(
+                  //     onTapOutside: (event) {
+                  //       FocusScope.of(context).unfocus();
+                  //     },
+                  //     decoration: InputDecoration(
+                  //       hintText: "Product Name (Pre-filled)",
+                  //     ),
+                  //   ),
+                  // ],
                   //           TextFormField(
                   //             onTapOutside: (event) {
                   //   FocusScope.of(context).unfocus();

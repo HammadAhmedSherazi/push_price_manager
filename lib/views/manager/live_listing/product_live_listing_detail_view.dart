@@ -4,7 +4,8 @@ import '../../../export_all.dart';
 class ProductLiveListingDetailView extends StatelessWidget {
 
   final String type;
-  const ProductLiveListingDetailView({super.key, required this.type});
+  // final ProductDataModel data;
+  const ProductLiveListingDetailView({super.key, required this.type, });
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +67,7 @@ class ProductLiveListingDetailView extends StatelessWidget {
               
         
               CustomOutlineButtonWidget(title: "edit", onPressed: (){
-                AppRouter.push(ProductAddDetailView(title: "Product Listings - List Product", type: type,));
+                // AppRouter.push(ProductAddDetailView(title: "Product Listings - List Product", type: type,));
               }),
               CustomButtonWidget(title: "delete", onPressed: (){}, color: Color(0xffB80303),)
            

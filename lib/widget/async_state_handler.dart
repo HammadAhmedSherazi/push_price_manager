@@ -1,5 +1,7 @@
 
 
+import 'package:push_price_manager/utils/extension.dart';
+
 import '../../../export_all.dart';
 
 
@@ -14,6 +16,7 @@ class AsyncStateHandler<T> extends StatelessWidget {
   final Widget? loadingWidget;
   final Widget ? customSuccessWidget;
   final T? data;
+  final Axis scrollDirection;
 
   const AsyncStateHandler({
     super.key,
@@ -22,6 +25,7 @@ class AsyncStateHandler<T> extends StatelessWidget {
     required this.itemBuilder,
     required this.onRetry,
     this.emptyMessage,
+    this.scrollDirection = Axis.vertical,
     this.scrollController,
     this.padding,
     this.loadingWidget,
@@ -50,6 +54,7 @@ class AsyncStateHandler<T> extends StatelessWidget {
       }
 
       return  customSuccessWidget  ??  ListView.separated(
+        scrollDirection: scrollDirection,
         controller: scrollController,
         // shrinkWrap: true,
         physics: const AlwaysScrollableScrollPhysics(),
@@ -61,7 +66,7 @@ class AsyncStateHandler<T> extends StatelessWidget {
             return itemBuilder(context, index);
           }
         },
-        separatorBuilder: (context, index) => const SizedBox(height: 16),
+        separatorBuilder: (context, index) =>scrollDirection == Axis.vertical ? const SizedBox(height: 16): 10.pw,
         itemCount: status == Status.loadingMore ? dataList.length + 1 : dataList.length,
       );
     }

@@ -90,10 +90,10 @@ class _SelectProductViewState extends State<SelectProductView> {
                 itemBuilder: (context, index) {
                   return Stack(
                     children: [
-                      SizedBox(
-                        width: double.infinity,
-                        height: double.infinity,
-                        child: ProductDisplayBoxWidget()),
+                      // SizedBox(
+                      //   width: double.infinity,
+                      //   height: double.infinity,
+                      //   child: ProductDisplayBoxWidget()),
                         Positioned(
                       right: 0,
                       child: Checkbox(
@@ -138,10 +138,10 @@ class _SelectProductViewState extends State<SelectProductView> {
               itemBuilder: (context, index) {
                 return Stack(
                   children: [
-                    SizedBox(
-                      width: double.infinity,
-                      height: double.infinity,
-                      child: ProductDisplayBoxWidget()),
+                    // SizedBox(
+                    //   width: double.infinity,
+                    //   height: double.infinity,
+                    //   child: ProductDisplayBoxWidget()),
                     Positioned(
                       right: 0,
                       child: Checkbox(
