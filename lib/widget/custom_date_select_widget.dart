@@ -10,6 +10,7 @@ class CustomDateSelectWidget extends StatefulWidget {
   final DateTime? selectedDate;
   final ValueChanged<DateTime?> onDateSelected;
   final Widget? suffixIcon;
+  final String? Function(String?)? validator;
 
   const CustomDateSelectWidget({
     super.key,
@@ -21,6 +22,7 @@ class CustomDateSelectWidget extends StatefulWidget {
     this.lastDate,
     this.selectedDate,
     this.suffixIcon,
+    this.validator
   });
 
   @override
@@ -38,13 +40,13 @@ class _CustomDateSelectWidgetState extends State<CustomDateSelectWidget> {
     );
   }
 
-  @override
-  void didUpdateWidget(covariant CustomDateSelectWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.selectedDate != widget.selectedDate) {
-      _controller.text = Helper.selectDateFormat(widget.selectedDate);
-    }
-  }
+  // @override
+  // void didUpdateWidget(covariant CustomDateSelectWidget oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   if (oldWidget.selectedDate != widget.selectedDate) {
+  //     _controller.text = Helper.selectDateFormat(widget.selectedDate);
+  //   }
+  // }
 
   Future<void> _pickDate() async {
     final now = DateTime.now();
@@ -56,12 +58,17 @@ class _CustomDateSelectWidgetState extends State<CustomDateSelectWidget> {
     );
     if (picked != null) {
       widget.onDateSelected(picked);
+      setState(() {
+        _controller.text = Helper.selectDateFormat(picked);
+        
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      validator: widget.validator,
       onTapOutside: (event) {
   FocusScope.of(context).unfocus();
 },

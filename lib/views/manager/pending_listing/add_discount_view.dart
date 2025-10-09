@@ -1,119 +1,259 @@
+import 'package:flutter/services.dart';
 import 'package:push_price_manager/utils/extension.dart';
 
 import '../../../export_all.dart';
 
-class AddDiscountView extends StatefulWidget {
+class AddDiscountView extends ConsumerStatefulWidget {
   final bool? isPromotionalDiscount;
   final bool? isInstant;
-  const AddDiscountView({super.key, this.isPromotionalDiscount = false, this.isInstant = false});
+  final ListingModel data;
+  const AddDiscountView({
+    super.key,
+    this.isPromotionalDiscount = false,
+    this.isInstant = false,
+    required this.data,
+  });
 
   @override
-  State<AddDiscountView> createState() => _AddDiscountViewState();
+  ConsumerState<AddDiscountView> createState() => _AddDiscountViewState();
 }
 
-class _AddDiscountViewState extends State<AddDiscountView> {
+class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
+  late final TextEditingController _currentDiscountEditTextController;
+  late final TextEditingController _dialyDiscountEditTextController;
+  List<String> titles = [
+    'Save Discount For Future Listings',
+    'Save Duration of Listing Start Date in Accordance with the Best By Date for future Listings',
+    'Resume Automatically For The Next Batch',
+  ];
 
-  List<String> titles =  [
-  'Save Discount For Future Listings',
-  'Save Duration of Listing Start Date in Accordance with the Best By Date for future Listings',
-  'Resume Automatically For The Next Batch',
-];
+  List<bool> values = [false, false, true];
 
-
-List<bool> values = [false, false, true];
-int selectedIndex = -1;
   @override
   void initState() {
-    if(widget.isPromotionalDiscount!){
+    Future.microtask(() {
+      ref
+          .read(productProvider.notifier)
+          .getSuggestion(
+            productId: widget.data.productId,
+            storeId: widget.data.storeId,
+            item: widget.data,
+          );
+     
+    });
+    _currentDiscountEditTextController = TextEditingController(
+    
+    );
+    _dialyDiscountEditTextController = TextEditingController(
+     
+    );
+
+    if (widget.isPromotionalDiscount!) {
       titles = ['Save Discount For Future Listings'];
       values = [false];
+    } else {
+      values = [
+        widget.data.saveDiscountForFuture,
+        widget.data.saveDiscountForListing,
+        widget.data.autoApplyForNextBatch,
+      ];
     }
+
     super.initState();
-    
   }
+  
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return CustomScreenTemplate(
-      showBottomButton: true,
-      bottomButtonText: "next",
-      onButtonTap: (){
-        if(widget.isInstant!){
-          AppRouter.push(ListScheduleCalenderView());
-        }
-        else{
-           AppRouter.push(SelectProductView());
-        }
-        
-      },
-      title: "Add Discount", child: ListView(
-      padding: EdgeInsets.all(AppTheme.horizontalPadding),
-      children: [
-         TextFormField(
-          onTapOutside: (event) {
-  FocusScope.of(context).unfocus();
-},
-                  decoration: InputDecoration(
-                    hintText: "Current Discount",
-                    suffixIcon:  Icon(
-                Icons.percent_sharp,
-                color: AppColors.secondaryColor,
-              ),
-                  ),
-                ),
-                10.ph,
-          TextFormField(
-            onTapOutside: (event) {
-  FocusScope.of(context).unfocus();
-},
-                  decoration: InputDecoration(
-                    hintText: "Daily Increasing Discount",
-                    suffixIcon:  Icon(
-                Icons.percent_sharp,
-                color: AppColors.secondaryColor,
-              ),
-                  ),
-                ),
-                10.ph,
-            CustomDateSelectWidget(label: "label", hintText: "Listing Start Date", onDateSelected: (date){}),
-            20.ph,
+    ref.listen(productProvider, (previous, next) {
+    final newItem = next.listItem;
+    if (newItem != null) {
+      _currentDiscountEditTextController.text = newItem.currentDiscount != 0.0?
+          newItem.currentDiscount.toStringAsFixed(2) : "";
+      _dialyDiscountEditTextController.text = newItem.dailyIncreasingDiscountPercent != 0.0 ?
+          newItem.dailyIncreasingDiscountPercent.toStringAsFixed(2) : "";
+    }
+  });
+    final providerVM = ref.watch(productProvider);
+    final listItem = providerVM.listItem ?? widget.data;
 
-            ...List.generate(titles.length, (index)=>Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Text(
-            titles[index],
-            style: context.textStyle.bodyMedium,
+    return AsyncStateHandler(
+      status: providerVM.getSuggestionApiRes.status,
+      dataList: [],
+      itemBuilder: (context, index) => SizedBox(),
+      onRetry: () {
+        ref
+            .read(productProvider.notifier)
+            .getSuggestion(
+              productId: widget.data.productId,
+              storeId: widget.data.storeId,
+              item: widget.data,
+            );
+      },
+      customSuccessWidget: CustomScreenTemplate(
+        showBottomButton: true,
+        bottomButtonText: "next",
+        customBottomWidget: Padding(
+          padding: EdgeInsetsGeometry.symmetric(
+            horizontal: AppTheme.horizontalPadding,
+          ),
+          child: CustomButtonWidget(
+            title: "next",
+            isLoad: widget.isInstant!
+                ? providerVM.getSuggestionApiRes.status == Status.loading
+                : false,
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                if (widget.isInstant!) {
+                  AppRouter.push(ListScheduleCalenderView());
+                } else {
+                  Map<String, dynamic> data = {};
+                  if (widget.isPromotionalDiscount!) {
+                    data = {
+                      "save_discount_for_future":
+                          listItem.saveDiscountForFuture,
+                      "go_live_date": listItem.goLiveDate!.toIso8601String(),
+                      "listing_id": listItem.listingId,
+                      "current_discount": 100,
+                      "daily_increasing_discount_percent": 100,
+                    };
+                  } else {
+                    data = {
+                      "save_discount_for_future":
+                          listItem.saveDiscountForFuture,
+                      "save_duration_for_listing":
+                          listItem.saveDiscountForListing,
+                      "auto_apply_for_next_batch":
+                          listItem.autoApplyForNextBatch,
+                      "go_live_date": listItem.goLiveDate!.toIso8601String(),
+                      "listing_id": listItem.listingId,
+                      "current_discount": 100,
+                      "daily_increasing_discount_percent": 100,
+                    };
+                  }
+                  ref
+                      .read(productProvider.notifier)
+                      .setReview(input: data, times: widget.isInstant! ? 4 : 3);
+                }
+              }
+            },
           ),
         ),
-        Checkbox(
-          
-          shape: RoundedRectangleBorder(
-            
-            borderRadius: BorderRadius.circular(3.r),
-            
+
+        title: "Add Discount",
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            physics: BouncingScrollPhysics(),
+            padding: EdgeInsets.all(AppTheme.horizontalPadding),
+            children: [
+              TextFormField(
+                onTapOutside: (event) {
+                  FocusScope.of(context).unfocus();
+                },
+                controller: _currentDiscountEditTextController,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+                ],
+                validator: (value) => value?.validateCurrentDiscount(),
+                decoration: InputDecoration(
+                  hintText: "Current Discount",
+                  suffixIcon: Icon(
+                    Icons.percent_sharp,
+                    color: AppColors.secondaryColor,
+                  ),
+                ),
+              ),
+              10.ph,
+              TextFormField(
+                onTapOutside: (event) {
+                  FocusScope.of(context).unfocus();
+                },
+                controller: _dialyDiscountEditTextController,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+                ],
+                validator: (value) => value?.validateCurrentDiscount(),
+                decoration: InputDecoration(
+                  hintText: "Daily Increasing Discount",
+                  suffixIcon: Icon(
+                    Icons.percent_sharp,
+                    color: AppColors.secondaryColor,
+                  ),
+                ),
+              ),
+              10.ph,
+              CustomDateSelectWidget(
+                label: "label",
+                initialDate: DateTime.now(),
+                firstDate: DateTime.now(),
+                lastDate: DateTime.now().add(
+                  const Duration(days: 365),
+                ), // ✅ set a valid future limit
+                validator: (value) => value?.validateDate(),
+                hintText: "Listing Start Date",
+                onDateSelected: (date) {
+                  // ✅ Safe state update after build
+                  ref.read(productProvider.notifier).setGoLiveDate(date);
+                },
+                selectedDate: listItem.goLiveDate,
+              ),
+              20.ph,
+
+              ...List.generate(
+                titles.length,
+                (index) => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        titles[index],
+                        style: context.textStyle.bodyMedium,
+                      ),
+                    ),
+                    Checkbox(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(3.r),
+                      ),
+                      side: BorderSide(color: AppColors.secondaryColor),
+                      value: index == 0
+                          ? listItem.saveDiscountForFuture
+                          : index == 1
+                          ? listItem.saveDiscountForListing
+                          : listItem.autoApplyForNextBatch,
+                      onChanged: (v) {
+                        ref
+                            .read(productProvider.notifier)
+                            .setCheckBox(v!, index);
+                      },
+                      activeColor: AppColors.secondaryColor,
+                    ),
+
+                    // Radio<int>(
+                    //   value: index,
+                    //   groupValue: selectedIndex,
+                    //   onChanged: (val) {
+                    //     setState(() {
+                    //       selectedIndex = val!;
+                    //     });
+                    //   },
+                    //   fillColor: MaterialStateProperty.resolveWith((_) => AppColors.secondaryColor),
+                    // ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          side: BorderSide(
-            color: AppColors.secondaryColor
-          ),
-          value: index == selectedIndex, onChanged: (v){
-          setState(() {
-            selectedIndex = index;
-          });
-        },activeColor: AppColors.secondaryColor, ),
-        // Radio<int>(
-        //   value: index,
-        //   groupValue: selectedIndex,
-        //   onChanged: (val) {
-        //     setState(() {
-        //       selectedIndex = val!;
-        //     });
-        //   },
-        //   fillColor: MaterialStateProperty.resolveWith((_) => AppColors.secondaryColor),
-        // ),
-     
-      ],
-    ))]));
+        ),
+      ),
+    );
   }
 }
 

@@ -17,7 +17,7 @@ class Helper {
   return '$month $day, $year';
   }
   else{
-    return 'April 22, 2025';
+    return '';
   }
 
     // if(date == null){
@@ -99,4 +99,18 @@ static  String getTypeTitle(String type) {
       return "";
   }
 }
+static String setType(String type) {
+    switch (type) {
+      case "Best By Products":
+        return "BEST_BY_PRODUCTS";
+      case "Instant Sales":
+        return "INSTANT_SALE";
+      case "Promotional Products":
+        return "PROMOTIONAL_PRODUCTS";
+      case "Weighted Items":
+        return "WEIGHTED_ITEMS";
+      default:
+        return "";
+    }
+  }
 }

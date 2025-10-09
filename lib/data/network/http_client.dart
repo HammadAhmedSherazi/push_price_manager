@@ -413,6 +413,14 @@ class MyHttpClient extends BaseApiServices {
       case 200:
       case 201:
       case 203:
+      case 404:
+      //  if (json.decode(response.body.toString())['details'] ==
+      //       "User Not Found") {
+      //     SharedPreferenceManager.sharedInstance.clearAll();
+
+      //     AppRouter.pushAndRemoveUntil(const LoginView());
+      //     Helper.showMessage( AppRouter.navKey.currentContext!,message: "Please login again!");
+      //   }
         var utf8Format = utf8.decode(response.bodyBytes);
         var responseJson = jsonDecode(utf8Format);
         return responseJson;
@@ -462,7 +470,7 @@ class MyHttpClient extends BaseApiServices {
           response.statusCode,
           response.body.toString(),
         );
-      case 404:
+      
       case 408:
         Helper.showMessage(
            AppRouter.navKey.currentContext!,message: 

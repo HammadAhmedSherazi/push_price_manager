@@ -6,28 +6,35 @@ class ProductState {
   final ApiResponse listNowApiResponse;
   final ApiResponse listRequestApiResponse;
   final ApiResponse productListingApiResponse;
+  final ApiResponse getSuggestionApiRes;
   final ApiResponse pendingReviewApiRes;
-
+  final ApiResponse setReviewApiRes;
   final ApiResponse<ProductDataModel> getProductReponse;
   final List<ProductDataModel>? products;
   final List<ProductDataModel>? listRequestproducts;
-  final List<ProductDataModel>? listApprovedproducts;
+  final List<ListingModel>? listApprovedproducts;
   final List<ListingModel>? pendingReviewList;
   final String? searchText;
-  final int? offset;
+  // final int? offset;
+  final ListingModel? listItem;
+  final int? skip;
   ProductState({
     required this.productApiResponse,
     this.products,
     this.searchText,
-    this.offset,
+    // this.offset,
     required this.getProductReponse,
     required this.listNowApiResponse,
     required this.listRequestApiResponse,
     required this.productListingApiResponse,
     required this.pendingReviewApiRes,
+    required this.getSuggestionApiRes,
+    required this.setReviewApiRes,
     this.listApprovedproducts,
     this.listRequestproducts,
     this.pendingReviewList,
+    this.listItem,
+    this.skip
   });
 
   ProductState copyWith({
@@ -35,18 +42,24 @@ class ProductState {
     ApiResponse? productListingApiResponse,
     ApiResponse? productApiResponse,
     ApiResponse? pendingReviewApiRes,
+    ApiResponse? getSuggestionApiRes,
+    ApiResponse? setReviewApiRes,
     List<ProductDataModel>? products,
     String? searchText,
-    int? offset,
+    int? skip,
     ApiResponse<ProductDataModel>? getProductReponse,
     ApiResponse? listNowApiResponse,
     List<ProductDataModel>? listRequestproducts,
-    List<ProductDataModel>? listApprovedproducts,
-    List<ListingModel>? pendingReviewList
+    List<ListingModel>? listApprovedproducts,
+    List<ListingModel>? pendingReviewList,
+    ListingModel? listItem,
+    
   }) => ProductState(
+    getSuggestionApiRes: getSuggestionApiRes ?? this.getSuggestionApiRes,
     productApiResponse: productApiResponse ?? this.productApiResponse,
     products: products ?? this.products,
-    offset: offset ?? this.offset,
+    skip: skip ?? this.skip,
+    // offset: offset ?? this.offset,
     searchText: searchText ?? this.searchText,
     getProductReponse: getProductReponse ?? this.getProductReponse,
     listNowApiResponse: listNowApiResponse ?? this.listNowApiResponse,
@@ -55,6 +68,8 @@ class ProductState {
     listApprovedproducts: listApprovedproducts ?? this.listApprovedproducts,
     listRequestproducts: listRequestproducts ?? this.listRequestproducts,
     pendingReviewApiRes: pendingReviewApiRes ?? this.pendingReviewApiRes,
-    pendingReviewList: pendingReviewList ?? this.pendingReviewList
+    pendingReviewList: pendingReviewList ?? this.pendingReviewList,
+    listItem: listItem ?? this.listItem,
+    setReviewApiRes: setReviewApiRes ?? this.setReviewApiRes
   );
 }

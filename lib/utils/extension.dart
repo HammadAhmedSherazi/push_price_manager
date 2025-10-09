@@ -134,6 +134,42 @@ String? validateHeight() {
 
   return null;
 }
+String? validateCurrentDiscount() {
+  final value = double.tryParse(trim());
+  if (value == null) return 'Discount is required';
+
+  // ✅ Ensure it’s within a reasonable range (0–100%)
+  if (value < 0 || value > 100) {
+    return 'Discount must be between 0 and 100';
+  }
+
+  return null; // ✅ Valid discount
+}
+String? validateDate() {
+  if (trim().isEmpty) return 'Date is required';
+
+  try {
+    final date = DateTime.tryParse(trim());
+    if(date == null) return null;
+
+
+    final now = DateTime.now();
+
+    // ✅ Optional: disallow past or unrealistic future dates
+    if (date.isBefore(DateTime(now.year, now.month, now.day))) {
+      return 'Date cannot be in the past';
+    }
+
+    if (date.isAfter(DateTime(now.year + 2))) {
+      return 'Date is too far in the future';
+    }
+
+    return null; // ✅ Valid date
+  } catch (e) {
+    return 'Enter a valid date (e.g. 2025-10-08)';
+  }
+}
+
 }
 extension ReadableDateTime on DateTime {
   String toReadableString() {

@@ -17,20 +17,7 @@ class _SelectListingTypeViewState extends State<SelectListingTypeView> {
     "Weighted Items",
     "Promotional Products",
   ];
-  String setType(String type) {
-    switch (type) {
-      case "Best By Products":
-        return "BEST_BY_PRODUCTS";
-      case "Instant Sales":
-        return "INSTANT_SALE";
-      case "Promotional Products":
-        return "PROMOTIONAL_PRODUCTS";
-      case "Weighted Items":
-        return "WEIGHTED_ITEMS";
-      default:
-        return "";
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +32,7 @@ class _SelectListingTypeViewState extends State<SelectListingTypeView> {
           data = Map<String, dynamic>.from(args);
         }
 
-        data['listing_type'] = setType(types[selectIndex]);
+        data['listing_type'] = Helper.setType(types[selectIndex]);
         if (AppConstant.userType == UserType.employee) {
           AppRouter.push(
             ListingProductView(type: types[selectIndex], popTime: 6),

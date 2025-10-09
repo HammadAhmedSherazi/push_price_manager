@@ -129,6 +129,9 @@ class PendingListingSection extends ConsumerWidget {
                     type: Helper.getTypeTitle(providerVM.pendingReviewList![index].listingType),
                     data: providerVM.pendingReviewList![index],
                   ),
+                  fun: (){
+                    ref.read(productProvider.notifier).getPendingReviewList(limit: 10);
+                  }
                 );
               },
               child: ProductDisplayBoxWidget(

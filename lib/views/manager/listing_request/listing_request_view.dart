@@ -14,7 +14,7 @@ class ListingRequestView extends ConsumerStatefulWidget {
 class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
   late TextEditingController _searchTextEditController;
   late ScrollController _scrollController;
-  int offset = 0;
+  
   Timer? _searchDebounce;
   @override
   void initState() {
@@ -24,17 +24,20 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
     Future.microtask(() {
       ref
           .read(productProvider.notifier)
-          .getProductfromDatabase(limit: 10, offset: offset);
+          .getProductfromDatabase(limit: 10, skip: 0);
     });
      _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-            offset++;
-             Future.microtask(() {
+            int skip = ref.read(productProvider).skip ?? 0;
+            if(skip > 0){
+               Future.microtask(() {
       ref
           .read(productProvider.notifier)
-          .getProductfromDatabase(limit: 10, offset: offset);
+          .getProductfromDatabase(limit: 10, skip: skip);
     });
+            }
+            
       
       }
     });
@@ -57,8 +60,8 @@ void dispose() {
           : "Listing Request - Select Product",
       child: RefreshIndicator.adaptive(
          onRefresh: () async{
-                    offset = 0;
-                    ref.read(productProvider.notifier).getProductfromDatabase(limit: 10, offset: offset);
+                   
+                    ref.read(productProvider.notifier).getProductfromDatabase(limit: 10, skip: 0);
                   },
         child: Column(
           children: [
@@ -73,7 +76,7 @@ void dispose() {
         if (text.length >= 3) {
           ref.read(productProvider.notifier).getProductfromDatabase(
             limit: 20,
-            offset: 0,
+            skip: ref.watch(productProvider).skip ?? 0,
             searchText: text,
           );
         }
@@ -114,7 +117,7 @@ void dispose() {
                     onRetry: () {
                       ref
                           .read(productProvider.notifier)
-                          .getProductfromDatabase(limit: 5, offset: offset);
+                          .getProductfromDatabase(limit: 5, skip: ref.watch(productProvider).skip!);
                     },
                   ),
                 );

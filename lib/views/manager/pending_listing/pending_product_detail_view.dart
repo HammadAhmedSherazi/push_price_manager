@@ -25,11 +25,11 @@ class PendingProductDetailView extends StatelessWidget {
                 title: "next",
                 onPressed: () {
                   AppRouter.push(
-                    AddDiscountView(isInstant: type == "Instant Sales"),
+                    AddDiscountView(isInstant: type == "Instant Sales", data: data,),
                   );
                 },
               ),
-            if (AppConstant.userType == UserType.employee)
+            if (AppConstant.userType == UserType.employee && data.status == "PENDING_MANAGER_REVIEW")
               CustomButtonWidget(
                 title: "edit",
                 onPressed: () {
@@ -55,6 +55,7 @@ class PendingProductDetailView extends StatelessWidget {
                   );
                 },
               ),
+            if(data.status == "PENDING_MANAGER_REVIEW")
             CustomButtonWidget(
               title: "delete",
               onPressed: () {},
@@ -125,7 +126,7 @@ class PendingProductDetailView extends StatelessWidget {
                   ProductTitleWidget(
                     title: "Best by Date",
                     value: Helper.selectDateFormat(
-                      DateTime.tryParse(data.bestByDate),
+                      data.bestByDate,
                     ),
                   ),
                 ProductTitleWidget(

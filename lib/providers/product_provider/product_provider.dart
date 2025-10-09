@@ -7,20 +7,55 @@ import 'package:push_price_manager/providers/product_provider/product_state.dart
 class ProductProvider extends Notifier<ProductState> {
   @override
   ProductState build() {
-    return ProductState(productApiResponse: ApiResponse.undertermined(),products: [], getProductReponse: ApiResponse.loading(), listNowApiResponse: ApiResponse.undertermined(),listRequestApiResponse: ApiResponse.undertermined(),productListingApiResponse: ApiResponse.undertermined(), pendingReviewApiRes: ApiResponse.undertermined());
+    return ProductState(
+      productApiResponse: ApiResponse.undertermined(),
+      products: [],
+      getProductReponse: ApiResponse.loading(),
+      listNowApiResponse: ApiResponse.undertermined(),
+      listRequestApiResponse: ApiResponse.undertermined(),
+      productListingApiResponse: ApiResponse.undertermined(),
+      pendingReviewApiRes: ApiResponse.undertermined(),
+      getSuggestionApiRes: ApiResponse.undertermined(),
+      setReviewApiRes: ApiResponse.undertermined(),
+      listApprovedproducts: [],
+    );
   }
 
-  FutureOr<void> getProductfromDatabase({required int limit, required int offset ,  String? searchText })async{
-    if(offset == 0 && state.products!.isNotEmpty){
-      state = state.copyWith(products: []);
+  void setGoLiveDate(DateTime? date) {
+    if (date == null) return;
+    state = state.copyWith(
+      listItem: state.listItem!.copyWith(goLiveDate: date),
+    );
+  }
+
+  void setCheckBox(bool chk, int index) {
+    if (index == 0) {
+      state = state.copyWith(
+        listItem: state.listItem!.copyWith(saveDiscountForFuture: chk),
+      );
+    } else if (index == 1) {
+      state = state.copyWith(
+        listItem: state.listItem!.copyWith(saveDiscountForListing: chk),
+      );
+    } else {
+      state = state.copyWith(
+        listItem: state.listItem!.copyWith(autoApplyForNextBatch: chk),
+      );
     }
-    Map<String, dynamic> params ={
-        'limit' : limit,
-        'skip' : offset
-    };
-    if(searchText != null){
+  }
+
+  FutureOr<void> getProductfromDatabase({
+    required int limit,
+    int skip = 0,
+    String? searchText,
+  }) async {
+    if (skip == 0 && state.products!.isNotEmpty) {
+      state = state.copyWith(products: [], skip: 0);
+    }
+    Map<String, dynamic> params = {'limit': limit, 'skip': skip};
+    if (searchText != null) {
       params['search_term'] = searchText;
-    } 
+    }
     // if(minPrice != null){
     //   params['min_price'] = minPrice;
     // }
@@ -30,39 +65,61 @@ class ProductProvider extends Notifier<ProductState> {
     // if(categoryId != null){
     //   params['category_id'] = categoryId;
     // }
-    
 
-    
     try {
-      state = state.copyWith(productApiResponse: ApiResponse.loading());
-      final response = await MyHttpClient.instance.get(ApiEndpoints.getDataBaseProducts,params: params);
-     if (!ref.mounted) return;
-     if(response != null){
-        List temp = response ?? [];
-     
-        state = state.copyWith(productApiResponse: ApiResponse.completed(response),
-        products:  offset == 0 && state.products!.isEmpty ? List.from(temp.map((e)=>ProductDataModel.fromJson(e))):[...state.products!, ...List.from(temp.map((e)=>ProductDataModel.fromJson(e)))]  
-        );
+      state = state.copyWith(
+        productApiResponse: skip == 0
+            ? ApiResponse.loading()
+            : ApiResponse.loadingMore(),
+      );
+      final response = await MyHttpClient.instance.get(
+        ApiEndpoints.getDataBaseProducts,
+        params: params,
+      );
 
-      }
-      else{
-        // state = state.copyWith(productApiResponse: ApiResponse.error());
+      if (response != null) {
+        List temp = response ?? [];
+        final List<ProductDataModel> list = List.from(
+          temp.map((e) => ProductDataModel.fromJson(e)),
+        );
+        state = state.copyWith(
+          productApiResponse: ApiResponse.completed(response),
+          products: skip == 0 && state.products!.isEmpty
+              ? list
+              : [...state.products!, ...list],
+          skip: limit >= list.length ? 1 + limit : 0,
+        );
+      } else {
+        state = state.copyWith(
+          productApiResponse: skip == 0
+              ? ApiResponse.error()
+              : ApiResponse.undertermined(),
+        );
       }
     } catch (e) {
-      state = state.copyWith(productApiResponse: ApiResponse.error());
+      state = state.copyWith(
+        productApiResponse: skip == 0
+            ? ApiResponse.error()
+            : ApiResponse.undertermined(),
+      );
     }
   }
 
-  FutureOr<void> getProductData(String code)async{
+  FutureOr<void> getProductData(String code) async {
     try {
       state = state.copyWith(getProductReponse: ApiResponse.loading());
-      final response = await MyHttpClient.instance.get("${ApiEndpoints.getProductDetailByBarCode}$code");
+      final response = await MyHttpClient.instance.get(
+        "${ApiEndpoints.getProductDetailByBarCode}$code",
+      );
       AppRouter.back();
-      if(response != null){
-        state = state.copyWith(getProductReponse: ApiResponse.completed(ProductDataModel.fromJson(response)));
-        AppRouter.push(ScanProductView(data: state.getProductReponse.data!,));
-      }
-      else{
+      if (response != null) {
+        state = state.copyWith(
+          getProductReponse: ApiResponse.completed(
+            ProductDataModel.fromJson(response),
+          ),
+        );
+        AppRouter.push(ScanProductView(data: state.getProductReponse.data!));
+      } else {
         state = state.copyWith(getProductReponse: ApiResponse.error());
       }
     } catch (e) {
@@ -71,110 +128,241 @@ class ProductProvider extends Notifier<ProductState> {
     }
   }
 
-  FutureOr<void> listNow({required Map<String, dynamic> input, required int popTime})async{
+  FutureOr<void> listNow({
+    required Map<String, dynamic> input,
+    required int popTime,
+  }) async {
     try {
-      state = state.copyWith(listNowApiResponse:ApiResponse.loading());
-      final response = await MyHttpClient.instance.post(ApiEndpoints.listings, input);
-      if(response != null){
-        state = state.copyWith(listNowApiResponse:ApiResponse.completed(response));
-         AppRouter.customback(times: popTime);
-              AppRouter.push(
-                SuccessListingRequestView(message: "Product Listing Successful!"),
-              );
-      }
-      else{
-        state = state.copyWith(listNowApiResponse:ApiResponse.error());
+      state = state.copyWith(listNowApiResponse: ApiResponse.loading());
+      final response = await MyHttpClient.instance.post(
+        ApiEndpoints.listings,
+        input,
+      );
+      if (response != null) {
+        state = state.copyWith(
+          listNowApiResponse: ApiResponse.completed(response),
+        );
+        AppRouter.customback(times: popTime);
+        AppRouter.push(
+          SuccessListingRequestView(message: "Product Listing Successful!"),
+        );
+      } else {
+        state = state.copyWith(listNowApiResponse: ApiResponse.error());
       }
     } catch (e) {
-      state = state.copyWith(listNowApiResponse:ApiResponse.error());
+      state = state.copyWith(listNowApiResponse: ApiResponse.error());
     }
   }
 
-  FutureOr<void> getListRequestProducts({required int limit,  int skip = 0, String? type})async{
+  FutureOr<void> getListRequestProducts({
+    required int limit,
+    int skip = 0,
+    String? type,
+  }) async {
     try {
-      if(skip == 0 && state.listRequestproducts!.isNotEmpty){
+      if (skip == 0 && state.listRequestproducts!.isNotEmpty) {
         state = state.copyWith(listRequestproducts: []);
       }
-      state = state.copyWith(listRequestApiResponse:  ApiResponse.loading());
-      final response = await MyHttpClient.instance.get(ApiEndpoints.myListings,params: {
-        "status_filter" : "PENDING_MANAGER_REVIEW",
-        "skip" : skip,
-        "limit" : limit
-      });
-      if(response != null){
-        state = state.copyWith(listRequestApiResponse:  ApiResponse.completed("done"));
+      state = state.copyWith(listRequestApiResponse: ApiResponse.loading());
+      final response = await MyHttpClient.instance.get(
+        ApiEndpoints.myListings,
+        params: {
+          "status_filter": "PENDING_MANAGER_REVIEW",
+          "skip": skip,
+          "limit": limit,
+        },
+      );
+      if (response != null) {
+        state = state.copyWith(
+          listRequestApiResponse: ApiResponse.completed("done"),
+        );
         List temp = response ?? [];
-        if(temp.isNotEmpty)
-        {
-          state = state.copyWith(listRequestproducts:skip == 0? List.from(temp.map((e)=>ProductDataModel.fromJson(e['product']))): [...state.listRequestproducts!, ... List.from(temp.map((e)=>ProductDataModel.fromJson(e['product'])))]);
+        if (temp.isNotEmpty) {
+          state = state.copyWith(
+            listRequestproducts: skip == 0
+                ? List.from(
+                    temp.map((e) => ProductDataModel.fromJson(e['product'])),
+                  )
+                : [
+                    ...state.listRequestproducts!,
+                    ...List.from(
+                      temp.map((e) => ProductDataModel.fromJson(e['product'])),
+                    ),
+                  ],
+          );
         }
-
-      }
-      else{
-        state = state.copyWith(listRequestApiResponse:  ApiResponse.error());
+      } else {
+        state = state.copyWith(listRequestApiResponse: ApiResponse.error());
       }
     } catch (e) {
-        state = state.copyWith(listRequestApiResponse:  ApiResponse.error());
-      
+      state = state.copyWith(listRequestApiResponse: ApiResponse.error());
     }
   }
 
-  FutureOr<void> getListApprovedProducts({required int limit, int skip=0, String? type})async{
+  FutureOr<void> getListApprovedProducts({
+    required int limit,
+    int skip = 0,
+    String type = "BEST_BY_PRODUCTS",
+  }) async {
     try {
-      if(skip == 0 && state.listApprovedproducts!.isNotEmpty){
+      if (skip == 0 && state.listApprovedproducts!.isNotEmpty) {
         state = state.copyWith(listRequestproducts: []);
       }
-      state = state.copyWith(productListingApiResponse:  ApiResponse.loading());
-      final response = await MyHttpClient.instance.get(ApiEndpoints.myListings,params: {
-        "status_filter" : "APPROVED",
-        "skip" : skip,
-        "limit" : limit
-      });
-      if(response != null){
-        state = state.copyWith( productListingApiResponse:  ApiResponse.completed("done"));
+      state = state.copyWith(
+        productListingApiResponse: skip == 0
+            ? ApiResponse.loading()
+            : ApiResponse.loadingMore(),
+      );
+      final response = await MyHttpClient.instance.get(
+        ApiEndpoints.myListings,
+        params: {
+          "status_filter": "APPROVED",
+          "skip": skip,
+          "limit": limit,
+          "listing_type_filter": type,
+        },
+      );
+      if (response != null) {
+        state = state.copyWith(
+          productListingApiResponse: ApiResponse.completed("done"),
+        );
         List temp = response ?? [];
-        if(temp.isNotEmpty)
-        {
-          state = state.copyWith(listApprovedproducts:skip == 0? List.from(temp.map((e)=>ProductDataModel.fromJson(e['product']))): [...state.listApprovedproducts!, ... List.from(temp.map((e)=>ProductDataModel.fromJson(e['product'])))]);
+        if (temp.isNotEmpty) {
+          final List<ListingModel> list = List.from(
+            temp.map((e) => ListingModel.fromJson(e)),
+          );
+          state = state.copyWith(
+            listApprovedproducts: skip == 0
+                ? list
+                : [...state.listApprovedproducts!, ...list],
+            skip: limit >= list.length ? 1 + limit : 0,
+          );
         }
-
-      }
-      else{
-        state = state.copyWith(productListingApiResponse:  ApiResponse.error());
+      } else {
+        state = state.copyWith(
+          productListingApiResponse: skip == 0
+              ? ApiResponse.error()
+              : ApiResponse.undertermined(),
+        );
       }
     } catch (e) {
-        state = state.copyWith(productListingApiResponse:  ApiResponse.error());
-      
+      state = state.copyWith(
+        productListingApiResponse: skip == 0
+            ? ApiResponse.error()
+            : ApiResponse.undertermined(),
+      );
     }
   }
-  
-  FutureOr<void> getPendingReviewList({required int limit, int skip=0})async{
+
+  FutureOr<void> getPendingReviewList({
+    required int limit,
+    int skip = 0,
+  }) async {
     try {
-      if(skip == 0 && state.pendingReviewList != null && state.pendingReviewList!.isNotEmpty){
+      if (skip == 0 &&
+          state.pendingReviewList != null &&
+          state.pendingReviewList!.isNotEmpty) {
         state = state.copyWith(pendingReviewList: []);
       }
-      state = state.copyWith(pendingReviewApiRes: ApiResponse.loading(), );
-      final response = await MyHttpClient.instance.get(ApiEndpoints.pendingReview);
-      if(response != null){
-      state = state.copyWith(pendingReviewApiRes: ApiResponse.completed(response));
-      List temp = response ?? [];
-      if(temp.isNotEmpty){
-        final List<ListingModel> list = List.from(temp.map((e)=>ListingModel.fromJson(e)));
-        state = state.copyWith(pendingReviewList: skip == 0? list: [...state.pendingReviewList!, ...list]);
-      }
-
-      }
-      else{
-      state = state.copyWith(pendingReviewApiRes: ApiResponse.error());
-
+      state = state.copyWith(
+        pendingReviewApiRes: skip == 0
+            ? ApiResponse.loading()
+            : ApiResponse.loadingMore(),
+        listItem: null,
+      );
+      final response = await MyHttpClient.instance.get(
+        ApiEndpoints.pendingReview,
+      );
+      if (response != null) {
+        state = state.copyWith(
+          pendingReviewApiRes: ApiResponse.completed(response),
+        );
+        List temp = response ?? [];
+        if (temp.isNotEmpty) {
+          final List<ListingModel> list = List.from(
+            temp.map((e) => ListingModel.fromJson(e)),
+          );
+          state = state.copyWith(
+            pendingReviewList: skip == 0
+                ? list
+                : [...state.pendingReviewList!, ...list],
+            skip: limit >= list.length ? 1 + limit : 0,
+          );
+        }
+      } else {
+        state = state.copyWith(
+          pendingReviewApiRes: skip == 0
+              ? ApiResponse.error()
+              : ApiResponse.undertermined(),
+        );
       }
     } catch (e) {
-      state = state.copyWith(pendingReviewApiRes: ApiResponse.error());
-    } 
+      state = state.copyWith(
+        pendingReviewApiRes: skip == 0
+            ? ApiResponse.error()
+            : ApiResponse.undertermined(),
+      );
+    }
+  }
 
+  FutureOr<void> getSuggestion({
+    required int productId,
+    required int storeId,
+    required ListingModel item,
+  }) async {
+    try {
+      state = state.copyWith(
+        getSuggestionApiRes: ApiResponse.loading(),
+        listItem: item,
+      );
+      final response = await MyHttpClient.instance.get(
+        ApiEndpoints.suggestionsDiscount,
+        params: {"product_id": productId, "store_id": storeId},
+      );
+      if (response != null) {
+        final ListingModel item = state.listItem!.copyWith(
+          dailyIncreasingDiscountPercent:
+              response['daily_increasing_discount_percent'],
+          currentDiscount: response['current_discount'],
+          saveDiscountForFuture: response['save_discount_for_future'],
+          autoApplyForNextBatch: response['auto_apply_for_next_batch'],
+        );
+
+        state = state.copyWith(
+          getSuggestionApiRes: ApiResponse.completed(response),
+          listItem: item,
+        );
+      } else {
+        state = state.copyWith(getSuggestionApiRes: ApiResponse.error());
+      }
+    } catch (e) {
+      state = state.copyWith(getSuggestionApiRes: ApiResponse.error());
+    }
+  }
+
+  FutureOr<void> setReview({
+    required Map<String, dynamic> input,
+    required int times,
+  }) async {
+    try {
+      state = state.copyWith(setReviewApiRes: ApiResponse.loading());
+      final response = await MyHttpClient.instance.post(
+        ApiEndpoints.review,
+        input,
+      );
+      if (response != null) {
+        AppRouter.customback(times: times);
+        AppRouter.push(SuccessListingRequestView(message: "Listing is Live!"));
+      } else {
+        state = state.copyWith(setReviewApiRes: ApiResponse.loading());
+      }
+    } catch (e) {
+      state = state.copyWith(setReviewApiRes: ApiResponse.loading());
+    }
   }
 }
 
-final productProvider = NotifierProvider.autoDispose<ProductProvider, ProductState>(
-  ProductProvider.new,
-);
+final productProvider =
+    NotifierProvider.autoDispose<ProductProvider, ProductState>(
+      ProductProvider.new,
+    );

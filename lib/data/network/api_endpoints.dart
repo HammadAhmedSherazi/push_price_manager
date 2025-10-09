@@ -8,5 +8,7 @@ class ApiEndpoints {
   static const String pendingEmployeeTasks = "${ApiEndpoints.listings}pending-employee-tasks";
   static const String suggestionsDiscount = "${ApiEndpoints.listings}suggestions/discount/";
   static const String pendingReview = "${ApiEndpoints.listings}pending/review";
+  static const String review = "${ApiEndpoints.listings}review";
+  static String updateList(String id)=> "${ApiEndpoints.listings}$id/employee-details";
 
 }

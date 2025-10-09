@@ -37,23 +37,24 @@ class _ListingProductViewState extends State<ListingProductView> {
   int quantity = 0;
   DateTime? pickedDate;
 
-void changeQuantity(int value) {
-  if (value <= 0) return; // Prevent invalid quantity
+  void changeQuantity(int value) {
+    if (value <= 0) return; // Prevent invalid quantity
 
-  setState(() {
-    if (value > quantity) {
-      // Add controllers for the extra values
-      priceControllers.addAll(
-        List.generate(value - quantity, (_) => TextEditingController()),
-      );
-    } else if (value < quantity) {
-      // Remove extra controllers safely
-      priceControllers.removeRange(value, priceControllers.length);
-    }
+    setState(() {
+      if (value > quantity) {
+        // Add controllers for the extra values
+        priceControllers.addAll(
+          List.generate(value - quantity, (_) => TextEditingController()),
+        );
+      } else if (value < quantity) {
+        // Remove extra controllers safely
+        priceControllers.removeRange(value, priceControllers.length);
+      }
 
-    quantity = value; // Update the current quantity
-  });
-}
+      quantity = value; // Update the current quantity
+    });
+  }
+
   @override
   void initState() {
     dateTextController = TextEditingController();
@@ -64,50 +65,67 @@ void changeQuantity(int value) {
   Widget build(BuildContext context) {
     return CustomScreenTemplate(
       showBottomButton: true,
-      
+
       bottomButtonText: "list now",
       customBottomWidget: Padding(
-        padding:  EdgeInsets.symmetric(
-          horizontal: AppTheme.horizontalPadding
-        ),
+        padding: EdgeInsets.symmetric(horizontal: AppTheme.horizontalPadding),
         child: Consumer(
           builder: (context, ref, child) {
             return CustomButtonWidget(
-              isLoad: ref.watch(productProvider).listNowApiResponse.status == Status.loading,
-              title: "list now", onPressed:  () {
-              if(quantity == 0){
-                Helper.showMessage(context, message: "Please add quantity of product");
-              }
-              else{
-                if(dateTextController!.text.isEmpty && (widget.type == "Weighted Items" ||
-                        widget.type == "Best By Products")){
-                
-                   Helper.showMessage(context, message: "Please select a date");
-                   return;
+              isLoad:
+                  ref.watch(productProvider).listNowApiResponse.status ==
+                  Status.loading,
+              title: "list now",
+              onPressed: () {
+                if (quantity == 0) {
+                  Helper.showMessage(
+                    context,
+                    message: "Please add quantity of product",
+                  );
+                } else {
+                  if (dateTextController!.text.isEmpty &&
+                      (widget.type == "Weighted Items" ||
+                          widget.type == "Best By Products")) {
+                    Helper.showMessage(
+                      context,
+                      message: "Please select a date",
+                    );
+                    return;
+                  }
+                  final route = ModalRoute.of(context);
+                  final args = route?.settings.arguments;
+                  Map<String, dynamic> data = {};
+                  if (args is Map<String, dynamic>) {
+                    data = Map<String, dynamic>.from(args);
+                  }
+                  data['quantity'] = quantity;
+                  if (widget.type == "Weighted Items" ||
+                      widget.type == "Best By Products") {
+                    data['best_by_date'] = pickedDate!.toIso8601String();
+                  }
+                  if (widget.type == "Weighted Items" &&
+                      priceControllers.isNotEmpty) {
+                    data["weighted_items_prices"] = List.generate(
+                      priceControllers.length,
+                      (index) => num.tryParse(priceControllers[index]!.text),
+                    );
+                  }
+                  ref
+                      .read(productProvider.notifier)
+                      .listNow(input: data, popTime: widget.popTime);
                 }
-                final route = ModalRoute.of(context);
-        final args = route?.settings.arguments;
-              Map<String, dynamic> data = {};
-               if (args is Map<String, dynamic>) {
-          data = Map<String, dynamic>.from(args);
-        }
-        data['quantity'] = quantity;
-        data['best_by_date'] = pickedDate!.toIso8601String();
-       
-               ref.read(productProvider.notifier).listNow(input: data, popTime: widget.popTime);
-              }
-              
-            });
-          }
+              },
+            );
+          },
         ),
       ),
-     
+
       title: "List Product",
       child: Container(
         width: double.infinity,
         height: double.infinity,
         padding: EdgeInsets.all(AppTheme.horizontalPadding),
-        child: quantity > 4
+        child: quantity > 4 && widget.type == "Weighted Items"
             ? SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -127,7 +145,7 @@ void changeQuantity(int value) {
                         readOnly: true,
                         onTap: () async {
                           DateTime now = DateTime.now();
-                         pickedDate = await showDatePicker(
+                          pickedDate = await showDatePicker(
                             context: context,
                             initialDate: now,
                             firstDate: DateTime(2000),

@@ -43,8 +43,8 @@ class AsyncStateHandler<T> extends StatelessWidget {
       return loadingWidget ?? const CustomLoadingWidget();
     }
 
-    if (status == Status.completed) {
-      if (dataList.isEmpty) {
+    if (status == Status.completed ) {
+      if (dataList.isEmpty && customSuccessWidget == null) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

@@ -56,7 +56,7 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
     storeTitleController = TextEditingController(text: widget.data.store.storeName);
     productCategoryTitleController = TextEditingController(text: widget.data.product?.category?.title);
     quantity = widget.data.quantity;
-    bestByDate = DateTime.tryParse(widget.data.bestByDate);
+    bestByDate = widget.data.bestByDate;
     super.initState();
   }
 
@@ -97,7 +97,7 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
       bottomButtonText: "next",
       onButtonTap: () {
         if (AppConstant.userType == UserType.manager) {
-          AppRouter.push(AddDiscountView(isInstant: types[1] == selectType));
+          AppRouter.push(AddDiscountView(isInstant: types[1] == selectType, data: ListingModel(),));
         } else {
           AppRouter.customback(times: 2);
           AppRouter.push(
