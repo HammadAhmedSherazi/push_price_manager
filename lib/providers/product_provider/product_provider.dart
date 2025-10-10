@@ -17,7 +17,9 @@ class ProductProvider extends Notifier<ProductState> {
       pendingReviewApiRes: ApiResponse.undertermined(),
       getSuggestionApiRes: ApiResponse.undertermined(),
       setReviewApiRes: ApiResponse.undertermined(),
+      getStoresApiRes: ApiResponse.undertermined(),
       listApprovedproducts: [],
+      myStores: [],
     );
   }
 
@@ -44,10 +46,36 @@ class ProductProvider extends Notifier<ProductState> {
     }
   }
 
+  void addSelectProduct(int index) {
+    final stores = List<StoreSelectDataModel>.from(state.myStores ?? []);
+    final selectedStores = List<StoreSelectDataModel>.from(
+      state.mySelectedStores ?? [],
+    );
+
+    final store = stores[index];
+    selectedStores.add(store.copyWith(isSelected: true));
+    stores.removeAt(index);
+
+    state = state.copyWith(myStores: stores, mySelectedStores: selectedStores);
+  }
+
+  void removeProduct(int index) {
+    final stores = List<StoreSelectDataModel>.from(state.myStores ?? []);
+    final selectedStores = List<StoreSelectDataModel>.from(
+      state.mySelectedStores ?? [],
+    );
+
+    final store = selectedStores[index];
+    stores.add(store.copyWith(isSelected: false));
+    selectedStores.removeAt(index);
+
+    state = state.copyWith(myStores: stores, mySelectedStores: selectedStores);
+  }
+
   FutureOr<void> getProductfromDatabase({
     required int limit,
     int skip = 0,
-    String? searchText,
+    String?searchText,
   }) async {
     if (skip == 0 && state.products!.isNotEmpty) {
       state = state.copyWith(products: [], skip: 0);
@@ -73,7 +101,9 @@ class ProductProvider extends Notifier<ProductState> {
             : ApiResponse.loadingMore(),
       );
       final response = await MyHttpClient.instance.get(
-        ApiEndpoints.getDataBaseProducts,
+        AppConstant.userType == UserType.employee
+            ? ApiEndpoints.getEmployeeDataBaseProducts
+            : ApiEndpoints.getManagerDataBaseProducts,
         params: params,
       );
 
@@ -87,7 +117,7 @@ class ProductProvider extends Notifier<ProductState> {
           products: skip == 0 && state.products!.isEmpty
               ? list
               : [...state.products!, ...list],
-          skip: limit >= list.length ? 1 + limit : 0,
+          skip: list.length >= limit ? 1 + limit : 0,
         );
       } else {
         state = state.copyWith(
@@ -135,7 +165,8 @@ class ProductProvider extends Notifier<ProductState> {
     try {
       state = state.copyWith(listNowApiResponse: ApiResponse.loading());
       final response = await MyHttpClient.instance.post(
-        ApiEndpoints.listings,
+      AppConstant.userType == UserType.employee
+            ?  ApiEndpoints.listings :ApiEndpoints.managerCreate ,
         input,
       );
       if (response != null) {
@@ -144,7 +175,8 @@ class ProductProvider extends Notifier<ProductState> {
         );
         AppRouter.customback(times: popTime);
         AppRouter.push(
-          SuccessListingRequestView(message: "Product Listing Successful!"),
+          SuccessListingRequestView(message: AppConstant.userType == UserType.employee
+            ? "Product Listing Successful!" : "Listing Request Sent Successfully!"),
         );
       } else {
         state = state.copyWith(listNowApiResponse: ApiResponse.error());
@@ -203,6 +235,7 @@ class ProductProvider extends Notifier<ProductState> {
     required int limit,
     int skip = 0,
     String type = "BEST_BY_PRODUCTS",
+    String? searchText
   }) async {
     try {
       if (skip == 0 && state.listApprovedproducts!.isNotEmpty) {
@@ -220,6 +253,7 @@ class ProductProvider extends Notifier<ProductState> {
           "skip": skip,
           "limit": limit,
           "listing_type_filter": type,
+          "search" : searchText
         },
       );
       if (response != null) {
@@ -236,6 +270,12 @@ class ProductProvider extends Notifier<ProductState> {
                 ? list
                 : [...state.listApprovedproducts!, ...list],
             skip: limit >= list.length ? 1 + limit : 0,
+          );
+        }
+        else{
+          state = state.copyWith(
+            listApprovedproducts: [],
+            skip: 0,
           );
         }
       } else {
@@ -358,6 +398,31 @@ class ProductProvider extends Notifier<ProductState> {
       }
     } catch (e) {
       state = state.copyWith(setReviewApiRes: ApiResponse.loading());
+    }
+  }
+
+  FutureOr<void> getMyStores({String? searchText}) async {
+    try {
+      state = state.copyWith(getStoresApiRes: ApiResponse.loading());
+      final response = await MyHttpClient.instance.get(ApiEndpoints.getMyStore);
+      if (response != null) {
+        state = state.copyWith(
+          getStoresApiRes: ApiResponse.completed(response),
+        );
+        List temp = response['assigned_stores'] ?? [];
+        if (temp.isNotEmpty) {
+          state = state.copyWith(
+            mySelectedStores: [],
+            myStores: List.from(
+              temp.map((e) => StoreSelectDataModel.fromJson(e)),
+            ),
+          );
+        }
+      } else {
+        state = state.copyWith(getStoresApiRes: ApiResponse.error());
+      }
+    } catch (e) {
+      state = state.copyWith(getStoresApiRes: ApiResponse.error());
     }
   }
 }

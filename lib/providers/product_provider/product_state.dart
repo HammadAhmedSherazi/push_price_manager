@@ -9,13 +9,16 @@ class ProductState {
   final ApiResponse getSuggestionApiRes;
   final ApiResponse pendingReviewApiRes;
   final ApiResponse setReviewApiRes;
+  final ApiResponse getStoresApiRes;
   final ApiResponse<ProductDataModel> getProductReponse;
   final List<ProductDataModel>? products;
   final List<ProductDataModel>? listRequestproducts;
   final List<ListingModel>? listApprovedproducts;
   final List<ListingModel>? pendingReviewList;
+  final List<StoreSelectDataModel>? myStores;
   final String? searchText;
   // final int? offset;
+  final List<StoreSelectDataModel>? mySelectedStores;
   final ListingModel? listItem;
   final int? skip;
   ProductState({
@@ -30,11 +33,14 @@ class ProductState {
     required this.pendingReviewApiRes,
     required this.getSuggestionApiRes,
     required this.setReviewApiRes,
+    required this.getStoresApiRes,
     this.listApprovedproducts,
     this.listRequestproducts,
     this.pendingReviewList,
     this.listItem,
-    this.skip
+    this.skip,
+    this.myStores,
+    this.mySelectedStores
   });
 
   ProductState copyWith({
@@ -44,6 +50,7 @@ class ProductState {
     ApiResponse? pendingReviewApiRes,
     ApiResponse? getSuggestionApiRes,
     ApiResponse? setReviewApiRes,
+    ApiResponse? getStoresApiRes,
     List<ProductDataModel>? products,
     String? searchText,
     int? skip,
@@ -52,6 +59,8 @@ class ProductState {
     List<ProductDataModel>? listRequestproducts,
     List<ListingModel>? listApprovedproducts,
     List<ListingModel>? pendingReviewList,
+    List<StoreSelectDataModel>? myStores,
+    List<StoreSelectDataModel>? mySelectedStores,
     ListingModel? listItem,
     
   }) => ProductState(
@@ -70,6 +79,9 @@ class ProductState {
     pendingReviewApiRes: pendingReviewApiRes ?? this.pendingReviewApiRes,
     pendingReviewList: pendingReviewList ?? this.pendingReviewList,
     listItem: listItem ?? this.listItem,
-    setReviewApiRes: setReviewApiRes ?? this.setReviewApiRes
+    setReviewApiRes: setReviewApiRes ?? this.setReviewApiRes,
+    getStoresApiRes:  getStoresApiRes ?? this.getStoresApiRes,
+    myStores: myStores ?? this.myStores,
+    mySelectedStores: mySelectedStores ?? this.mySelectedStores
   );
 }

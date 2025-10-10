@@ -39,7 +39,7 @@ class _SelectListingTypeViewState extends State<SelectListingTypeView> {
             settings: RouteSettings(arguments: data),
           );
         } else {
-          AppRouter.push(SelectStoreView());
+          AppRouter.push(SelectStoreView(), settings: RouteSettings(arguments: data),);
         }
       },
       showBottomButton: true,

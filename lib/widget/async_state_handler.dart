@@ -8,7 +8,7 @@ import '../../../export_all.dart';
 class AsyncStateHandler<T> extends StatelessWidget {
   final Status status;
   final List<T> dataList;
-  final Widget Function(BuildContext, int) itemBuilder;
+  final Widget Function(BuildContext, int)? itemBuilder;
   final VoidCallback onRetry;
   final String? emptyMessage;
   final ScrollController? scrollController;
@@ -52,8 +52,11 @@ class AsyncStateHandler<T> extends StatelessWidget {
           ],
         );
       }
+      if(customSuccessWidget != null && itemBuilder == null){
+        return customSuccessWidget!;
+      }
 
-      return  customSuccessWidget  ??  ListView.separated(
+      return  ListView.separated(
         scrollDirection: scrollDirection,
         controller: scrollController,
         // shrinkWrap: true,
@@ -63,7 +66,7 @@ class AsyncStateHandler<T> extends StatelessWidget {
           if (status == Status.loadingMore && index == dataList.length) {
             return const CustomLoadingWidget();
           } else {
-            return itemBuilder(context, index);
+            return itemBuilder!(context, index);
           }
         },
         separatorBuilder: (context, index) =>scrollDirection == Axis.vertical ? const SizedBox(height: 16): 10.pw,

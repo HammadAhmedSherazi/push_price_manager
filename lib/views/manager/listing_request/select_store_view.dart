@@ -1,67 +1,108 @@
+import 'dart:async';
+
 import 'package:push_price_manager/utils/extension.dart';
 
 import '../../../export_all.dart';
 
-class SelectStoreView extends StatefulWidget {
+class SelectStoreView extends ConsumerStatefulWidget {
   const SelectStoreView({super.key});
 
   @override
-  State<SelectStoreView> createState() => _SelectStoreViewState();
+  ConsumerState<SelectStoreView> createState() => _SelectStoreViewState();
 }
 
-class _SelectStoreViewState extends State<SelectStoreView> {
-  List<StoreSelectDataModel> recentStores = List.generate(
-    2,
-    (index) => StoreSelectDataModel(
-      title: "ABC Store",
-      address: "abc street, lorem ipsum",
-      rating: 4.0,
-      icon: Assets.store,
-      isSelected: false,
-    ),
-  );
-  List<StoreSelectDataModel> selectedStores = [];
-  addSelectProduct(int index) {
-    final store = recentStores[index];
-    selectedStores.add(store.copyWith(isSelected: true));
-    recentStores.removeAt(index);
-  }
-  removeProduct(int index){
-    final store = selectedStores[index];
-    recentStores.add(store.copyWith(isSelected: false));
-    selectedStores.removeAt(index);
-  }
-  late TextEditingController searchTextEditController = TextEditingController();
+class _SelectStoreViewState extends ConsumerState<SelectStoreView> {
+  // List<StoreSelectDataModel> recentStores = List.generate(
+  //   2,
+  //   (index) => StoreSelectDataModel(
+  //     title: "ABC Store",
+  //     address: "abc street, lorem ipsum",
+  //     rating: 4.0,
+  //     icon: Assets.store,
+  //     isSelected: false,
+  //   ),
+  // );
+  // List<StoreSelectDataModel> selectedStores = [];
 
+  late final TextEditingController searchTextEditController;
+  Timer? _searchDebounce;
+  @override
+  void initState() {
+    searchTextEditController = TextEditingController();
+    Future.microtask(() {
+      fetchStores();
+    });
+    super.initState();
+  }
+  void fetchStores({String? searchText}){
+    ref.read(productProvider.notifier).getMyStores(searchText: searchText);
+  }
   @override
   Widget build(BuildContext context) {
+    final providerVM = ref.watch(productProvider);
+    final recentStores = providerVM.myStores ?? [];
+    final selectedStores = providerVM.mySelectedStores ?? [];
     return CustomScreenTemplate(
       title: "Select Store",
       showBottomButton: true,
-      onButtonTap: (){
-        AppRouter.customback(
-                times: 6
-              );
-        AppRouter.push(SuccessListingRequestView(message: "Listing Request Sent Successfully!"));
-      },
-      bottomButtonText: "send request",
+      customBottomWidget: Padding(
+        padding: EdgeInsets.symmetric(horizontal: AppTheme.horizontalPadding),
+        child: Consumer(
+          builder: (context, ref, child) {
+            ref.watch(productProvider.select((e) => e.listNowApiResponse));
+            return CustomButtonWidget(
+              isLoad: providerVM.listNowApiResponse.status == Status.loading,
+              title: "send request",
+              onPressed: () {
+                if (selectedStores.isEmpty) {
+                  Helper.showMessage(context, message: "Please select a store");
+                  return;
+                }
+                final route = ModalRoute.of(context);
+                final args = route?.settings.arguments;
+
+                Map<String, dynamic> data = {};
+                if (args is Map<String, dynamic>) {
+                  data = Map<String, dynamic>.from(args);
+                }
+                data['store_ids'] = List.generate(providerVM.mySelectedStores!.length, (index)=>selectedStores[index].storeId);
+                
+                ref.read(productProvider.notifier).listNow(input: data, popTime: 6);
+              },
+            );
+          },
+        ),
+      ),
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: EdgeInsets.all(AppTheme.horizontalPadding),
             child: CustomSearchBarWidget(
-              onTapOutside: (v){
-               FocusScope.of(context).unfocus();
-              
-            },
-              hintText: "Hinted search text", controller: searchTextEditController, onChanged: (v){
-              setState(() {
-                
-              });
-            },),
+              onTapOutside: (v) {
+                FocusScope.of(context).unfocus();
+              },
+              hintText: "Hinted search text",
+              controller: searchTextEditController,
+              onChanged: (text) {
+                 if (_searchDebounce?.isActive ?? false) {
+                    _searchDebounce!.cancel();
+                  }
+
+                  _searchDebounce = Timer(
+                    const Duration(milliseconds: 500),
+                    () {
+                      if (text.length >= 3) {
+                          fetchStores(searchText: text);
+                      }
+                    },
+                  );
+              },
+            ),
           ),
-          if (selectedStores.isNotEmpty && searchTextEditController.text == "") ...[
+          if (selectedStores.isNotEmpty &&
+              searchTextEditController.text == "") ...[
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: AppTheme.horizontalPadding,
@@ -89,9 +130,7 @@ class _SelectStoreViewState extends State<SelectStoreView> {
                   return StoreCardWidget(
                     data: selectedStores[index],
                     onTap: () {
-                      setState(() {
-                        removeProduct(index);
-                      });
+                      ref.read(productProvider.notifier).removeProduct(index);
                     },
                   );
                 },
@@ -99,50 +138,58 @@ class _SelectStoreViewState extends State<SelectStoreView> {
             ),
             10.ph,
           ],
-          if(recentStores.isNotEmpty )...[
+          if (recentStores.isNotEmpty) ...[
             Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: AppTheme.horizontalPadding,
-            ),
-            child: Text(searchTextEditController.text == ""? "Recent" : "Search Result", style: context.textStyle.displayMedium),
-          ),
-          10.ph,
-          Expanded(
-            child: GridView.builder(
               padding: EdgeInsets.symmetric(
                 horizontal: AppTheme.horizontalPadding,
               ),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // Two items per row
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 20,
-                childAspectRatio:
-                    0.97, // Adjust if you want different box shapes
+              child: Text(
+                searchTextEditController.text == ""
+                    ? "Recent"
+                    : "Search Result",
+                style: context.textStyle.displayMedium,
               ),
-              itemCount: recentStores.length, // Set how many items you want
-              itemBuilder: (context, index) {
-                return StoreCardWidget(
-                  data: recentStores[index],
-                  onTap: () {
-                    setState(() {
-                      addSelectProduct(index);
-                    });
-                  },
-                );
-              },
             ),
-          ),
+            10.ph,
+            Expanded(
+              child: AsyncStateHandler(
+                status: providerVM.getStoresApiRes.status,
+                dataList: recentStores,
+                itemBuilder: null,
+                onRetry: () {
+                  ref.read(productProvider.notifier).getMyStores();
+                },
+                customSuccessWidget: GridView.builder(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: AppTheme.horizontalPadding,
+                  ),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, // Two items per row
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 20,
+                    childAspectRatio:
+                        0.97, // Adjust if you want different box shapes
+                  ),
+                  itemCount: recentStores.length, // Set how many items you want
+                  itemBuilder: (context, index) {
+                    return StoreCardWidget(
+                      data: recentStores[index],
+                      onTap: () {
+                        ref
+                            .read(productProvider.notifier)
+                            .addSelectProduct(index);
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
           ],
-
-          
         ],
       ),
     );
   }
-
 }
-
-
 
 class StoreCardWidget extends StatelessWidget {
   final StoreSelectDataModel data;
@@ -160,7 +207,9 @@ class StoreCardWidget extends StatelessWidget {
         padding: EdgeInsets.all(10.r),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
-          color: data.isSelected ? AppColors.secondaryColor : Color(0xFFF3F3F3), // Background color
+          color: data.isSelected
+              ? AppColors.secondaryColor
+              : Color(0xFFF3F3F3), // Background color
           boxShadow: [
             BoxShadow(
               color: Color(0x40000000), // #00000040 = 25% opacity black
@@ -174,17 +223,17 @@ class StoreCardWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           spacing: 4,
           children: [
-            Image.asset(data.icon, width: 60.r),
+            DisplayNetworkImage(imageUrl: "", width: 60.r, height: 60.r),
             Text(
-              data.title,
+              data.storeName,
               style: context.textStyle.bodyMedium!.copyWith(color: textColor),
             ),
             Text(
-              data.rating.toString(),
+              '4.0',
               style: context.textStyle.titleSmall!.copyWith(color: textColor),
             ),
             Text(
-              data.address,
+              data.storeLocation,
               style: context.textStyle.titleSmall!.copyWith(color: textColor),
               maxLines: 1,
               textAlign: TextAlign.center,

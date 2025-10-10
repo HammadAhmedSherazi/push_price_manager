@@ -14,7 +14,7 @@ class ListingRequestView extends ConsumerStatefulWidget {
 class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
   late TextEditingController _searchTextEditController;
   late ScrollController _scrollController;
-  
+
   Timer? _searchDebounce;
   @override
   void initState() {
@@ -22,31 +22,34 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
     _searchTextEditController = TextEditingController();
     _scrollController = ScrollController();
     Future.microtask(() {
-      ref
-          .read(productProvider.notifier)
-          .getProductfromDatabase(limit: 10, skip: 0);
+     fetchProduct(skip: 0);
     });
-     _scrollController.addListener(() {
+    _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-            int skip = ref.read(productProvider).skip ?? 0;
-            if(skip > 0){
-               Future.microtask(() {
-      ref
-          .read(productProvider.notifier)
-          .getProductfromDatabase(limit: 10, skip: skip);
-    });
-            }
-            
-      
+        int skip = ref.read(productProvider).skip ?? 0;
+        if (skip > 0) {
+          Future.microtask(() {
+            fetchProduct(skip: skip);
+          });
+        }
       }
     });
   }
+
+  void fetchProduct({String ?searchText, required int skip}){
+    final String? text = _searchTextEditController.text.isEmpty ? null :  _searchTextEditController.text;
+    ref
+                .read(productProvider.notifier)
+                .getProductfromDatabase(limit: 10, skip: skip, searchText: searchText ?? text);
+  }
+
   @override
-void dispose() {
-  _searchDebounce?.cancel();
-  super.dispose();
-}
+  void dispose() {
+    _searchDebounce?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScreenTemplate(
@@ -59,10 +62,11 @@ void dispose() {
           ? "Search From Database"
           : "Listing Request - Select Product",
       child: RefreshIndicator.adaptive(
-         onRefresh: () async{
-                   
-                    ref.read(productProvider.notifier).getProductfromDatabase(limit: 10, skip: 0);
-                  },
+        onRefresh: () async {
+          ref
+              .read(productProvider.notifier)
+              .getProductfromDatabase(limit: 10, skip: 0);
+        },
         child: Column(
           children: [
             Padding(
@@ -70,17 +74,18 @@ void dispose() {
               child: CustomSearchBarWidget(
                 controller: _searchTextEditController,
                 onChanged: (text) {
-                  if (_searchDebounce?.isActive ?? false) _searchDebounce!.cancel();
-        
-            _searchDebounce = Timer(const Duration(milliseconds: 500), () {
-        if (text.length >= 3) {
-          ref.read(productProvider.notifier).getProductfromDatabase(
-            limit: 20,
-            skip: ref.watch(productProvider).skip ?? 0,
-            searchText: text,
-          );
-        }
-            });
+                  if (_searchDebounce?.isActive ?? false) {
+                    _searchDebounce!.cancel();
+                  }
+
+                  _searchDebounce = Timer(
+                    const Duration(milliseconds: 500),
+                    () {
+                      if (text.length >= 3) {
+                        fetchProduct(skip: ref.watch(productProvider).skip ?? 0, searchText: text);
+                      }
+                    },
+                  );
                 },
                 onTapOutside: (v) {
                   FocusScope.of(context).unfocus();
@@ -98,26 +103,27 @@ void dispose() {
                   child: AsyncStateHandler(
                     scrollController: _scrollController,
                     status: providerVM.status,
-                                  
+
                     padding: EdgeInsets.symmetric(
                       horizontal: AppTheme.horizontalPadding,
                     ),
                     itemBuilder: (context, index) {
-                      final product = ref.watch(productProvider).products![index];
+                      final product = ref
+                          .watch(productProvider)
+                          .products![index];
                       return ProductDisplayWidget(
                         data: product,
-                      onTap: () {
-                        AppRouter.push(ListingProductDetailView(
-                          data: product,
-                        ));
-                      },
-                    );
+                        onTap: () {
+                          AppRouter.push(
+                            ListingProductDetailView(data: product),
+                          );
+                        },
+                      );
                     },
                     dataList: ref.watch(productProvider).products!,
                     onRetry: () {
-                      ref
-                          .read(productProvider.notifier)
-                          .getProductfromDatabase(limit: 5, skip: ref.watch(productProvider).skip!);
+                      String? txt = _searchTextEditController.text.isEmpty ? null : _searchTextEditController.text; 
+                      fetchProduct(skip: 0,searchText: txt);
                     },
                   ),
                 );

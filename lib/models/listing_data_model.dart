@@ -27,7 +27,7 @@ class ListingModel {
   final int storeId;
   final bool autoApplyForNextBatch;
   final Manager manager;
-  final Store store;
+  final StoreDataModel store;
   final ProductDataModel? product;
   final UserDataModel? employee;
 
@@ -55,7 +55,7 @@ class ListingModel {
     this.storeId = 0,
     this.autoApplyForNextBatch = false,
     this.manager = const Manager(),
-    this.store = const Store(),
+    this.store = const StoreDataModel(),
     this.product,
     this.employee,
     this.saveDiscountForListing = false,
@@ -100,8 +100,8 @@ class ListingModel {
             ? Manager.fromJson(json['manager'])
             : const Manager(),
         store: json['store'] != null
-            ? Store.fromJson(json['store'])
-            : const Store(),
+            ? StoreDataModel.fromJson(json['store'])
+            : const StoreDataModel(),
         product: json['product'] != null
             ? ProductDataModel.fromJson(json['product'])
             : null,
@@ -165,7 +165,7 @@ class ListingModel {
     int? storeId,
     bool? autoApplyForNextBatch,
     Manager? manager,
-    Store? store,
+    StoreDataModel? store,
     ProductDataModel? product,
     UserDataModel? employee,
   }) {
@@ -203,46 +203,6 @@ class ListingModel {
   }
 }
 
-
-class Store {
-  final String storeOperationalHours;
-  final String updatedAt;
-  final int storeId;
-  final int chainId;
-  final String storeName;
-  final String storeLocation;
-  final String createdAt;
-
-  const Store({
-    this.storeOperationalHours = '',
-    this.updatedAt = '',
-    this.storeId = 0,
-    this.chainId = 0,
-    this.storeName = '',
-    this.storeLocation = '',
-    this.createdAt = '',
-  });
-
-  factory Store.fromJson(Map<String, dynamic> json) => Store(
-        storeOperationalHours: json['store_operational_hours'] ?? '',
-        updatedAt: json['updated_at'] ?? '',
-        storeId: json['store_id'] ?? 0,
-        chainId: json['chain_id'] ?? 0,
-        storeName: json['store_name'] ?? '',
-        storeLocation: json['store_location'] ?? '',
-        createdAt: json['created_at'] ?? '',
-      );
-
-  Map<String, dynamic> toJson() => {
-        'store_operational_hours': storeOperationalHours,
-        'updated_at': updatedAt,
-        'store_id': storeId,
-        'chain_id': chainId,
-        'store_name': storeName,
-        'store_location': storeLocation,
-        'created_at': createdAt,
-      };
-}
 
 class Manager {
   const Manager();

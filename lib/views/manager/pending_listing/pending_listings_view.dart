@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:push_price_manager/utils/extension.dart';
 
 import '../../../export_all.dart';
@@ -12,6 +14,8 @@ class PendingListingView extends ConsumerStatefulWidget {
 
 class _PendingListingViewState extends ConsumerState<PendingListingView> {
   late final ScrollController _scrollController;
+  late final TextEditingController _searchTextEditController;
+  Timer? _searchDebounce;
   List<String> types = [
     "Best By Products",
     "Instant Sales",
@@ -23,33 +27,38 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _searchTextEditController = TextEditingController();
     Future.microtask(() {
-      fetchProduct();
+      fetchProduct(skip: 0);
     });
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         int skip = ref.read(productProvider).skip ?? 0;
         if (skip > 0) {
-          ref
-              .read(productProvider.notifier)
-              .getListApprovedProducts(
-                limit: 10,
-                type: Helper.setType(types[selectIndex]),
-                skip: skip,
-              );
+          fetchProduct(skip: skip);
         }
       }
     });
   }
 
-  void fetchProduct() {
+  void fetchProduct({String ? text, required int skip}) {
+    String ? txt = _searchTextEditController.text.isEmpty ? null : _searchTextEditController.text;
+         
     ref
         .read(productProvider.notifier)
         .getListApprovedProducts(
           limit: 10,
           type: Helper.setType(types[selectIndex]),
+          searchText: text ?? txt,
+          skip: skip
+          
         );
+  }
+  @override
+  void dispose() {
+    _searchDebounce?.cancel();
+    super.dispose();
   }
 
   @override
@@ -88,7 +97,7 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                                 setState(() {
                                   selectIndex = i;
                                 });
-                                fetchProduct();
+                                fetchProduct(skip: 0);
                               },
                               child: Container(
                                 // margin: EdgeInsets.only(bottom: 8),
@@ -126,7 +135,7 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                                   setState(() {
                                     selectIndex = i + 1;
                                   });
-                                  fetchProduct();
+                                  fetchProduct(skip: 0);
                                 },
                                 child: Container(
                                   // margin: EdgeInsets.only(bottom: 8),
@@ -175,8 +184,19 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
             child: CustomSearchBarWidget(
               hintText: "Hinted search text",
               suffixIcon: SvgPicture.asset(Assets.filterIcon),
-              onChanged: (value){
-                
+              onChanged: (text){
+                if (_searchDebounce?.isActive ?? false) {
+                    _searchDebounce!.cancel();
+                  }
+
+                  _searchDebounce = Timer(
+                    const Duration(milliseconds: 500),
+                    () {
+                      if (text.length >= 3) {
+                       fetchProduct(text: text, skip: 0);
+                      }
+                    },
+                  );
               },
               onTapOutside: (v) {
                 FocusScope.of(context).unfocus();
@@ -188,7 +208,7 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
               status: providerVM.productListingApiResponse.status,
               dataList: providerVM.listApprovedproducts!,
               onRetry: () {
-                fetchProduct();
+                fetchProduct(skip: 0);
               },
               scrollController: _scrollController,
               padding: EdgeInsets.all(

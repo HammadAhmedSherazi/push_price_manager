@@ -1,14 +1,18 @@
 class ApiEndpoints {
-  static const String login = "admin/staff/login";
+  static const String adminStaff = "admin/staff/";
+  static const String login = "${adminStaff}login";
   static const String getProducts = "admin/products/";
-  static const String getDataBaseProducts = "admin/products/employee-product-database";
-  static const String getProductDetailByBarCode = "admin/products/barcode/";
+  static const String getEmployeeDataBaseProducts = "${getProducts}employee-product-database";
+  static const String getManagerDataBaseProducts = "${getProducts}manager-product-database";
+  static const String getProductDetailByBarCode = "${getProducts}barcode/";
   static const String listings = "admin/listings/";
-  static const String myListings = "${ApiEndpoints.listings}my-listings";
+  static const String myListings = "${listings}my-listings";
   static const String pendingEmployeeTasks = "${ApiEndpoints.listings}pending-employee-tasks";
+  static const String managerCreate = "${ApiEndpoints.listings}manager-create";
   static const String suggestionsDiscount = "${ApiEndpoints.listings}suggestions/discount/";
   static const String pendingReview = "${ApiEndpoints.listings}pending/review";
   static const String review = "${ApiEndpoints.listings}review";
   static String updateList(String id)=> "${ApiEndpoints.listings}$id/employee-details";
+  static const String getMyStore = "${adminStaff}my-stores";
 
 }
