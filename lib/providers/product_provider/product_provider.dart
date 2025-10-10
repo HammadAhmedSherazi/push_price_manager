@@ -18,7 +18,8 @@ class ProductProvider extends Notifier<ProductState> {
       getSuggestionApiRes: ApiResponse.undertermined(),
       setReviewApiRes: ApiResponse.undertermined(),
       getStoresApiRes: ApiResponse.undertermined(),
-
+      deleteApiRes: ApiResponse.undertermined(),
+      updateApiRes: ApiResponse.undertermined(),
       listApprovedproducts: [],
       listRequestproducts: [],
       myStores: [],
@@ -302,6 +303,8 @@ class ProductProvider extends Notifier<ProductState> {
   FutureOr<void> getPendingReviewList({
     required int limit,
     int skip = 0,
+    String? searchText,
+    String ?type
   }) async {
     try {
       if (skip == 0 &&
@@ -451,6 +454,42 @@ class ProductProvider extends Notifier<ProductState> {
     } catch (e) {
       state = state.copyWith(listNowApiResponse: ApiResponse.error());
       
+    }
+  }
+
+  FutureOr<void> deleteList({required int listingId}) async{
+    try {
+      state = state.copyWith(deleteApiRes: ApiResponse.loading());
+      final response = await MyHttpClient.instance.delete( AppConstant.userType == UserType.employee
+            ? "${ApiEndpoints.myListings}$listingId" : "${ApiEndpoints.myListings}manager/$listingId", null, isJsonEncode: false);
+      if(response != null){
+      state = state.copyWith(deleteApiRes: ApiResponse.completed(response));
+
+      }
+      else{
+      state = state.copyWith(deleteApiRes: ApiResponse.error());
+
+      }
+    } catch (e) {
+      state = state.copyWith(deleteApiRes: ApiResponse.error());
+    }
+  }
+
+  FutureOr<void> updateList({required int listingId,required Map<String, dynamic> input}) async{
+    try {
+      state = state.copyWith(updateApiRes: ApiResponse.loading());
+      final response = await MyHttpClient.instance.put( AppConstant.userType == UserType.employee
+            ? "${ApiEndpoints.myListings}$listingId" : "${ApiEndpoints.myListings}manager/$listingId", input,);
+      if(response != null){
+      state = state.copyWith(updateApiRes: ApiResponse.completed(response));
+
+      }
+      else{
+      state = state.copyWith(updateApiRes: ApiResponse.error());
+
+      }
+    } catch (e) {
+      state = state.copyWith(updateApiRes: ApiResponse.error());
     }
   }
 

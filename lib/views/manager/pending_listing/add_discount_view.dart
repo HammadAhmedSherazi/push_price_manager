@@ -81,7 +81,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
     return AsyncStateHandler(
       status: providerVM.getSuggestionApiRes.status,
       dataList: [],
-      itemBuilder: (context, index) => SizedBox(),
+      itemBuilder: null,
       onRetry: () {
         ref
             .read(productProvider.notifier)

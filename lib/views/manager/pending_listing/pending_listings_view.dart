@@ -42,10 +42,12 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
     });
   }
 
-  void fetchProduct({String ? text, required int skip}) {
-    String ? txt = _searchTextEditController.text.isEmpty ? null : _searchTextEditController.text;
-         
-    ref
+  void fetchProduct({String? text, required int skip}) {
+    String? txt = _searchTextEditController.text.isEmpty
+        ? null
+        : _searchTextEditController.text;
+    if (AppConstant.userType == UserType.employee) {
+      ref
         .read(productProvider.notifier)
         .getListApprovedProducts(
           limit: 10,
@@ -54,7 +56,20 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
           skip: skip
           
         );
+    }
+    else{
+      ref
+        .read(productProvider.notifier)
+        .getPendingReviewList(
+          limit: 10,
+          type: Helper.setType(types[selectIndex]),
+          searchText: text ?? txt,
+          skip: skip
+          
+        );
+    }
   }
+
   @override
   void dispose() {
     _searchDebounce?.cancel();
@@ -64,6 +79,8 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
   @override
   Widget build(BuildContext context) {
     final providerVM = ref.watch(productProvider);
+    final response = AppConstant.userType == UserType.employee? providerVM.productListingApiResponse : providerVM.pendingReviewApiRes;
+    final list = AppConstant.userType == UserType.employee? providerVM.listApprovedproducts: providerVM.pendingReviewList;
     return Scaffold(
       appBar: CustomAppBarWidget(
         height: context.screenheight * 0.22,
@@ -184,19 +201,16 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
             child: CustomSearchBarWidget(
               hintText: "Hinted search text",
               suffixIcon: SvgPicture.asset(Assets.filterIcon),
-              onChanged: (text){
+              onChanged: (text) {
                 if (_searchDebounce?.isActive ?? false) {
-                    _searchDebounce!.cancel();
-                  }
+                  _searchDebounce!.cancel();
+                }
 
-                  _searchDebounce = Timer(
-                    const Duration(milliseconds: 500),
-                    () {
-                      if (text.length >= 3) {
-                       fetchProduct(text: text, skip: 0);
-                      }
-                    },
-                  );
+                _searchDebounce = Timer(const Duration(milliseconds: 500), () {
+                  if (text.length >= 3) {
+                    fetchProduct(text: text, skip: 0);
+                  }
+                });
               },
               onTapOutside: (v) {
                 FocusScope.of(context).unfocus();
@@ -205,8 +219,8 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
           ),
           Expanded(
             child: AsyncStateHandler(
-              status: providerVM.productListingApiResponse.status,
-              dataList: providerVM.listApprovedproducts!,
+              status: response.status,
+              dataList: list!,
               onRetry: () {
                 fetchProduct(skip: 0);
               },
@@ -214,17 +228,20 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
               padding: EdgeInsets.all(
                 AppTheme.horizontalPadding,
               ).copyWith(bottom: 100.r),
-              itemBuilder: (context, index) => ProductDisplayWidget(
+              itemBuilder: (context, index) {
+                final item =list[index];
+                return ProductDisplayWidget(
                 onTap: () {
                   AppRouter.push(
                     PendingProductDetailView(
                       type: types[selectIndex],
-                      data: providerVM.listApprovedproducts![index],
+                      data: item,
                     ),
                   );
                 },
-                data: providerVM.listApprovedproducts![index].product!,
-              ),
+                data: item.product!,
+              );
+              },
             ),
           ),
         ],

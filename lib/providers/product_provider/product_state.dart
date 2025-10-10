@@ -10,6 +10,8 @@ class ProductState {
   final ApiResponse pendingReviewApiRes;
   final ApiResponse setReviewApiRes;
   final ApiResponse getStoresApiRes;
+  final ApiResponse deleteApiRes;
+  final ApiResponse updateApiRes;
 
   final ApiResponse<ProductDataModel> getProductReponse;
   final List<ProductDataModel>? products;
@@ -35,7 +37,8 @@ class ProductState {
     required this.getSuggestionApiRes,
     required this.setReviewApiRes,
     required this.getStoresApiRes,
-
+    required this.updateApiRes,
+    required this.deleteApiRes,
     this.listApprovedproducts,
     this.listRequestproducts,
     this.pendingReviewList,
@@ -53,6 +56,8 @@ class ProductState {
     ApiResponse? getSuggestionApiRes,
     ApiResponse? setReviewApiRes,
     ApiResponse? getStoresApiRes,
+    ApiResponse? deleteApiRes,
+    ApiResponse? updateApiRes,
     List<ProductDataModel>? products,
     String? searchText,
     int? skip,
@@ -85,6 +90,8 @@ class ProductState {
     getStoresApiRes:  getStoresApiRes ?? this.getStoresApiRes,
     myStores: myStores ?? this.myStores,
     mySelectedStores: mySelectedStores ?? this.mySelectedStores,
+    updateApiRes: updateApiRes ?? this.updateApiRes,
+    deleteApiRes: deleteApiRes ?? this.deleteApiRes
     
   );
 }

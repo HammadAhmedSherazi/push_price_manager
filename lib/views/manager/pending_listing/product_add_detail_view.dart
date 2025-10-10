@@ -96,6 +96,7 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
       showBottomButton: true,
       bottomButtonText: "next",
       onButtonTap: () {
+       
         if (AppConstant.userType == UserType.manager) {
           AppRouter.push(AddDiscountView(isInstant: types[1] == selectType, data: ListingModel(),));
         } else {
