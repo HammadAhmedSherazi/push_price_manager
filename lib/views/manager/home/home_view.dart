@@ -91,6 +91,8 @@ class PendingListingSection extends ConsumerWidget {
                 AppRouter.push(
                   SeeAllProductView(
                     title: "Pending Listings",
+                    initFunCall: (){},
+                    onMoreFunCall: (){},
                     //   , onTap: (){
                     //   AppRouter.push(PendingProductDetailView(
                     //     type: "Best By Products",
@@ -166,6 +168,8 @@ class LiveListingSection extends StatelessWidget {
                 AppRouter.push(
                   SeeAllProductView(
                     title: "Live Listings",
+                    initFunCall: (){},
+                    onMoreFunCall: (){},
                     //           , onTap: (){
                     //            AppRouter.push(ProductLiveListingDetailView(
                     //   type: "Best By Products",

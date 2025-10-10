@@ -22,6 +22,7 @@ class ProductProvider extends Notifier<ProductState> {
       updateApiRes: ApiResponse.undertermined(),
       listApprovedproducts: [],
       listRequestproducts: [],
+      pendingReviewList: [],
       myStores: [],
     );
   }

@@ -1,13 +1,32 @@
 import 'package:push_price_manager/export_all.dart';
 
-class SeeAllProductView extends StatelessWidget {
+class SeeAllProductView extends ConsumerStatefulWidget {
   final String title;
   // final VoidCallback onTap;
-  const SeeAllProductView({super.key, required this.title, });
+  final VoidCallback initFunCall;
+  final VoidCallback onMoreFunCall;
+  const SeeAllProductView({super.key, required this.title, required this.initFunCall, required this.onMoreFunCall });
 
   @override
+  ConsumerState<SeeAllProductView> createState() => _SeeAllProductViewState();
+}
+
+class _SeeAllProductViewState extends ConsumerState<SeeAllProductView> {
+  late final ScrollController _scrollController;
+  @override
+  void initState() {
+   
+    super.initState();
+    _scrollController = ScrollController();
+    Future.microtask((){
+      widget.initFunCall;
+    });
+  }
+  @override
   Widget build(BuildContext context) {
-    return CustomScreenTemplate(title: title, child: GridView.builder(
+    return CustomScreenTemplate(title: widget.title, 
+    child: GridView.builder(
+      controller: _scrollController,
                 scrollDirection: Axis.vertical,
                 padding: EdgeInsets.symmetric(
                   horizontal: AppTheme.horizontalPadding,
@@ -27,17 +46,17 @@ class SeeAllProductView extends StatelessWidget {
                         height: double.infinity,
                         child: GestureDetector(
                           onTap: (){
-                            if(title ==  "Listing Request"){
+                            if(widget.title ==  "Listing Request"){
                               // AppRouter.push(
                             //  ListingProductDetailView(isRequest: true, type: setType(index),));
                        
                             }
-                            else if(title == "Product Listings"){
+                            else if(widget.title == "Product Listings"){
                   //              AppRouter.push(PendingProductDetailView(
                   //   type: setType(index),
                   // ));
                             }
-                            else if(title == "Pending Listings"){
+                            else if(widget.title == "Pending Listings"){
                   //              AppRouter.push(PendingProductDetailView(
                   //   type: setType(index),
                   // ));
@@ -54,6 +73,7 @@ class SeeAllProductView extends StatelessWidget {
                           ));
                 },
               ),
+           
            );
   }
 }
