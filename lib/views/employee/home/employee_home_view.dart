@@ -15,7 +15,7 @@ class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
   void initState() {
     Future.microtask(() {
       ref.read(productProvider.notifier).getListApprovedProducts(limit: 10);
-      // ref.read(productProvider.notifier).getListRequestProducts(limit: 10);
+      ref.read(productProvider.notifier).getListRequestProducts(limit: 10);
     });
     super.initState();
   }
@@ -75,11 +75,13 @@ class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
   }
 }
 
-class ListingRequestSection extends StatelessWidget {
+class ListingRequestSection extends ConsumerWidget {
   const ListingRequestSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(productProvider.select((e) => e.listRequestApiResponse));
+    final providerVM = ref.watch(productProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -114,21 +116,35 @@ class ListingRequestSection extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(
+         SizedBox(
           height: 125.h,
-          child: ListView.separated(
+          child: AsyncStateHandler(
+            padding: EdgeInsets.zero,
+            status: providerVM.listRequestApiResponse.status,
+            dataList: providerVM.listRequestproducts ?? [],
+            onRetry: () {
+              ref
+                  .read(productProvider.notifier)
+                  .getListRequestProducts(limit: 10);
+            },
             scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) => GestureDetector(
-              onTap: () {
-                // AppRouter.push( ListingProductDetailView(isRequest: true, type:setType(index)));
-              },
-              child: SizedBox.shrink(),
-              //  ProductDisplayBoxWidget()
-            ),
-            separatorBuilder: (context, index) => 10.pw,
-            itemCount: 4,
+            itemBuilder: (context, index) {
+              final item = providerVM.listRequestproducts![index];
+              return GestureDetector(
+                onTap: () {
+                  AppRouter.push(
+                    PendingProductDetailView(
+                      type: Helper.getTypeTitle(item.listingType),
+                      data: item,
+                    ),
+                  );
+                },
+                child: ProductDisplayBoxWidget(data: item.product!),
+              );
+            },
           ),
         ),
+    
       ],
     );
   }

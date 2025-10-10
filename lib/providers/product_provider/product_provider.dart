@@ -19,6 +19,7 @@ class ProductProvider extends Notifier<ProductState> {
       setReviewApiRes: ApiResponse.undertermined(),
       getStoresApiRes: ApiResponse.undertermined(),
       listApprovedproducts: [],
+      listRequestproducts: [],
       myStores: [],
     );
   }
@@ -189,45 +190,53 @@ class ProductProvider extends Notifier<ProductState> {
   FutureOr<void> getListRequestProducts({
     required int limit,
     int skip = 0,
-    String? type,
+    String type = "BEST_BY_PRODUCTS",
+    String? searchText
+
   }) async {
     try {
       if (skip == 0 && state.listRequestproducts!.isNotEmpty) {
         state = state.copyWith(listRequestproducts: []);
       }
-      state = state.copyWith(listRequestApiResponse: ApiResponse.loading());
+      state = state.copyWith(listRequestApiResponse: skip == 0
+            ? ApiResponse.loading()
+            : ApiResponse.loadingMore(),);
       final response = await MyHttpClient.instance.get(
         ApiEndpoints.myListings,
         params: {
-          "status_filter": "PENDING_MANAGER_REVIEW",
+          "status_filter": "PENDING_EMPLOYEE_DETAILS",
           "skip": skip,
           "limit": limit,
+          "listing_type_filter": type,
+          "search" : searchText
         },
       );
       if (response != null) {
         state = state.copyWith(
           listRequestApiResponse: ApiResponse.completed("done"),
         );
+        
         List temp = response ?? [];
         if (temp.isNotEmpty) {
+          final List<ListingModel> list = List.from(
+            temp.map((e) => ListingModel.fromJson(e)),
+          );
           state = state.copyWith(
             listRequestproducts: skip == 0
-                ? List.from(
-                    temp.map((e) => ProductDataModel.fromJson(e['product'])),
-                  )
-                : [
-                    ...state.listRequestproducts!,
-                    ...List.from(
-                      temp.map((e) => ProductDataModel.fromJson(e['product'])),
-                    ),
-                  ],
+                ? list
+                : [...state.listRequestproducts!, ...list],
+            skip: limit >= list.length ? 1 + limit : 0,
           );
         }
       } else {
-        state = state.copyWith(listRequestApiResponse: ApiResponse.error());
+        state = state.copyWith(listRequestApiResponse: skip == 0
+              ? ApiResponse.error()
+              : ApiResponse.undertermined());
       }
     } catch (e) {
-      state = state.copyWith(listRequestApiResponse: ApiResponse.error());
+      state = state.copyWith(listRequestApiResponse: skip == 0
+              ? ApiResponse.error()
+              : ApiResponse.undertermined());
     }
   }
 
@@ -272,12 +281,7 @@ class ProductProvider extends Notifier<ProductState> {
             skip: limit >= list.length ? 1 + limit : 0,
           );
         }
-        else{
-          state = state.copyWith(
-            listApprovedproducts: [],
-            skip: 0,
-          );
-        }
+        
       } else {
         state = state.copyWith(
           productListingApiResponse: skip == 0

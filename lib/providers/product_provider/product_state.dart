@@ -12,7 +12,7 @@ class ProductState {
   final ApiResponse getStoresApiRes;
   final ApiResponse<ProductDataModel> getProductReponse;
   final List<ProductDataModel>? products;
-  final List<ProductDataModel>? listRequestproducts;
+  final List<ListingModel>? listRequestproducts;
   final List<ListingModel>? listApprovedproducts;
   final List<ListingModel>? pendingReviewList;
   final List<StoreSelectDataModel>? myStores;
@@ -56,7 +56,7 @@ class ProductState {
     int? skip,
     ApiResponse<ProductDataModel>? getProductReponse,
     ApiResponse? listNowApiResponse,
-    List<ProductDataModel>? listRequestproducts,
+    List<ListingModel>? listRequestproducts,
     List<ListingModel>? listApprovedproducts,
     List<ListingModel>? pendingReviewList,
     List<StoreSelectDataModel>? myStores,

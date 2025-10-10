@@ -1,25 +1,69 @@
+import 'dart:async';
+
 import 'package:push_price_manager/utils/extension.dart';
 
 import '../../../export_all.dart';
 
-class EmployeeListRequestView extends StatefulWidget {
+class EmployeeListRequestView extends ConsumerStatefulWidget {
   final ScrollController scrollController;
   const EmployeeListRequestView({super.key, required this.scrollController});
 
   @override
-  State<EmployeeListRequestView> createState() => _EmployeeListRequestViewState();
+  ConsumerState<EmployeeListRequestView> createState() => _EmployeeListRequestViewState();
 }
 
-class _EmployeeListRequestViewState extends State<EmployeeListRequestView> {
+class _EmployeeListRequestViewState extends ConsumerState<EmployeeListRequestView> {
+late final ScrollController _scrollController;
+  late final TextEditingController _searchTextEditController;
+  Timer? _searchDebounce;
   List<String> types = [
     "Best By Products",
     "Instant Sales",
     "Weighted Items",
-    "Promotional Products"
+    "Promotional Products",
   ];
   int selectIndex = 0;
   @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _searchTextEditController = TextEditingController();
+    Future.microtask(() {
+      fetchProduct(skip: 0);
+    });
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        int skip = ref.read(productProvider).skip ?? 0;
+        if (skip > 0) {
+          fetchProduct(skip: skip);
+        }
+      }
+    });
+  }
+
+  void fetchProduct({String ? text, required int skip}) {
+    String ? txt = _searchTextEditController.text.isEmpty ? null : _searchTextEditController.text;
+         
+    ref
+        .read(productProvider.notifier)
+        .getListRequestProducts(
+          limit: 10,
+          type: Helper.setType(types[selectIndex]),
+          searchText: text ?? txt,
+          skip: skip
+          
+        );
+  }
+  @override
+  void dispose() {
+    _searchDebounce?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final providerVM = ref.watch(productProvider);
     return Scaffold(
       appBar: CustomAppBarWidget(
         height: context.screenheight * 0.22,
@@ -54,6 +98,7 @@ class _EmployeeListRequestViewState extends State<EmployeeListRequestView> {
                   setState(() {
                     selectIndex = i;
                   });
+                  fetchProduct(skip:0);
                 },
                 child: Container(
                   // margin: EdgeInsets.only(bottom: 8),
@@ -90,6 +135,7 @@ class _EmployeeListRequestViewState extends State<EmployeeListRequestView> {
                     setState(() {
                       selectIndex = i + 1;
                     });
+                    fetchProduct(skip: 0);
                   },
                   child: Container(
                     // margin: EdgeInsets.only(bottom: 8),
@@ -175,25 +221,52 @@ class _EmployeeListRequestViewState extends State<EmployeeListRequestView> {
             padding:  EdgeInsets.symmetric(
               horizontal: AppTheme.horizontalPadding
             ),
-            child: CustomSearchBarWidget(hintText: "Hinted search text", suffixIcon: SvgPicture.asset(Assets.filterIcon), onTapOutside: (v){
+            child: CustomSearchBarWidget(
+              controller: _searchTextEditController,
+              onChanged: (text){
+                if (_searchDebounce?.isActive ?? false) {
+                    _searchDebounce!.cancel();
+                  }
+
+                  _searchDebounce = Timer(
+                    const Duration(milliseconds: 500),
+                    () {
+                      if (text.length >= 3) {
+                       fetchProduct(text: text, skip: 0);
+                      }
+                    },
+                  );
+              },
+              hintText: "Hinted search text", suffixIcon: SvgPicture.asset(Assets.filterIcon), onTapOutside: (v){
                FocusScope.of(context).unfocus();
               
             }, ),
           ),
-          // Expanded(
-          //   child: ListView.separated(
-          //     controller: widget.scrollController,
-          //     padding: EdgeInsets.all(AppTheme.horizontalPadding).copyWith(
-          //       bottom: 100.r
-          //     ),
-          //     itemBuilder: (context, index)=>ProductDisplayWidget(
-          //       onTap: (){
-          //         AppRouter.push(ListRequestProductDetailView(
-          //           type: types[selectIndex],
-          //         ));
-          //       },
-          //     ), separatorBuilder: (context, index)=> 10.ph, itemCount: 10),
-          // )
+           Expanded(
+            child: AsyncStateHandler(
+              status: providerVM.listRequestApiResponse.status,
+              dataList: providerVM.listRequestproducts!,
+              onRetry: () {
+                fetchProduct(skip: 0);
+              },
+              scrollController: _scrollController,
+              padding: EdgeInsets.all(
+                AppTheme.horizontalPadding,
+              ).copyWith(bottom: 100.r),
+              itemBuilder: (context, index) => ProductDisplayWidget(
+                onTap: () {
+                  AppRouter.push(
+                    PendingProductDetailView(
+                      type: types[selectIndex],
+                      data: providerVM.listRequestproducts![index],
+                    ),
+                  );
+                },
+                data: providerVM.listRequestproducts![index].product!,
+              ),
+            ),
+          ),
+       
         ],
       ),
     );
