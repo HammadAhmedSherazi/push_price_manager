@@ -12,7 +12,7 @@ class ApiEndpoints {
   static const String suggestionsDiscount = "${ApiEndpoints.listings}suggestions/discount/";
   static const String pendingReview = "${ApiEndpoints.listings}pending/review";
   static const String review = "${ApiEndpoints.listings}review";
-  static String updateList(String id)=> "${ApiEndpoints.listings}$id/employee-details";
+  static String updateEmployeeListRequest(int id)=> "${ApiEndpoints.listings}$id/employee-details";
   static const String getMyStore = "${adminStaff}my-stores";
 
 }

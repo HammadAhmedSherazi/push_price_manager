@@ -253,17 +253,24 @@ late final ScrollController _scrollController;
               padding: EdgeInsets.all(
                 AppTheme.horizontalPadding,
               ).copyWith(bottom: 100.r),
-              itemBuilder: (context, index) => ProductDisplayWidget(
+              itemBuilder: (context, index) {
+                final item =providerVM.listRequestproducts![index];
+                return ProductDisplayWidget(
                 onTap: () {
-                  AppRouter.push(
-                    PendingProductDetailView(
-                      type: types[selectIndex],
-                      data: providerVM.listRequestproducts![index],
-                    ),
+                   AppRouter.push(
+                      ListingProductDetailView(isRequest: true, type:setType(index), data: item.product!, )
+                    
                   );
+                  // AppRouter.push(
+                  //   PendingProductDetailView(
+                  //     type: types[selectIndex],
+                  //     data: providerVM.listRequestproducts![index],
+                  //   ),
+                  // );
                 },
-                data: providerVM.listRequestproducts![index].product!,
-              ),
+                data: item.product!,
+              );
+              },
             ),
           ),
        

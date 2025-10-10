@@ -18,7 +18,7 @@ class ListingProductDetailView extends StatelessWidget {
        
        
          if(isRequest!){
-           AppRouter.push(ListingProductView(type: type!,popTime: 6,));
+           AppRouter.push(ListingProductView(type: type!,popTime: 6, isRequest: isRequest!,));
         }
         else{
           AppRouter.push(SelectListingTypeView(),settings: RouteSettings(

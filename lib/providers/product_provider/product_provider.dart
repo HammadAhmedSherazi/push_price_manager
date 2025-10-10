@@ -18,6 +18,7 @@ class ProductProvider extends Notifier<ProductState> {
       getSuggestionApiRes: ApiResponse.undertermined(),
       setReviewApiRes: ApiResponse.undertermined(),
       getStoresApiRes: ApiResponse.undertermined(),
+
       listApprovedproducts: [],
       listRequestproducts: [],
       myStores: [],
@@ -429,6 +430,30 @@ class ProductProvider extends Notifier<ProductState> {
       state = state.copyWith(getStoresApiRes: ApiResponse.error());
     }
   }
+
+  FutureOr<void> updateListRequest({required Map<String, dynamic> input, required int id, required int popTime, })async{
+    try {
+      state = state.copyWith(listNowApiResponse: ApiResponse.loading());
+      final response = await MyHttpClient.instance.put(ApiEndpoints.updateEmployeeListRequest(id), input);
+      if(response != null){
+      state = state.copyWith(listNowApiResponse: ApiResponse.completed(response));
+       AppRouter.customback(times: popTime);
+        AppRouter.push(
+          SuccessListingRequestView(message: AppConstant.userType == UserType.employee
+            ? "Product Listing Successful!" : "Listing Request Sent Successfully!"),
+        );
+
+      }
+      else{
+      state = state.copyWith(listNowApiResponse: ApiResponse.error());
+
+      }
+    } catch (e) {
+      state = state.copyWith(listNowApiResponse: ApiResponse.error());
+      
+    }
+  }
+
 }
 
 final productProvider =

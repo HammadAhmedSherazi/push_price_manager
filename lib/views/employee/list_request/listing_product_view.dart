@@ -1,4 +1,4 @@
-import 'package:push_price_manager/providers/product_provider/product_provider.dart';
+
 import 'package:push_price_manager/utils/extension.dart';
 
 import '../../../export_all.dart';
@@ -6,10 +6,12 @@ import '../../../export_all.dart';
 class ListingProductView extends StatefulWidget {
   final String type;
   final int popTime;
+  final bool isRequest;
   const ListingProductView({
     super.key,
     required this.type,
     required this.popTime,
+    this.isRequest = false
   });
 
   @override
@@ -110,9 +112,17 @@ class _ListingProductViewState extends State<ListingProductView> {
                       (index) => num.tryParse(priceControllers[index]!.text),
                     );
                   }
-                  ref
+                  if(widget.isRequest){
+                    final int id = data['listing_id'];
+                    data.remove('listing_id');
+                    ref.read(productProvider.notifier).updateListRequest(input: data, id: id,popTime: widget.popTime);
+                  }
+                  else{
+                    ref
                       .read(productProvider.notifier)
                       .listNow(input: data, popTime: widget.popTime);
+                  }
+                  
                 }
               },
             );

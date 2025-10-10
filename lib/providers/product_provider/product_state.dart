@@ -10,6 +10,7 @@ class ProductState {
   final ApiResponse pendingReviewApiRes;
   final ApiResponse setReviewApiRes;
   final ApiResponse getStoresApiRes;
+
   final ApiResponse<ProductDataModel> getProductReponse;
   final List<ProductDataModel>? products;
   final List<ListingModel>? listRequestproducts;
@@ -34,6 +35,7 @@ class ProductState {
     required this.getSuggestionApiRes,
     required this.setReviewApiRes,
     required this.getStoresApiRes,
+
     this.listApprovedproducts,
     this.listRequestproducts,
     this.pendingReviewList,
@@ -82,6 +84,7 @@ class ProductState {
     setReviewApiRes: setReviewApiRes ?? this.setReviewApiRes,
     getStoresApiRes:  getStoresApiRes ?? this.getStoresApiRes,
     myStores: myStores ?? this.myStores,
-    mySelectedStores: mySelectedStores ?? this.mySelectedStores
+    mySelectedStores: mySelectedStores ?? this.mySelectedStores,
+    
   );
 }

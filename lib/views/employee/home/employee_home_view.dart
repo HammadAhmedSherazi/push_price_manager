@@ -133,10 +133,8 @@ class ListingRequestSection extends ConsumerWidget {
               return GestureDetector(
                 onTap: () {
                   AppRouter.push(
-                    PendingProductDetailView(
-                      type: Helper.getTypeTitle(item.listingType),
-                      data: item,
-                    ),
+                      ListingProductDetailView(isRequest: true, type:setType(index), data: item.product!)
+                    
                   );
                 },
                 child: ProductDisplayBoxWidget(data: item.product!),
