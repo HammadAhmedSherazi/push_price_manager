@@ -28,10 +28,16 @@ class _HomeViewConsumerState extends ConsumerState<HomeView> {
         children: [
           Row(
             children: [
-              UserProfileWidget(
-                radius: 18.r,
-                imageUrl: Assets.userImage,
-                borderWidth: 1.4,
+              Consumer(
+                builder: (context, ref, child) {
+                  ref.watch(authProvider.select((e)=>e.userData));
+                  final user = ref.watch(authProvider).userData!;
+                  return UserProfileWidget(
+                    radius: 18.r,
+                    imageUrl: Assets.userImage,
+                    borderWidth: 1.4,
+                  );
+                }
               ),
               10.pw,
               Text("ABC BUSINESS", style: context.textStyle.displayMedium),
