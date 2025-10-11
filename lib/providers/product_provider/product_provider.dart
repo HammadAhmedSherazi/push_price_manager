@@ -86,7 +86,7 @@ class ProductProvider extends Notifier<ProductState> {
     }
     Map<String, dynamic> params = {'limit': limit, 'skip': skip};
     if (searchText != null) {
-      params['search_term'] = searchText;
+      params['search'] = searchText;
     }
     // if(minPrice != null){
     //   params['min_price'] = minPrice;
