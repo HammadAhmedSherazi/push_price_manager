@@ -286,6 +286,13 @@ class _ListingProductViewState extends State<ListingProductView> {
                     ...List.generate(
                       priceControllers.length,
                       (index) => TextFormField(
+                        controller: priceControllers[index],
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please enter a price";
+                          }
+                          return null;
+                        },
                         onTapOutside: (event) {
                           FocusScope.of(context).unfocus();
                         },

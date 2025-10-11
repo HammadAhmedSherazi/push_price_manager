@@ -21,7 +21,7 @@ class ListingModel {
   final DateTime? bestByDate;
   final DateTime? goLiveDate;
   final int listingId;
-  final double weightedItemsPrices;
+  final List<double>? weightedItemsPrices;
   final bool saveDiscountForFuture;
   final bool saveDiscountForListing;
   final int storeId;
@@ -50,7 +50,7 @@ class ListingModel {
     this.bestByDate,
     this.goLiveDate,
     this.listingId = 0,
-    this.weightedItemsPrices = 0.0,
+    this.weightedItemsPrices ,
     this.saveDiscountForFuture = false,
     this.storeId = 0,
     this.autoApplyForNextBatch = false,
@@ -91,7 +91,7 @@ class ListingModel {
             ? DateTime.tryParse(json['go_live_date'])
             : null,
         listingId: json['listing_id'] ?? 0,
-        weightedItemsPrices: (json['weighted_items_prices'] ?? 0).toDouble(),
+        weightedItemsPrices:  json['weighted_items_prices'] != null ?List.from(json['weighted_items_prices'].map((e) => e.toDouble())) : [],
         saveDiscountForFuture: json['save_discount_for_future'] ?? false,
         saveDiscountForListing: json['save_discount_for_listing'] ?? false,
         storeId: json['store_id'] ?? 0,
@@ -159,7 +159,7 @@ class ListingModel {
     DateTime? bestByDate,
     DateTime? goLiveDate,
     int? listingId,
-    double? weightedItemsPrices,
+    List<double>? weightedItemsPrices,
     bool? saveDiscountForFuture,
     bool? saveDiscountForListing,
     int? storeId,

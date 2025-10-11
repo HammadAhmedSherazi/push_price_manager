@@ -81,7 +81,7 @@ class _NavigationViewState extends State<NavigationView> {
                           return CustomButtonWidget(
                             title: "logout",
                             onPressed: () {
-                              
+                              ref.read(authProvider.notifier).logout();
                             },
                           );
                         }

@@ -439,10 +439,9 @@ class MyHttpClient extends BaseApiServices {
             "Something went wrong!";
         
         Helper.showMessage( AppRouter.navKey.currentContext!,message: msg);
-        if(msg.contains("Incorrect password")){
-          return null;
-        }
-        if (SharedPreferenceManager.sharedInstance.getRefreshToken() != null &&
+        
+        if(msg == "Invalid token"){
+         if (SharedPreferenceManager.sharedInstance.getRefreshToken() != null &&
             SharedPreferenceManager.sharedInstance.getRefreshToken() != "") {
           // AuthRemoteRepo.authRemoteInstance.updateToken(input: {
           //   "refreshToken":
@@ -460,7 +459,9 @@ class MyHttpClient extends BaseApiServices {
 
           AppRouter.pushAndRemoveUntil(const LoginView());
           Helper.showMessage( AppRouter.navKey.currentContext!,message: "Please login again!");
+        } 
         }
+        
         throw BadRequestException(
           response.statusCode,
           response.body.toString(),

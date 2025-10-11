@@ -3,7 +3,8 @@ import 'package:push_price_manager/utils/extension.dart';
 import '../../../export_all.dart';
 
 class ListScheduleCalenderView extends StatefulWidget {
-  const ListScheduleCalenderView({super.key});
+  final Map<String, dynamic> data;
+  const ListScheduleCalenderView({super.key, required this.data} );
 
   @override
   State<ListScheduleCalenderView> createState() => _ListScheduleCalenderViewState();
@@ -42,6 +43,9 @@ selectSlot(int index){
       showBottomButton: true,
       bottomButtonText: "next",
       onButtonTap: (){
+        // ref
+        //                 .read(productProvider.notifier)
+        //                 .setReview(input: data, times:  3);
         AppRouter.push(SelectProductView(isInstant: true,));
       },
       title: "Listing Schedule Calender", child: Padding(
@@ -60,28 +64,10 @@ selectSlot(int index){
               children: [
                 Container(
                   height: 40.h,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 15.r
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4.r),
-                    border: Border.all(
-                      color: AppColors.borderColor
-                    )
-                  ),
-                  child: Row(
-                    children: [
-                      Text(calendarList[index].day, style: context.textStyle.bodyMedium,),
-                     
-                    ],
-                  ),
-                ),
-              
-                Container(
-                  height: 40.h,
-                  padding: EdgeInsets.only(
+                    padding: EdgeInsets.only(
                     left: 15.r
                   ),
+                
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(4.r),
                     border: Border.all(
@@ -90,7 +76,7 @@ selectSlot(int index){
                   ),
                   child: Row(
                     children: [
-                      Expanded(child: Text(calendarList[index].timeSlot, style: context.textStyle.bodyMedium,)),
+                      Expanded(child: Text(calendarList[index].day, style: context.textStyle.bodyMedium,)),
                        Checkbox(
                 shape: RoundedRectangleBorder(
                   
@@ -103,6 +89,26 @@ selectSlot(int index){
                 value: calendarList[index].isSelect, onChanged: (v){
                 selectSlot(index);
                         },activeColor: AppColors.secondaryColor, ),
+                    ],
+                  ),
+                ),
+              
+                Container(
+                  height: 40.h,
+                    padding: EdgeInsets.symmetric(
+                    horizontal: 15.r
+                  ),
+                
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4.r),
+                    border: Border.all(
+                      color: AppColors.borderColor
+                    )
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(child: Text(calendarList[index].timeSlot, style: context.textStyle.bodyMedium,)),
+                     
                     ],
                   ),
                 ),

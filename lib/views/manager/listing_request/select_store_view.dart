@@ -223,21 +223,21 @@ class StoreCardWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           spacing: 4,
           children: [
-            DisplayNetworkImage(imageUrl: "", width: 60.r, height: 60.r),
+            Image.asset(Assets.store, width: 60.r, height: 60.r),
             Text(
               data.storeName,
               style: context.textStyle.bodyMedium!.copyWith(color: textColor),
             ),
-            Text(
-              '4.0',
-              style: context.textStyle.titleSmall!.copyWith(color: textColor),
-            ),
-            Text(
-              data.storeLocation,
-              style: context.textStyle.titleSmall!.copyWith(color: textColor),
-              maxLines: 1,
-              textAlign: TextAlign.center,
-            ),
+            // Text(
+            //   '4.0',
+            //   style: context.textStyle.titleSmall!.copyWith(color: textColor),
+            // ),
+            // Text(
+            //   data.storeLocation,
+            //   style: context.textStyle.titleSmall!.copyWith(color: textColor),
+            //   maxLines: 1,
+            //   textAlign: TextAlign.center,
+            // ),
             data.isSelected
                 ? Expanded(
                     child: Icon(

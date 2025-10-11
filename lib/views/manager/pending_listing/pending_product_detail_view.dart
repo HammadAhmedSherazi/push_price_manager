@@ -2,7 +2,7 @@ import 'package:push_price_manager/utils/extension.dart';
 
 import '../../../export_all.dart';
 
-class PendingProductDetailView extends StatelessWidget {
+class PendingProductDetailView extends ConsumerWidget {
   final String type;
   final ListingModel data;
   const PendingProductDetailView({
@@ -12,7 +12,11 @@ class PendingProductDetailView extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    Future.microtask(() {
+      ref.read(productProvider.notifier).setListItem(data);
+    });
+    final listItem = ref.watch(productProvider).listItem ?? data;
     return CustomScreenTemplate(
       showBottomButton: true,
       customBottomWidget: Padding(
@@ -78,7 +82,7 @@ class PendingProductDetailView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 DisplayNetworkImage(
-                  imageUrl: data.product!.image,
+                  imageUrl: listItem.product!.image,
                   width: 60.r,
                   height: 60.r,
                 ),
@@ -96,29 +100,33 @@ class PendingProductDetailView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      data.product!.title,
+                      listItem.product!.title,
                       style: context.textStyle.displayMedium!.copyWith(
                         fontSize: 16.sp,
                       ),
                     ),
-                    Text(
-                      data.product!.createdAt!.toReadableString(),
-                      style: context.textStyle.bodySmall,
-                    ),
+                    // Text(
+                    //   data.product!.createdAt!.toReadableString(),
+                    //   style: context.textStyle.bodySmall,
+                    // ),
                   ],
                 ),
                 10.ph,
                 ProductTitleWidget(
                   title: "Category",
-                  value: "${data.product?.category?.title}",
+                  value: "${listItem.product?.category?.title}",
                 ),
                 ProductTitleWidget(
-                  title: "Product Details",
-                  value: "${data.product?.description}",
+                  title: "Store",
+                  value: "${listItem.store.storeName}",
                 ),
+                // ProductTitleWidget(
+                //   title: "Product Details",
+                //   value: "${data.product?.description}",
+                // ),
                 ProductTitleWidget(
                   title: "Price",
-                  value: "\$${data.product?.price?.toStringAsFixed(2)}",
+                  value: "\$${listItem.product?.price?.toStringAsFixed(2)}",
                 ),
                 ProductTitleWidget(title: "Listing Type", value: type),
                 if (type.toLowerCase().contains("best") ||
@@ -126,16 +134,16 @@ class PendingProductDetailView extends StatelessWidget {
                   ProductTitleWidget(
                     title: "Best by Date",
                     value: Helper.selectDateFormat(
-                      data.bestByDate,
+                      listItem.bestByDate,
                     ),
                   ),
                 ProductTitleWidget(
                   title: "Product Quantity",
-                  value: "${data.quantity}",
+                  value: "${listItem.quantity}",
                 ),
-                if (type.toLowerCase().contains("weighted")) ...[
-                  ProductTitleWidget(title: "Price 1", value: "\$199.99"),
-                  ProductTitleWidget(title: "Price 2", value: "\$199.99"),
+                if (type == "Weighted Items" && listItem.weightedItemsPrices != null && listItem.weightedItemsPrices!.isNotEmpty) ...[
+                  ...List.generate(listItem.weightedItemsPrices!.length, (index) => ProductTitleWidget(title: "Price ${index + 1}", value: "\$${listItem.weightedItemsPrices![index]}"))
+                  
                 ],
               ],
             ),

@@ -28,7 +28,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
   ];
 
   List<bool> values = [false, false, true];
-
+  bool setDiscount = false;
   @override
   void initState() {
     Future.microtask(() {
@@ -66,6 +66,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    if(!setDiscount){
     ref.listen(productProvider, (previous, next) {
     final newItem = next.listItem;
     if (newItem != null) {
@@ -73,15 +74,18 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
           newItem.currentDiscount.toStringAsFixed(2) : "";
       _dialyDiscountEditTextController.text = newItem.dailyIncreasingDiscountPercent != 0.0 ?
           newItem.dailyIncreasingDiscountPercent.toStringAsFixed(2) : "";
+          setDiscount = true;
+      ref.read(productProvider.notifier).setGoLiveDate(newItem.goLiveDate);
     }
   });
+  }
     final providerVM = ref.watch(productProvider);
     final listItem = providerVM.listItem ?? widget.data;
 
     return Material(
       child: AsyncStateHandler(
         status: providerVM.getSuggestionApiRes.status,
-        dataList: [],
+        dataList: [0],
         itemBuilder: null,
         onRetry: () {
           ref
@@ -106,18 +110,15 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
                   : false,
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  if (widget.isInstant!) {
-                    AppRouter.push(ListScheduleCalenderView());
-                  } else {
-                    Map<String, dynamic> data = {};
+                  Map<String, dynamic> data = {};
                     if (widget.isPromotionalDiscount!) {
                       data = {
                         "save_discount_for_future":
                             listItem.saveDiscountForFuture,
-                        "go_live_date": listItem.goLiveDate!.toIso8601String(),
+                        "go_live_date":  listItem.goLiveDate!.toIso8601String(),
                         "listing_id": listItem.listingId,
-                        "current_discount": 100,
-                        "daily_increasing_discount_percent": 100,
+                        "current_discount": double.parse(_currentDiscountEditTextController.text),
+                        "daily_increasing_discount_percent": double.parse(_dialyDiscountEditTextController.text),
                       };
                     } else {
                       data = {
@@ -129,13 +130,20 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
                             listItem.autoApplyForNextBatch,
                         "go_live_date": listItem.goLiveDate!.toIso8601String(),
                         "listing_id": listItem.listingId,
-                        "current_discount": 100,
-                        "daily_increasing_discount_percent": 100,
+                        "current_discount": double.parse(_currentDiscountEditTextController.text),
+                        "daily_increasing_discount_percent": double.parse(_dialyDiscountEditTextController.text),
                       };
                     }
+                  if (widget.isInstant!) {
+                    AppRouter.push(ListScheduleCalenderView(
+                      data: data,
+
+                    ));
+                  } else {
+                    
                     ref
                         .read(productProvider.notifier)
-                        .setReview(input: data, times: widget.isInstant! ? 4 : 3);
+                        .setReview(input: data, times:  3);
                   }
                 }
               },

@@ -57,6 +57,9 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
     productCategoryTitleController = TextEditingController(text: widget.data.product?.category?.title);
     quantity = widget.data.quantity;
     bestByDate = widget.data.bestByDate;
+    if(selectType == "Weighted Items"){
+      priceControllers = List.generate(widget.data.weightedItemsPrices!.length, (index) => TextEditingController(text: widget.data.weightedItemsPrices![index].toStringAsFixed(2)));
+    }
     super.initState();
   }
 
@@ -74,8 +77,9 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
 
       return;
     } // Prevent invalid quantity
-
+   
     setState(() {
+       if(selectType == "Weighted Items"){
       if (value > quantity) {
         // Add controllers for the extra values
         priceControllers.addAll(
@@ -85,9 +89,10 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
         // Remove extra controllers safely
         priceControllers.removeRange(value, priceControllers.length);
       }
-
+       }
       quantity = value; // Update the current quantity
     });
+    
   }
 
   @override
@@ -141,6 +146,7 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                   decoration: InputDecoration(
                     hintText: "Product Name (Pre-filled)",
                   ),
+                  readOnly: true,
                 ),
                 TextFormField(
                   controller: storeTitleController,
@@ -150,12 +156,14 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                   decoration: InputDecoration(
                     hintText: "Store Name (Pre-filled)",
                   ),
+                  readOnly: true,
                 ),
                 TextFormField(
                   controller: productDescriptionController,
                   onTapOutside: (event) {
                     FocusScope.of(context).unfocus();
                   },
+                  readOnly: true,
                   minLines: 4,
                   maxLines: 4,
                   decoration: InputDecoration(
@@ -170,6 +178,7 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                   decoration: InputDecoration(
                     hintText: "Product Category (Pre-filled)",
                   ),
+                  readOnly: true,
                 ),
                 TextFormField(
                   controller: productPriceController,
@@ -179,6 +188,7 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                   decoration: InputDecoration(
                     hintText: "Product Price (Pre-filled)",
                   ),
+                  readOnly: true,
                 ),
                 CustomDropDown(
                   onChanged: (value) {

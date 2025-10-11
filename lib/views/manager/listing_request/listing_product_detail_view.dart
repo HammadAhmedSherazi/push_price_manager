@@ -2,14 +2,19 @@ import 'package:push_price_manager/utils/extension.dart';
 
 import '../../../export_all.dart';
 
-class ListingProductDetailView extends StatelessWidget {
+class ListingProductDetailView extends ConsumerWidget {
   final bool? isRequest;
   final String ? type;
-  final ProductDataModel data;
+  final ListingModel data;
   const ListingProductDetailView({super.key, this.isRequest = false, this.type = "", required this.data});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(productProvider.select((state) => state.listItem));
+    Future.microtask(() {
+      ref.read(productProvider.notifier).setListItem(data);
+    });
+    final listItem = ref.watch(productProvider).listItem ?? data;
     return CustomScreenTemplate(
       bottomButtonText: "next",
       showBottomButton: true,
@@ -18,12 +23,16 @@ class ListingProductDetailView extends StatelessWidget {
        
        
          if(isRequest!){
-           AppRouter.push(ListingProductView(type: type!,popTime: 6, isRequest: isRequest!,));
+           AppRouter.push(ListingProductView(type: type!,popTime: 6, isRequest: isRequest!,),settings: RouteSettings(
+            arguments: {
+              "listing_id": listItem.listingId
+            }
+          ));
         }
         else{
           AppRouter.push(SelectListingTypeView(),settings: RouteSettings(
             arguments: {
-              "product_id": data.id!
+              "product_id": listItem.product!.id!
             }
           ));
         }
@@ -32,7 +41,7 @@ class ListingProductDetailView extends StatelessWidget {
        else{
          AppRouter.push(SelectListingTypeView(), settings: RouteSettings(
             arguments: {
-              "product_id": data.id!
+              "product_id": listItem.product!.id!
             }
           ));
        }
@@ -51,7 +60,7 @@ class ListingProductDetailView extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                DisplayNetworkImage(imageUrl: data.image, height: 60.r, width: 60.r,),
+                DisplayNetworkImage(imageUrl: listItem.product!.image, height: 60.r, width: 60.r,),
               ],
             ),
           ),
@@ -66,21 +75,26 @@ class ListingProductDetailView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      data.title,
+                      listItem.product!.title,
                       style: context.textStyle.displayMedium!.copyWith(
                         fontSize: 16.sp,
                       ),
                     ),
-                    Text(data.createdAt!.toReadableString(), style: context.textStyle.bodySmall),
+                    // Text(data.createdAt!.toReadableString(), style: context.textStyle.bodySmall),
                   ],
                 ),
                 10.ph,
-                ProductTitleWidget(title: "Category", value: "${data.category?.title}"),
-                ProductTitleWidget(
-                  title: "Product Details",
-                  value: data.description,
-                ),
-                ProductTitleWidget(title: "Price", value: "\$${data.price!.toStringAsFixed(2)}"),
+                ProductTitleWidget(title: "Category", value: "${data.product?.category?.title}"),
+                
+               if(listItem.store.storeName.isNotEmpty)...[ ProductTitleWidget(
+                  title: "Store",
+                  value: listItem.store.storeName,
+                ),],
+                // ProductTitleWidget(
+                //   title: "Product Details",
+                //   value: data.description,
+                // ),
+                ProductTitleWidget(title: "Regular Price", value: "\$${data.product?.price!.toStringAsFixed(2)}"),
               ],
             ),
           ),

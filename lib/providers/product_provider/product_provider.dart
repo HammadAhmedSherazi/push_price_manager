@@ -34,6 +34,10 @@ class ProductProvider extends Notifier<ProductState> {
     );
   }
 
+  void setListItem(ListingModel item) {
+    state = state.copyWith(listItem: item);
+  }
+
   void setCheckBox(bool chk, int index) {
     if (index == 0) {
       state = state.copyWith(
@@ -193,7 +197,7 @@ class ProductProvider extends Notifier<ProductState> {
   FutureOr<void> getListRequestProducts({
     required int limit,
     int skip = 0,
-    String type = "BEST_BY_PRODUCTS",
+    String? type ,
     String? searchText
 
   }) async {
@@ -204,15 +208,22 @@ class ProductProvider extends Notifier<ProductState> {
       state = state.copyWith(listRequestApiResponse: skip == 0
             ? ApiResponse.loading()
             : ApiResponse.loadingMore(),);
+      Map<String, dynamic> params = {
+        "status_filter": "PENDING_MANAGER_REVIEW",
+        "skip": skip,
+        "limit": limit,
+        
+      };
+      if (type != null) {
+        params["listing_type_filter"] = type;
+      }
+      if (searchText != null) {
+        params["search"] = searchText;
+      }
+     
       final response = await MyHttpClient.instance.get(
         ApiEndpoints.myListings,
-        params: {
-          "status_filter": "PENDING_EMPLOYEE_DETAILS",
-          "skip": skip,
-          "limit": limit,
-          "listing_type_filter": type,
-          "search" : searchText
-        },
+        params: params,
       );
       if (response != null) {
         state = state.copyWith(
@@ -246,7 +257,7 @@ class ProductProvider extends Notifier<ProductState> {
   FutureOr<void> getListApprovedProducts({
     required int limit,
     int skip = 0,
-    String type = "BEST_BY_PRODUCTS",
+    String? type ,
     String? searchText
   }) async {
     try {
@@ -258,22 +269,28 @@ class ProductProvider extends Notifier<ProductState> {
             ? ApiResponse.loading()
             : ApiResponse.loadingMore(),
       );
+      Map<String, dynamic> params = {
+        "status_filter": "PENDING_MANAGER_REVIEW",
+        "skip": skip,
+        "limit": limit,
+        
+      };
+      if (type != null) {
+        params["listing_type_filter"] = type;
+      }
+      if (searchText != null) {
+        params["search"] = searchText;
+      }
       final response = await MyHttpClient.instance.get(
         ApiEndpoints.myListings,
-        params: {
-          "status_filter": "APPROVED",
-          "skip": skip,
-          "limit": limit,
-          "listing_type_filter": type,
-          "search" : searchText
-        },
+        params: params,
       );
       if (response != null) {
         state = state.copyWith(
           productListingApiResponse: ApiResponse.completed("done"),
         );
         List temp = response ?? [];
-        if (temp.isNotEmpty) {
+        // if (temp.isNotEmpty) {
           final List<ListingModel> list = List.from(
             temp.map((e) => ListingModel.fromJson(e)),
           );
@@ -283,7 +300,7 @@ class ProductProvider extends Notifier<ProductState> {
                 : [...state.listApprovedproducts!, ...list],
             skip: limit >= list.length ? 1 + limit : 0,
           );
-        }
+        // }
         
       } else {
         state = state.copyWith(
@@ -319,15 +336,26 @@ class ProductProvider extends Notifier<ProductState> {
             : ApiResponse.loadingMore(),
         listItem: null,
       );
+       Map<String, dynamic> params = {
+        "skip": skip,
+        "limit": limit,
+        
+      };
+      if (type != null) {
+        params["listing_type_filter"] = type;
+      }
+      if (searchText != null) {
+        params["search"] = searchText;
+      }
       final response = await MyHttpClient.instance.get(
-        ApiEndpoints.pendingReview,
+        ApiEndpoints.pendingReview, params: params,
       );
       if (response != null) {
         state = state.copyWith(
           pendingReviewApiRes: ApiResponse.completed(response),
         );
         List temp = response ?? [];
-        if (temp.isNotEmpty) {
+        // if (temp.isNotEmpty) {
           final List<ListingModel> list = List.from(
             temp.map((e) => ListingModel.fromJson(e)),
           );
@@ -337,7 +365,7 @@ class ProductProvider extends Notifier<ProductState> {
                 : [...state.pendingReviewList!, ...list],
             skip: limit >= list.length ? 1 + limit : 0,
           );
-        }
+        // }
       } else {
         state = state.copyWith(
           pendingReviewApiRes: skip == 0
@@ -419,14 +447,14 @@ class ProductProvider extends Notifier<ProductState> {
           getStoresApiRes: ApiResponse.completed(response),
         );
         List temp = response['assigned_stores'] ?? [];
-        if (temp.isNotEmpty) {
+        // if (temp.isNotEmpty) {
           state = state.copyWith(
             mySelectedStores: [],
             myStores: List.from(
               temp.map((e) => StoreSelectDataModel.fromJson(e)),
             ),
           );
-        }
+        // }
       } else {
         state = state.copyWith(getStoresApiRes: ApiResponse.error());
       }
