@@ -11,6 +11,7 @@ class ApiEndpoints {
   static const String managerCreate = "${ApiEndpoints.listings}manager-create";
   static const String suggestionsDiscount = "${ApiEndpoints.listings}suggestions/discount/";
   static const String pendingReview = "${ApiEndpoints.listings}pending/review";
+  static const String liveList = "${ApiEndpoints.listings}live";
   static const String review = "${ApiEndpoints.listings}review";
   static String updateEmployeeListRequest(int id)=> "${ApiEndpoints.listings}$id/employee-details";
   static const String getMyStore = "${adminStaff}my-stores";

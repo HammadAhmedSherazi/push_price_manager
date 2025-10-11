@@ -88,6 +88,7 @@ export './widget/async_state_handler.dart';
 export './widget/custom_loading_widget.dart';
 export './widget/custom_error_widget.dart';
 export './widget/show_empty_item_diaplay_widget.dart';
+export './widget/time_range_selector_widget.dart';
 
 //MODELS
 export './models/category_data_model.dart';

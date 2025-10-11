@@ -1,48 +1,53 @@
 import 'package:push_price_manager/utils/extension.dart';
+
 import '../../../export_all.dart';
 
-class ProductLiveListingDetailView extends StatelessWidget {
+class ProductLiveListingDetailView extends ConsumerWidget {
 
-  final String type;
-  // final ProductDataModel data;
-  const ProductLiveListingDetailView({super.key, required this.type, });
+  final ListingModel data;
+  const ProductLiveListingDetailView({super.key,  required this.data });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    Future.microtask((){
+      ref.read(productProvider.notifier).setListItem(data);
+    });
+  final providerVM = ref.watch(productProvider);
+  final ListingModel listData = providerVM.listItem ?? data;
  List<InfoDataModel> getInfoList(String selectedType) {
-  if (type ==  "Best By Products") {
+  if (selectedType ==  "Best By Products") {
     return [
       InfoDataModel(title: "Listing Type", description: selectedType),
-      InfoDataModel(title: "Best By Date", description: Helper.selectDateFormat(DateTime.now())),
-      InfoDataModel(title: "Product Quantity", description: "50"),
-      InfoDataModel(title: "Current Discount", description: "30%"),
-      InfoDataModel(title: "Daily Increasing Discount", description: "5%"),
-      InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(DateTime.now())),
+      InfoDataModel(title: "Best By Date", description: Helper.selectDateFormat(listData.bestByDate)),
+      InfoDataModel(title: "Product Quantity", description: "${listData.quantity}"),
+      InfoDataModel(title: "Current Discount", description: "${listData.currentDiscount}%"),
+      InfoDataModel(title: "Daily Increasing Discount", description: "${listData.dailyIncreasingDiscountPercent}%"),
+      InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(listData.goLiveDate)),
     ];
-  } else if (type == "Instant Sales") {
+  } else if (selectedType == "Instant Sales") {
     return [
       InfoDataModel(title: "Listing Type", description: selectedType),
-      InfoDataModel(title: "Product Quantity", description: "50"),
-      InfoDataModel(title: "Current Discount", description: "30%"),
-      InfoDataModel(title: "Hourly Increasing Discount", description: "5%"),
-      InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(DateTime.now())), 
+      InfoDataModel(title: "Product Quantity", description: "${listData.quantity}"),
+      InfoDataModel(title: "Current Discount", description: "${listData.currentDiscount}%"),
+      InfoDataModel(title: "Hourly Increasing Discount", description: "${listData.hourlyIncreasingDiscountPercent}%"),
+      InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(listData.goLiveDate)), 
     ];
   } else if (selectedType == "Weighted Items") {
     return [
       InfoDataModel(title: "Listing Type", description: selectedType),
-      InfoDataModel(title: "Best By Date", description: Helper.selectDateFormat(DateTime.now())),
-      InfoDataModel(title: "Product Quantity", description: "50"),
-      InfoDataModel(title: "Price 1", description: "\$199.99"),
-      InfoDataModel(title: "Price 2", description: "\$199.99"),
-      InfoDataModel(title: "Average Price", description: "\$199.99"),
-      InfoDataModel(title: "Current Discount", description: "30%"),
+      InfoDataModel(title: "Best By Date", description: Helper.selectDateFormat(listData.bestByDate)),
+      InfoDataModel(title: "Product Quantity", description: "${listData.quantity}"),
+     
+      ...List.generate(listData.weightedItemsPrices!.length,(index)=>  InfoDataModel(title: "Price ${index + 1}", description: "\$${listData.weightedItemsPrices![index]}")),      
+      InfoDataModel(title: "Average Price", description: "\$${listData.averagePrice}"),
+      InfoDataModel(title: "Current Discount", description: "${listData.currentDiscount}%"),
      ];
   } else {
     return [
       InfoDataModel(title: "Listing Type", description: selectedType),
-      InfoDataModel(title: "Product Quantity", description: "50"),
-      InfoDataModel(title: "Discount", description: "30%"),
-      InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(DateTime.now())), 
+      InfoDataModel(title: "Product Quantity", description: "${listData.quantity}"),
+      InfoDataModel(title: "Current Discount", description: "${listData.currentDiscount}%"),
+      InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(listData.goLiveDate)), 
     ];
   }
 }
@@ -61,13 +66,13 @@ class ProductLiveListingDetailView extends StatelessWidget {
         child: Column(
           spacing: 10,
           children: [
-            if(type == "Promotional Products")
+            if(Helper.getTypeTitle(listData.listingType) == "Promotional Products")
             CustomButtonWidget(title: "Pause", onPressed: (){}),
             
               
         
               CustomOutlineButtonWidget(title: "edit", onPressed: (){
-                // AppRouter.push(ProductAddDetailView(title: "Product Listings - List Product", type: type,));
+                AppRouter.push(ProductAddDetailView(title: "Product Listings - List Product", type: Helper.getTypeTitle(listData.listingType),data: listData,));
               }),
               CustomButtonWidget(title: "delete", onPressed: (){}, color: Color(0xffB80303),)
            
@@ -84,7 +89,12 @@ class ProductLiveListingDetailView extends StatelessWidget {
             padding: EdgeInsets.all(30.r),
             height: context.screenheight * 0.18,
             color: AppColors.primaryAppBarColor,
-            child: Image.asset(Assets.groceryBag),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                DisplayNetworkImage(imageUrl: listData.product!.image, width: 60.r, height: 60.r,)
+              ],
+            ),
           ),
           Padding(
             padding: EdgeInsetsGeometry.symmetric(
@@ -97,26 +107,26 @@ class ProductLiveListingDetailView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "ABC Product",
+                      listData.product!.title,
                       style: context.textStyle.displayMedium!.copyWith(
                         fontSize: 16.sp,
                       ),
                     ),
-                    Text("Today 3:45pm", style: context.textStyle.bodySmall),
+                    // Text("Today 3:45pm", style: context.textStyle.bodySmall),
                   ],
                 ),
                 10.ph,
                 ProductTitleWidget(title: "Category", value: "ABC Category"),
                 ProductTitleWidget(
-                  title: "Product Details",
-                  value: "Lorem Ipsum Dor",
+                  title: "Store",
+                  value: "${listData.store?.storeName}",
                 ),
-                ProductTitleWidget(title: "Price", value: "\$199.99"),
-                ...List.generate(getInfoList(type).length, (index)=> ProductTitleWidget(
-                  title: getInfoList(type)[index].title,
-                  value: getInfoList(type)[index].description,
+                ProductTitleWidget(title: "Price", value: "\$${listData.product?.price}"),
+                ...List.generate(getInfoList(Helper.getTypeTitle(listData.listingType)).length, (index)=> ProductTitleWidget(
+                  title: getInfoList(Helper.getTypeTitle(listData.listingType))[index].title,
+                  value: getInfoList(Helper.getTypeTitle(listData.listingType))[index].description,
                 )),
-                if(type == "Instant Sales")...[
+                if(Helper.getTypeTitle(listData.listingType) == "Instant Sales")...[
                   10.ph,
                   Row(
                     children: [
@@ -125,7 +135,7 @@ class ProductLiveListingDetailView extends StatelessWidget {
                   ),
                   ProductTitleWidget(title: "Monday", value: "09:00 - 18:00")
                 ],
-                if(type == "Promotional Products")...[
+                if(Helper.getTypeTitle(listData.listingType) == "Promotional Products")...[
                   10.ph,
                   Row(
                     children: [

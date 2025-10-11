@@ -20,6 +20,8 @@ class ProductProvider extends Notifier<ProductState> {
       getStoresApiRes: ApiResponse.undertermined(),
       deleteApiRes: ApiResponse.undertermined(),
       updateApiRes: ApiResponse.undertermined(),
+      listLiveApiResponse: ApiResponse.undertermined(),
+      listLiveProducts: [],
       listApprovedproducts: [],
       listRequestproducts: [],
       pendingReviewList: [],
@@ -83,7 +85,7 @@ class ProductProvider extends Notifier<ProductState> {
   FutureOr<void> getProductfromDatabase({
     required int limit,
     int skip = 0,
-    String?searchText,
+    String? searchText,
   }) async {
     if (skip == 0 && state.products!.isNotEmpty) {
       state = state.copyWith(products: [], skip: 0);
@@ -173,8 +175,9 @@ class ProductProvider extends Notifier<ProductState> {
     try {
       state = state.copyWith(listNowApiResponse: ApiResponse.loading());
       final response = await MyHttpClient.instance.post(
-      AppConstant.userType == UserType.employee
-            ?  ApiEndpoints.listings :ApiEndpoints.managerCreate ,
+        AppConstant.userType == UserType.employee
+            ? ApiEndpoints.listings
+            : ApiEndpoints.managerCreate,
         input,
       );
       if (response != null) {
@@ -183,8 +186,11 @@ class ProductProvider extends Notifier<ProductState> {
         );
         AppRouter.customback(times: popTime);
         AppRouter.push(
-          SuccessListingRequestView(message: AppConstant.userType == UserType.employee
-            ? "Product Listing Successful!" : "Listing Request Sent Successfully!"),
+          SuccessListingRequestView(
+            message: AppConstant.userType == UserType.employee
+                ? "Product Listing Successful!"
+                : "Listing Request Sent Successfully!",
+          ),
         );
       } else {
         state = state.copyWith(listNowApiResponse: ApiResponse.error());
@@ -197,22 +203,22 @@ class ProductProvider extends Notifier<ProductState> {
   FutureOr<void> getListRequestProducts({
     required int limit,
     int skip = 0,
-    String? type ,
-    String? searchText
-
+    String? type,
+    String? searchText,
   }) async {
     try {
       if (skip == 0 && state.listRequestproducts!.isNotEmpty) {
         state = state.copyWith(listRequestproducts: []);
       }
-      state = state.copyWith(listRequestApiResponse: skip == 0
+      state = state.copyWith(
+        listRequestApiResponse: skip == 0
             ? ApiResponse.loading()
-            : ApiResponse.loadingMore(),);
+            : ApiResponse.loadingMore(),
+      );
       Map<String, dynamic> params = {
         "status_filter": "PENDING_MANAGER_REVIEW",
         "skip": skip,
         "limit": limit,
-        
       };
       if (type != null) {
         params["listing_type_filter"] = type;
@@ -220,7 +226,7 @@ class ProductProvider extends Notifier<ProductState> {
       if (searchText != null) {
         params["search"] = searchText;
       }
-     
+
       final response = await MyHttpClient.instance.get(
         ApiEndpoints.myListings,
         params: params,
@@ -229,7 +235,7 @@ class ProductProvider extends Notifier<ProductState> {
         state = state.copyWith(
           listRequestApiResponse: ApiResponse.completed("done"),
         );
-        
+
         List temp = response ?? [];
         if (temp.isNotEmpty) {
           final List<ListingModel> list = List.from(
@@ -243,22 +249,26 @@ class ProductProvider extends Notifier<ProductState> {
           );
         }
       } else {
-        state = state.copyWith(listRequestApiResponse: skip == 0
+        state = state.copyWith(
+          listRequestApiResponse: skip == 0
               ? ApiResponse.error()
-              : ApiResponse.undertermined());
+              : ApiResponse.undertermined(),
+        );
       }
     } catch (e) {
-      state = state.copyWith(listRequestApiResponse: skip == 0
-              ? ApiResponse.error()
-              : ApiResponse.undertermined());
+      state = state.copyWith(
+        listRequestApiResponse: skip == 0
+            ? ApiResponse.error()
+            : ApiResponse.undertermined(),
+      );
     }
   }
 
   FutureOr<void> getListApprovedProducts({
     required int limit,
     int skip = 0,
-    String? type ,
-    String? searchText
+    String? type,
+    String? searchText,
   }) async {
     try {
       if (skip == 0 && state.listApprovedproducts!.isNotEmpty) {
@@ -273,7 +283,6 @@ class ProductProvider extends Notifier<ProductState> {
         "status_filter": "PENDING_MANAGER_REVIEW",
         "skip": skip,
         "limit": limit,
-        
       };
       if (type != null) {
         params["listing_type_filter"] = type;
@@ -291,17 +300,16 @@ class ProductProvider extends Notifier<ProductState> {
         );
         List temp = response ?? [];
         // if (temp.isNotEmpty) {
-          final List<ListingModel> list = List.from(
-            temp.map((e) => ListingModel.fromJson(e)),
-          );
-          state = state.copyWith(
-            listApprovedproducts: skip == 0
-                ? list
-                : [...state.listApprovedproducts!, ...list],
-            skip: limit >= list.length ? 1 + limit : 0,
-          );
+        final List<ListingModel> list = List.from(
+          temp.map((e) => ListingModel.fromJson(e)),
+        );
+        state = state.copyWith(
+          listApprovedproducts: skip == 0
+              ? list
+              : [...state.listApprovedproducts!, ...list],
+          skip: limit >= list.length ? 1 + limit : 0,
+        );
         // }
-        
       } else {
         state = state.copyWith(
           productListingApiResponse: skip == 0
@@ -322,7 +330,7 @@ class ProductProvider extends Notifier<ProductState> {
     required int limit,
     int skip = 0,
     String? searchText,
-    String ?type
+    String? type,
   }) async {
     try {
       if (skip == 0 &&
@@ -336,11 +344,7 @@ class ProductProvider extends Notifier<ProductState> {
             : ApiResponse.loadingMore(),
         listItem: null,
       );
-       Map<String, dynamic> params = {
-        "skip": skip,
-        "limit": limit,
-        
-      };
+      Map<String, dynamic> params = {"skip": skip, "limit": limit};
       if (type != null) {
         params["listing_type_filter"] = type;
       }
@@ -348,7 +352,8 @@ class ProductProvider extends Notifier<ProductState> {
         params["search"] = searchText;
       }
       final response = await MyHttpClient.instance.get(
-        ApiEndpoints.pendingReview, params: params,
+        ApiEndpoints.pendingReview,
+        params: params,
       );
       if (response != null) {
         state = state.copyWith(
@@ -356,15 +361,15 @@ class ProductProvider extends Notifier<ProductState> {
         );
         List temp = response ?? [];
         // if (temp.isNotEmpty) {
-          final List<ListingModel> list = List.from(
-            temp.map((e) => ListingModel.fromJson(e)),
-          );
-          state = state.copyWith(
-            pendingReviewList: skip == 0
-                ? list
-                : [...state.pendingReviewList!, ...list],
-            skip: limit >= list.length ? 1 + limit : 0,
-          );
+        final List<ListingModel> list = List.from(
+          temp.map((e) => ListingModel.fromJson(e)),
+        );
+        state = state.copyWith(
+          pendingReviewList: skip == 0
+              ? list
+              : [...state.pendingReviewList!, ...list],
+          skip: limit >= list.length ? 1 + limit : 0,
+        );
         // }
       } else {
         state = state.copyWith(
@@ -376,6 +381,65 @@ class ProductProvider extends Notifier<ProductState> {
     } catch (e) {
       state = state.copyWith(
         pendingReviewApiRes: skip == 0
+            ? ApiResponse.error()
+            : ApiResponse.undertermined(),
+      );
+    }
+  }
+
+  FutureOr<void> getLiveListProducts({
+    required int limit,
+    int skip = 0,
+    String? searchText,
+    String? type,
+  }) async {
+    try {
+      if (skip == 0 && state.listLiveProducts!.isNotEmpty) {
+        state = state.copyWith(listLiveProducts: []);
+      }
+      state = state.copyWith(
+        listLiveApiResponse: skip == 0
+            ? ApiResponse.loading()
+            : ApiResponse.loadingMore(),
+        listItem: null,
+      );
+      Map<String, dynamic> params = {"skip": skip, "limit": limit};
+      if (type != null) {
+        params["listing_type_filter"] = type;
+      }
+      if (searchText != null) {
+        params["search"] = searchText;
+      }
+      final response = await MyHttpClient.instance.get(
+        ApiEndpoints.liveList,
+        params: params,
+      );
+      if (response != null) {
+        state = state.copyWith(
+          listLiveApiResponse: ApiResponse.completed(response),
+        );
+        List temp = response ?? [];
+        // if (temp.isNotEmpty) {
+        final List<ListingModel> list = List.from(
+          temp.map((e) => ListingModel.fromJson(e)),
+        );
+        state = state.copyWith(
+          listLiveProducts: skip == 0
+              ? list
+              : [...state.listLiveProducts!, ...list],
+          skip: limit >= list.length ? 1 + limit : 0,
+        );
+        // }
+      } else {
+        state = state.copyWith(
+          listLiveApiResponse: skip == 0
+              ? ApiResponse.error()
+              : ApiResponse.undertermined(),
+        );
+      }
+    } catch (e) {
+      state = state.copyWith(
+        listLiveApiResponse: skip == 0
             ? ApiResponse.error()
             : ApiResponse.undertermined(),
       );
@@ -448,12 +512,12 @@ class ProductProvider extends Notifier<ProductState> {
         );
         List temp = response['assigned_stores'] ?? [];
         // if (temp.isNotEmpty) {
-          state = state.copyWith(
-            mySelectedStores: [],
-            myStores: List.from(
-              temp.map((e) => StoreSelectDataModel.fromJson(e)),
-            ),
-          );
+        state = state.copyWith(
+          mySelectedStores: [],
+          myStores: List.from(
+            temp.map((e) => StoreSelectDataModel.fromJson(e)),
+          ),
+        );
         // }
       } else {
         state = state.copyWith(getStoresApiRes: ApiResponse.error());
@@ -463,65 +527,89 @@ class ProductProvider extends Notifier<ProductState> {
     }
   }
 
-  FutureOr<void> updateListRequest({required Map<String, dynamic> input, required int id, required int popTime, })async{
+  FutureOr<void> updateListRequest({
+    required Map<String, dynamic> input,
+    required int id,
+    required int popTime,
+  }) async {
     try {
       state = state.copyWith(listNowApiResponse: ApiResponse.loading());
-      final response = await MyHttpClient.instance.put(ApiEndpoints.updateEmployeeListRequest(id), input);
-      if(response != null){
-      state = state.copyWith(listNowApiResponse: ApiResponse.completed(response));
-       AppRouter.customback(times: popTime);
-        AppRouter.push(
-          SuccessListingRequestView(message: AppConstant.userType == UserType.employee
-            ? "Product Listing Successful!" : "Listing Request Sent Successfully!"),
+      final response = await MyHttpClient.instance.put(
+        ApiEndpoints.updateEmployeeListRequest(id),
+        input,
+      );
+      if (response != null) {
+        state = state.copyWith(
+          listNowApiResponse: ApiResponse.completed(response),
         );
-
-      }
-      else{
-      state = state.copyWith(listNowApiResponse: ApiResponse.error());
-
+        AppRouter.customback(times: popTime);
+        AppRouter.push(
+          SuccessListingRequestView(
+            message: AppConstant.userType == UserType.employee
+                ? "Product Listing Successful!"
+                : "Listing Request Sent Successfully!",
+          ),
+        );
+      } else {
+        state = state.copyWith(listNowApiResponse: ApiResponse.error());
       }
     } catch (e) {
       state = state.copyWith(listNowApiResponse: ApiResponse.error());
-      
     }
   }
 
-  FutureOr<void> deleteList({required int listingId}) async{
+  FutureOr<void> deleteList({required int listingId}) async {
     try {
       state = state.copyWith(deleteApiRes: ApiResponse.loading());
-      final response = await MyHttpClient.instance.delete( AppConstant.userType == UserType.employee
-            ? "${ApiEndpoints.myListings}$listingId" : "${ApiEndpoints.myListings}manager/$listingId", null, isJsonEncode: false);
-      if(response != null){
-      state = state.copyWith(deleteApiRes: ApiResponse.completed(response));
-
-      }
-      else{
-      state = state.copyWith(deleteApiRes: ApiResponse.error());
-
+      final response = await MyHttpClient.instance.delete(
+        AppConstant.userType == UserType.employee
+            ? "${ApiEndpoints.myListings}$listingId"
+            : "${ApiEndpoints.myListings}manager/$listingId",
+        null,
+        isJsonEncode: false,
+      );
+      if (response != null) {
+        state = state.copyWith(deleteApiRes: ApiResponse.completed(response));
+      } else {
+        state = state.copyWith(deleteApiRes: ApiResponse.error());
       }
     } catch (e) {
       state = state.copyWith(deleteApiRes: ApiResponse.error());
     }
   }
 
-  FutureOr<void> updateList({required int listingId,required Map<String, dynamic> input}) async{
+  FutureOr<void> updateList({
+    required int listingId,
+    required Map<String, dynamic> input,
+  }) async {
     try {
       state = state.copyWith(updateApiRes: ApiResponse.loading());
-      final response = await MyHttpClient.instance.put( AppConstant.userType == UserType.employee
-            ? "${ApiEndpoints.myListings}$listingId" : "${ApiEndpoints.myListings}manager/$listingId", input,);
-      if(response != null){
-      state = state.copyWith(updateApiRes: ApiResponse.completed(response));
-
-      }
-      else{
-      state = state.copyWith(updateApiRes: ApiResponse.error());
-
+      final response = await MyHttpClient.instance.put(
+        AppConstant.userType == UserType.employee
+            ? "${ApiEndpoints.myListings}$listingId"
+            : "${ApiEndpoints.myListings}manager/$listingId",
+        input,
+      );
+      if (response != null) {
+        ListingModel data = ListingModel.fromJson(response);
+        state = state.copyWith(updateApiRes: ApiResponse.completed(response), listItem: data);
+          if (AppConstant.userType == UserType.manager) {
+          AppRouter.customback(times: 2); 
+          } else {
+          AppRouter.customback(times: 2);
+          AppRouter.push(
+            SuccessListingRequestView(
+              message: "Product Listing Edit Successful!",
+            ),
+          );
+        }
+      } else {
+        state = state.copyWith(updateApiRes: ApiResponse.error());
       }
     } catch (e) {
       state = state.copyWith(updateApiRes: ApiResponse.error());
     }
   }
-
 }
 
 final productProvider =

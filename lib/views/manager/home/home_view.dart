@@ -15,6 +15,7 @@ class _HomeViewConsumerState extends ConsumerState<HomeView> {
   void initState() {
     Future.microtask(() {
       ref.read(productProvider.notifier).getPendingReviewList(limit: 10);
+      ref.read(productProvider.notifier).getLiveListProducts(limit: 10);
     });
     super.initState();
   }
@@ -104,6 +105,9 @@ class PendingListingSection extends ConsumerWidget {
                     //   ));
                     // },
                   ),
+                  fun: (){
+                     ref.read(productProvider.notifier).getPendingReviewList(limit: 10);
+                  }
                 );
               },
               child: Text(
@@ -157,59 +161,79 @@ class LiveListingSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Consumer(
+      
+      builder: (context, ref, child) {
+         ref.watch(productProvider.select((e)=>e.listLiveApiResponse));
+         final providerVM = ref.watch(productProvider);
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Live Listings", style: context.textStyle.displayMedium),
-            TextButton(
-              style: ButtonStyle(
-                padding: WidgetStatePropertyAll(EdgeInsets.zero),
-                visualDensity: VisualDensity(horizontal: -4.0, vertical: -4.0),
-              ),
-              onPressed: () {
-                AppRouter.push(
-                  SeeAllProductView(
-                    title: "Live Listings",
-                   
-                    //           , onTap: (){
-                    //            AppRouter.push(ProductLiveListingDetailView(
-                    //   type: "Best By Products",
-                    //  ));
-                    //         }
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Live Listings", style: context.textStyle.displayMedium),
+                TextButton(
+                  style: ButtonStyle(
+                    padding: WidgetStatePropertyAll(EdgeInsets.zero),
+                    visualDensity: VisualDensity(horizontal: -4.0, vertical: -4.0),
                   ),
-                );
-              },
-              child: Text(
-                "See All",
-                style: context.textStyle.displayMedium!.copyWith(
-                  color: AppColors.primaryColor,
-                  decoration: TextDecoration.underline,
+                  onPressed: () {
+                    AppRouter.push(
+                      SeeAllProductView(
+                        title: "Live Listings",
+                       
+                        //           , onTap: (){
+                        //            AppRouter.push(ProductLiveListingDetailView(
+                        //   type: "Best By Products",
+                        //  ));
+                        //         }
+                      ),
+                      fun: (){
+                        ref.read(productProvider.notifier).getLiveListProducts(limit: 10);
+                      }
+                    );
+                  },
+                  child: Text(
+                    "See All",
+                    style: context.textStyle.displayMedium!.copyWith(
+                      color: AppColors.primaryColor,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
                 ),
+              ],
+            ),
+            SizedBox(
+              height: 125.h,
+              child: AsyncStateHandler(
+                dataList: providerVM.listLiveProducts!,
+                status: providerVM.listLiveApiResponse.status,
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.zero,
+                onRetry: (){
+                  ref.read(productProvider.notifier).getLiveListProducts(limit: 10);
+                },
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () {
+                    AppRouter.push(
+                      ProductLiveListingDetailView(data: providerVM.listLiveProducts![index],),
+                      fun: (){
+                        ref.read(productProvider.notifier).getLiveListProducts(limit: 10);
+                      }
+                    );
+                  },
+                  child: ProductDisplayBoxWidget(
+                    data: providerVM.listLiveProducts![index].product!,
+                  ),
+                  // 
+                ),
+                
               ),
             ),
           ],
-        ),
-        SizedBox(
-          height: 125.h,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) => GestureDetector(
-              onTap: () {
-                // AppRouter.push(
-                //   ProductLiveListingDetailView(type: "Best By Products", data: ,),
-                // );
-              },
-              child: SizedBox.shrink(),
-              // ProductDisplayBoxWidget()
-            ),
-            separatorBuilder: (context, index) => 10.pw,
-            itemCount: 5,
-          ),
-        ),
-      ],
+        );
+      }
     );
   }
 }

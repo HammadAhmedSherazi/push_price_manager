@@ -48,6 +48,7 @@ class _SeeAllProductViewState extends ConsumerState<SeeAllProductView> {
       //   type: setType(index),
       // ));
     } else {
+      ref.read(productProvider.notifier).getLiveListProducts(limit: 10);
       //                          AppRouter.push(ProductLiveListingDetailView(
       //   type: setType(index),
       //  ));
@@ -77,7 +78,10 @@ class _SeeAllProductViewState extends ConsumerState<SeeAllProductView> {
       //   type: setType(index),
       // ));
     } else {
-      //                          AppRouter.push(ProductLiveListingDetailView(
+      response = providerVM.listLiveApiResponse;
+      list = providerVM.listLiveProducts!;
+      //        
+      //                  AppRouter.push(ProductLiveListingDetailView(
       //   type: setType(index),
       //  ));
     }

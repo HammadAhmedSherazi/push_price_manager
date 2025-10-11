@@ -12,11 +12,13 @@ class ProductState {
   final ApiResponse getStoresApiRes;
   final ApiResponse deleteApiRes;
   final ApiResponse updateApiRes;
+  final ApiResponse listLiveApiResponse;
 
   final ApiResponse<ProductDataModel> getProductReponse;
   final List<ProductDataModel>? products;
   final List<ListingModel>? listRequestproducts;
   final List<ListingModel>? listApprovedproducts;
+  final List<ListingModel>? listLiveProducts;
   final List<ListingModel>? pendingReviewList;
   final List<StoreSelectDataModel>? myStores;
   final String? searchText;
@@ -39,8 +41,10 @@ class ProductState {
     required this.getStoresApiRes,
     required this.updateApiRes,
     required this.deleteApiRes,
+    required this.listLiveApiResponse,
     this.listApprovedproducts,
     this.listRequestproducts,
+    this.listLiveProducts,
     this.pendingReviewList,
     this.listItem,
     this.skip,
@@ -50,6 +54,7 @@ class ProductState {
 
   ProductState copyWith({
     ApiResponse? listRequestApiResponse,
+    ApiResponse? listLiveApiResponse,
     ApiResponse? productListingApiResponse,
     ApiResponse? productApiResponse,
     ApiResponse? pendingReviewApiRes,
@@ -66,6 +71,7 @@ class ProductState {
     List<ListingModel>? listRequestproducts,
     List<ListingModel>? listApprovedproducts,
     List<ListingModel>? pendingReviewList,
+    List<ListingModel>? listLiveProducts,
     List<StoreSelectDataModel>? myStores,
     List<StoreSelectDataModel>? mySelectedStores,
     ListingModel? listItem,
@@ -91,7 +97,9 @@ class ProductState {
     myStores: myStores ?? this.myStores,
     mySelectedStores: mySelectedStores ?? this.mySelectedStores,
     updateApiRes: updateApiRes ?? this.updateApiRes,
-    deleteApiRes: deleteApiRes ?? this.deleteApiRes
+    deleteApiRes: deleteApiRes ?? this.deleteApiRes,
+    listLiveApiResponse: listLiveApiResponse ?? this.listLiveApiResponse,
+    listLiveProducts: listLiveProducts ?? this.listLiveProducts
     
   );
 }
