@@ -42,7 +42,7 @@ class PendingProductDetailView extends StatelessWidget {
                   );
                 },
               ),
-            if (AppConstant.userType == UserType.manager)
+            if (AppConstant.userType == UserType.manager && data.status == "PENDING_MANAGER_REVIEW")
               CustomOutlineButtonWidget(
                 title: "edit",
                 onPressed: () {

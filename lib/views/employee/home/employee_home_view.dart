@@ -98,8 +98,7 @@ class ListingRequestSection extends ConsumerWidget {
                 AppRouter.push(
                   SeeAllProductView(
                     title: "Listing Request",
-                    initFunCall: (){},
-                    onMoreFunCall: (){},
+                   
                     // ,onTap: (){
 
                     //           AppRouter.push(
@@ -174,8 +173,7 @@ class ProductListingSection extends ConsumerWidget {
                 AppRouter.push(
                   SeeAllProductView(
                     title: "Product Listings",
-                    initFunCall: (){},
-                    onMoreFunCall: (){},
+                   
                     // , onTap: (){
                     //           AppRouter.push(PendingProductDetailView(
                     //   type: "Best By Products",

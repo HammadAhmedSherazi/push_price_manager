@@ -78,178 +78,180 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
     final providerVM = ref.watch(productProvider);
     final listItem = providerVM.listItem ?? widget.data;
 
-    return AsyncStateHandler(
-      status: providerVM.getSuggestionApiRes.status,
-      dataList: [],
-      itemBuilder: null,
-      onRetry: () {
-        ref
-            .read(productProvider.notifier)
-            .getSuggestion(
-              productId: widget.data.productId,
-              storeId: widget.data.storeId,
-              item: widget.data,
-            );
-      },
-      customSuccessWidget: CustomScreenTemplate(
-        showBottomButton: true,
-        bottomButtonText: "next",
-        customBottomWidget: Padding(
-          padding: EdgeInsetsGeometry.symmetric(
-            horizontal: AppTheme.horizontalPadding,
-          ),
-          child: CustomButtonWidget(
-            title: "next",
-            isLoad: widget.isInstant!
-                ? providerVM.getSuggestionApiRes.status == Status.loading
-                : false,
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                if (widget.isInstant!) {
-                  AppRouter.push(ListScheduleCalenderView());
-                } else {
-                  Map<String, dynamic> data = {};
-                  if (widget.isPromotionalDiscount!) {
-                    data = {
-                      "save_discount_for_future":
-                          listItem.saveDiscountForFuture,
-                      "go_live_date": listItem.goLiveDate!.toIso8601String(),
-                      "listing_id": listItem.listingId,
-                      "current_discount": 100,
-                      "daily_increasing_discount_percent": 100,
-                    };
+    return Material(
+      child: AsyncStateHandler(
+        status: providerVM.getSuggestionApiRes.status,
+        dataList: [],
+        itemBuilder: null,
+        onRetry: () {
+          ref
+              .read(productProvider.notifier)
+              .getSuggestion(
+                productId: widget.data.productId,
+                storeId: widget.data.storeId,
+                item: widget.data,
+              );
+        },
+        customSuccessWidget: CustomScreenTemplate(
+          showBottomButton: true,
+          bottomButtonText: "next",
+          customBottomWidget: Padding(
+            padding: EdgeInsetsGeometry.symmetric(
+              horizontal: AppTheme.horizontalPadding,
+            ),
+            child: CustomButtonWidget(
+              title: "next",
+              isLoad: widget.isInstant!
+                  ? providerVM.getSuggestionApiRes.status == Status.loading
+                  : false,
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  if (widget.isInstant!) {
+                    AppRouter.push(ListScheduleCalenderView());
                   } else {
-                    data = {
-                      "save_discount_for_future":
-                          listItem.saveDiscountForFuture,
-                      "save_duration_for_listing":
-                          listItem.saveDiscountForListing,
-                      "auto_apply_for_next_batch":
-                          listItem.autoApplyForNextBatch,
-                      "go_live_date": listItem.goLiveDate!.toIso8601String(),
-                      "listing_id": listItem.listingId,
-                      "current_discount": 100,
-                      "daily_increasing_discount_percent": 100,
-                    };
+                    Map<String, dynamic> data = {};
+                    if (widget.isPromotionalDiscount!) {
+                      data = {
+                        "save_discount_for_future":
+                            listItem.saveDiscountForFuture,
+                        "go_live_date": listItem.goLiveDate!.toIso8601String(),
+                        "listing_id": listItem.listingId,
+                        "current_discount": 100,
+                        "daily_increasing_discount_percent": 100,
+                      };
+                    } else {
+                      data = {
+                        "save_discount_for_future":
+                            listItem.saveDiscountForFuture,
+                        "save_duration_for_listing":
+                            listItem.saveDiscountForListing,
+                        "auto_apply_for_next_batch":
+                            listItem.autoApplyForNextBatch,
+                        "go_live_date": listItem.goLiveDate!.toIso8601String(),
+                        "listing_id": listItem.listingId,
+                        "current_discount": 100,
+                        "daily_increasing_discount_percent": 100,
+                      };
+                    }
+                    ref
+                        .read(productProvider.notifier)
+                        .setReview(input: data, times: widget.isInstant! ? 4 : 3);
                   }
-                  ref
-                      .read(productProvider.notifier)
-                      .setReview(input: data, times: widget.isInstant! ? 4 : 3);
                 }
-              }
-            },
+              },
+            ),
           ),
-        ),
-
-        title: "Add Discount",
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            physics: BouncingScrollPhysics(),
-            padding: EdgeInsets.all(AppTheme.horizontalPadding),
-            children: [
-              TextFormField(
-                onTapOutside: (event) {
-                  FocusScope.of(context).unfocus();
-                },
-                controller: _currentDiscountEditTextController,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
-                ],
-                validator: (value) => value?.validateCurrentDiscount(),
-                decoration: InputDecoration(
-                  hintText: "Current Discount",
-                  suffixIcon: Icon(
-                    Icons.percent_sharp,
-                    color: AppColors.secondaryColor,
+      
+          title: "Add Discount",
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              physics: BouncingScrollPhysics(),
+              padding: EdgeInsets.all(AppTheme.horizontalPadding),
+              children: [
+                TextFormField(
+                  onTapOutside: (event) {
+                    FocusScope.of(context).unfocus();
+                  },
+                  controller: _currentDiscountEditTextController,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
                   ),
-                ),
-              ),
-              10.ph,
-              TextFormField(
-                onTapOutside: (event) {
-                  FocusScope.of(context).unfocus();
-                },
-                controller: _dialyDiscountEditTextController,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
-                ],
-                validator: (value) => value?.validateCurrentDiscount(),
-                decoration: InputDecoration(
-                  hintText: "Daily Increasing Discount",
-                  suffixIcon: Icon(
-                    Icons.percent_sharp,
-                    color: AppColors.secondaryColor,
-                  ),
-                ),
-              ),
-              10.ph,
-              CustomDateSelectWidget(
-                label: "label",
-                initialDate: DateTime.now(),
-                firstDate: DateTime.now(),
-                lastDate: DateTime.now().add(
-                  const Duration(days: 365),
-                ), // ✅ set a valid future limit
-                validator: (value) => value?.validateDate(),
-                hintText: "Listing Start Date",
-                onDateSelected: (date) {
-                  // ✅ Safe state update after build
-                  ref.read(productProvider.notifier).setGoLiveDate(date);
-                },
-                selectedDate: listItem.goLiveDate,
-              ),
-              20.ph,
-
-              ...List.generate(
-                titles.length,
-                (index) => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        titles[index],
-                        style: context.textStyle.bodyMedium,
-                      ),
-                    ),
-                    Checkbox(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(3.r),
-                      ),
-                      side: BorderSide(color: AppColors.secondaryColor),
-                      value: index == 0
-                          ? listItem.saveDiscountForFuture
-                          : index == 1
-                          ? listItem.saveDiscountForListing
-                          : listItem.autoApplyForNextBatch,
-                      onChanged: (v) {
-                        ref
-                            .read(productProvider.notifier)
-                            .setCheckBox(v!, index);
-                      },
-                      activeColor: AppColors.secondaryColor,
-                    ),
-
-                    // Radio<int>(
-                    //   value: index,
-                    //   groupValue: selectedIndex,
-                    //   onChanged: (val) {
-                    //     setState(() {
-                    //       selectedIndex = val!;
-                    //     });
-                    //   },
-                    //   fillColor: MaterialStateProperty.resolveWith((_) => AppColors.secondaryColor),
-                    // ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
                   ],
+                  validator: (value) => value?.validateCurrentDiscount(),
+                  decoration: InputDecoration(
+                    hintText: "Current Discount",
+                    suffixIcon: Icon(
+                      Icons.percent_sharp,
+                      color: AppColors.secondaryColor,
+                    ),
+                  ),
                 ),
-              ),
-            ],
+                10.ph,
+                TextFormField(
+                  onTapOutside: (event) {
+                    FocusScope.of(context).unfocus();
+                  },
+                  controller: _dialyDiscountEditTextController,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+                  ],
+                  validator: (value) => value?.validateCurrentDiscount(),
+                  decoration: InputDecoration(
+                    hintText: "Daily Increasing Discount",
+                    suffixIcon: Icon(
+                      Icons.percent_sharp,
+                      color: AppColors.secondaryColor,
+                    ),
+                  ),
+                ),
+                10.ph,
+                CustomDateSelectWidget(
+                  label: "label",
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime.now(),
+                  lastDate: DateTime.now().add(
+                    const Duration(days: 365),
+                  ), // ✅ set a valid future limit
+                  validator: (value) => value?.validateDate(),
+                  hintText: "Listing Start Date",
+                  onDateSelected: (date) {
+                    // ✅ Safe state update after build
+                    ref.read(productProvider.notifier).setGoLiveDate(date);
+                  },
+                  selectedDate: listItem.goLiveDate,
+                ),
+                20.ph,
+      
+                ...List.generate(
+                  titles.length,
+                  (index) => Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          titles[index],
+                          style: context.textStyle.bodyMedium,
+                        ),
+                      ),
+                      Checkbox(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(3.r),
+                        ),
+                        side: BorderSide(color: AppColors.secondaryColor),
+                        value: index == 0
+                            ? listItem.saveDiscountForFuture
+                            : index == 1
+                            ? listItem.saveDiscountForListing
+                            : listItem.autoApplyForNextBatch,
+                        onChanged: (v) {
+                          ref
+                              .read(productProvider.notifier)
+                              .setCheckBox(v!, index);
+                        },
+                        activeColor: AppColors.secondaryColor,
+                      ),
+      
+                      // Radio<int>(
+                      //   value: index,
+                      //   groupValue: selectedIndex,
+                      //   onChanged: (val) {
+                      //     setState(() {
+                      //       selectedIndex = val!;
+                      //     });
+                      //   },
+                      //   fillColor: MaterialStateProperty.resolveWith((_) => AppColors.secondaryColor),
+                      // ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -1,11 +1,11 @@
+import 'package:push_price_manager/data/network/api_response.dart';
 import 'package:push_price_manager/export_all.dart';
 
 class SeeAllProductView extends ConsumerStatefulWidget {
   final String title;
   // final VoidCallback onTap;
-  final VoidCallback initFunCall;
-  final VoidCallback onMoreFunCall;
-  const SeeAllProductView({super.key, required this.title, required this.initFunCall, required this.onMoreFunCall });
+
+  const SeeAllProductView({super.key, required this.title});
 
   @override
   ConsumerState<SeeAllProductView> createState() => _SeeAllProductViewState();
@@ -13,67 +13,129 @@ class SeeAllProductView extends ConsumerStatefulWidget {
 
 class _SeeAllProductViewState extends ConsumerState<SeeAllProductView> {
   late final ScrollController _scrollController;
+  List<ListingModel> list = [];
+  ApiResponse response = ApiResponse.undertermined();
   @override
   void initState() {
-   
     super.initState();
     _scrollController = ScrollController();
-    Future.microtask((){
-      widget.initFunCall;
+    Future.microtask(() {
+      fetchProducts(skip: 0);
+    });
+     _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        int skip = ref.read(productProvider).skip ?? 0;
+        if (skip > 0) {
+          fetchProducts(skip: skip);
+        }
+      }
     });
   }
+
+  void fetchProducts({required int skip}) {
+    if (widget.title == "Listing Request") {
+      ref.read(productProvider.notifier).getListRequestProducts(limit: 10);
+      
+      // AppRouter.push(
+      //  ListingProductDetailView(isRequest: true, type: setType(index),));
+    } else if (widget.title == "Product Listings") {
+     
+     ref.read(productProvider.notifier).getListApprovedProducts(limit: 10);
+    } else if (widget.title == "Pending Listings") {
+      ref.read(productProvider.notifier).getPendingReviewList(limit: 10);
+      //              AppRouter.push(PendingProductDetailView(
+      //   type: setType(index),
+      // ));
+    } else {
+      //                          AppRouter.push(ProductLiveListingDetailView(
+      //   type: setType(index),
+      //  ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return CustomScreenTemplate(title: widget.title, 
-    child: GridView.builder(
-      controller: _scrollController,
-                scrollDirection: Axis.vertical,
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppTheme.horizontalPadding,
-                  vertical: AppTheme.horizontalPadding
-                ),
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  // item height (since scrolling is horizontal)
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 20,
-                  childAspectRatio: 0.999,
-                  maxCrossAxisExtent: 200,
-                ),
-                itemCount: 4,
-                itemBuilder: (context, index) {
-                  return SizedBox(
-                        width: double.infinity,
-                        height: double.infinity,
-                        child: GestureDetector(
-                          onTap: (){
-                            if(widget.title ==  "Listing Request"){
-                              // AppRouter.push(
-                            //  ListingProductDetailView(isRequest: true, type: setType(index),));
-                       
-                            }
-                            else if(widget.title == "Product Listings"){
-                  //              AppRouter.push(PendingProductDetailView(
-                  //   type: setType(index),
-                  // ));
-                            }
-                            else if(widget.title == "Pending Listings"){
-                  //              AppRouter.push(PendingProductDetailView(
-                  //   type: setType(index),
-                  // ));
-                            }
-                            else{
-        //                          AppRouter.push(ProductLiveListingDetailView(
-        //   type: setType(index),
-        //  ));
-                            }
-                          },
-                          child: 
-                          SizedBox.shrink()
-                          // ProductDisplayBoxWidget()
-                          ));
-                },
-              ),
+  
+    final providerVM = ref.watch(productProvider);
+    if (widget.title == "Listing Request") {
+      response = providerVM.listRequestApiResponse;
+      list = providerVM.listRequestproducts!;
+      // AppRouter.push(
+      //  ListingProductDetailView(isRequest: true, type: setType(index),));
+    } else if (widget.title == "Product Listings") {
+      response = providerVM.productListingApiResponse;
+      list = providerVM.listApprovedproducts!;
+      //              AppRouter.push(PendingProductDetailView(
+      //   type: setType(index),
+      // ));
+    } else if (widget.title == "Pending Listings") {
+     
+      response = providerVM.pendingReviewApiRes;
+      list = providerVM.pendingReviewList!;
+      //              AppRouter.push(PendingProductDetailView(
+      //   type: setType(index),
+      // ));
+    } else {
+      //                          AppRouter.push(ProductLiveListingDetailView(
+      //   type: setType(index),
+      //  ));
+    }
+    return CustomScreenTemplate(
+      title: widget.title,
+      child: AsyncStateHandler(
+        status: response.status,
+        dataList: list,
+        itemBuilder: null,
+        onRetry: () {
+          fetchProducts(skip: 0);
+        },
+        customSuccessWidget: GridView.builder(
+          controller: _scrollController,
+          scrollDirection: Axis.vertical,
+          padding: EdgeInsets.symmetric(
+            horizontal: AppTheme.horizontalPadding,
+            vertical: AppTheme.horizontalPadding,
+          ),
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            // item height (since scrolling is horizontal)
+            mainAxisSpacing: 20,
+            crossAxisSpacing: 20,
+            childAspectRatio: 0.999,
+            maxCrossAxisExtent: 200,
+          ),
+          itemCount: list.length,
+          itemBuilder: (context, index) {
            
-           );
+            return SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+              child: GestureDetector(
+                onTap: () {
+                  if (widget.title == "Listing Request") {
+                    // AppRouter.push(
+                    //  ListingProductDetailView(isRequest: true, type: setType(index),));
+                  } else if (widget.title == "Product Listings") {
+                    //              AppRouter.push(PendingProductDetailView(
+                    //   type: setType(index),
+                    // ));
+                  } else if (widget.title == "Pending Listings") {
+                    //              AppRouter.push(PendingProductDetailView(
+                    //   type: setType(index),
+                    // ));
+                  } else {
+                    //                          AppRouter.push(ProductLiveListingDetailView(
+                    //   type: setType(index),
+                    //  ));
+                  }
+                },
+                child: 
+                ProductDisplayBoxWidget(data: list[index].product!,)
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 }

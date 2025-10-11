@@ -44,7 +44,7 @@ class AsyncStateHandler<T> extends StatelessWidget {
     }
 
     if (status == Status.completed ) {
-      if (dataList.isEmpty && customSuccessWidget == null) {
+      if (dataList.isEmpty ) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
