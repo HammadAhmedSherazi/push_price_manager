@@ -84,6 +84,9 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
                       if (text.length >= 3) {
                         fetchProduct(skip: ref.watch(productProvider).skip ?? 0, searchText: text);
                       }
+                      else{
+                        fetchProduct(skip: 0);
+                      }
                     },
                   );
                 },

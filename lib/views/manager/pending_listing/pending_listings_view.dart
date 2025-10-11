@@ -210,6 +210,9 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                   if (text.length >= 3) {
                     fetchProduct(text: text, skip: 0);
                   }
+                  else{
+                    fetchProduct(skip: 0);
+                  }
                 });
               },
               onTapOutside: (v) {

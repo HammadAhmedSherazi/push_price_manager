@@ -234,6 +234,9 @@ late final ScrollController _scrollController;
                       if (text.length >= 3) {
                        fetchProduct(text: text, skip: 0);
                       }
+                      else{
+                        fetchProduct(skip: 0);
+                      }
                     },
                   );
               },
