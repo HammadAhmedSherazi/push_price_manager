@@ -76,8 +76,8 @@ class _ProductLiveListingDetailViewState extends State<ProductLiveListingDetailV
       InfoDataModel(title: "Listing Type", description: "Best By Products"),
       InfoDataModel(title: "Best By Date", description: bestByDate),
       InfoDataModel(title: "Product Quantity", description: "4"),
-      InfoDataModel(title: "Price 1", description: "\$${regularPrice.toStringAsFixed(2)}"),
-      InfoDataModel(title: "Price 2", description: "\$${bestBuyPrice.toStringAsFixed(2)}"),
+      // InfoDataModel(title: "Price 1", description: "\$${regularPrice.toStringAsFixed(2)}"),
+      // InfoDataModel(title: "Price 2", description: "\$${bestBuyPrice.toStringAsFixed(2)}"),
       InfoDataModel(title: "Average Price", description: "\$${((regularPrice + bestBuyPrice) / 2).toStringAsFixed(2)}"),
       InfoDataModel(title: "Current Discount", description: "10%"),
      ];

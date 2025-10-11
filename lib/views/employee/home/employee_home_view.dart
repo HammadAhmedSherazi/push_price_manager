@@ -129,7 +129,7 @@ class _ListingRequestSectionState extends State<ListingRequestSection> {
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index)=>GestureDetector(
                             onTap: (){
-                              AppRouter.push( ListingProductDetailView(isRequest: true, type:setType(index), product: products[index]));
+                              AppRouter.push(ListingProductDetailView(isRequest: true, type: setType(index), product: products[index]));
                             },
                             child: ProductDisplayBoxWidget(product: products[index])), 
                           separatorBuilder: (context, index)=> 10.pw, 

@@ -136,8 +136,8 @@ class _PendingProductDetailViewState extends State<PendingProductDetailView> {
                         ProductTitleWidget(title: "Best By Date", value: selectedProduct!.bestByDate),
                     ProductTitleWidget(title: "Product Quantity", value: "4"),
                     if(widget.type.toLowerCase().contains("weighted"))...[
-                      ProductTitleWidget(title: "Price 1", value: "\$${selectedProduct!.regularPrice.toStringAsFixed(2)}"),
-                      ProductTitleWidget(title: "Price 2", value: "\$${selectedProduct!.bestBuyPrice.toStringAsFixed(2)}"),
+                      // ProductTitleWidget(title: "Price 1", value: "\$${selectedProduct!.regularPrice.toStringAsFixed(2)}"),
+                      // ProductTitleWidget(title: "Price 2", value: "\$${selectedProduct!.bestBuyPrice.toStringAsFixed(2)}"),
                     ]
                   ],
                 ) : Column(

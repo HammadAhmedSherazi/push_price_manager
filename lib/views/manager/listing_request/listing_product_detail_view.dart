@@ -138,12 +138,11 @@ class _ListingProductDetailViewState extends State<ListingProductDetailView> {
                       ]
                     else
                       ...[
-                        if (AppConstant.userType == UserType.employee)
-                        ProductTitleWidget(title: "Store", value: "Store 1"),
+                        ProductTitleWidget(title: "Store Name", value: "Store 1"),
                         ProductTitleWidget(title: "Category", value: selectedProduct!.category ?? "Grocery"),
                         ProductTitleWidget(title: "Regular Price", value: "\$${selectedProduct!.regularPrice.toStringAsFixed(2)}"),
                         if (widget.isRequest == true)
-                        ProductTitleWidget(title: "Listing Type", value:  "Best By Products"),
+                          ProductTitleWidget(title: "Listing Type", value: "Best By Date"),
                       ],
                   ],
                 ) : Column(

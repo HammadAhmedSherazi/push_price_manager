@@ -105,13 +105,14 @@ class _ListRequestProductDetailViewState extends State<ListRequestProductDetailV
                             ),
                           ),
                         ),
-                        Text("", style: context.textStyle.bodySmall),
+                        Text("Today 3:45pm", style: context.textStyle.bodySmall),
                       ],
                     ),
                     10.ph,
+                    ProductTitleWidget(title: "Store Name", value: "Store 1"),
                     ProductTitleWidget(title: "Category", value: selectedProduct!.category ?? "Grocery"),
                     ProductTitleWidget(title: "Regular Price", value: "\$${selectedProduct!.regularPrice.toStringAsFixed(2)}"),
-                    // ProductTitleWidget(title: "Listing Type", value: widget.type),
+                    ProductTitleWidget(title: "Listing Type", value: widget.type),
                   ],
                 ) : Column(
                   children: [
