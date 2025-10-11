@@ -101,5 +101,6 @@ class ProductState {
     listLiveApiResponse: listLiveApiResponse ?? this.listLiveApiResponse,
     listLiveProducts: listLiveProducts ?? this.listLiveProducts
     
+    
   );
 }

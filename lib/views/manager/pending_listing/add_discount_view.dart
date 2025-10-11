@@ -135,7 +135,10 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
                       };
                     }
                   if (widget.isInstant!) {
+                    data['hourly_increasing_discount'] = double.parse(_dialyDiscountEditTextController.text);
+                    data.remove("daily_increasing_discount_percent");
                     AppRouter.push(ListScheduleCalenderView(
+
                       data: data,
 
                     ));
@@ -191,7 +194,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
                   ],
                   validator: (value) => value?.validateCurrentDiscount(),
                   decoration: InputDecoration(
-                    hintText: "Daily Increasing Discount",
+                    hintText: widget.isInstant!?"Hourly Increasing Discoun" :  "Daily Increasing Discount",
                     suffixIcon: Icon(
                       Icons.percent_sharp,
                       color: AppColors.secondaryColor,
@@ -212,7 +215,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
                     // ✅ Safe state update after build
                     ref.read(productProvider.notifier).setGoLiveDate(date);
                   },
-                  selectedDate: listItem.goLiveDate,
+                  selectedDate: null,
                 ),
                 20.ph,
       

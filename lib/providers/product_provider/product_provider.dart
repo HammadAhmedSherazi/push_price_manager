@@ -495,10 +495,10 @@ class ProductProvider extends Notifier<ProductState> {
         AppRouter.customback(times: times);
         AppRouter.push(SuccessListingRequestView(message: "Listing is Live!"));
       } else {
-        state = state.copyWith(setReviewApiRes: ApiResponse.loading());
+        state = state.copyWith(setReviewApiRes: ApiResponse.error());
       }
     } catch (e) {
-      state = state.copyWith(setReviewApiRes: ApiResponse.loading());
+      state = state.copyWith(setReviewApiRes: ApiResponse.error());
     }
   }
 

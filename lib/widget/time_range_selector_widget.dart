@@ -42,6 +42,9 @@ class _TimeRangePickerDialogState extends State<TimeRangePickerDialog> {
     );
     if (time != null) setState(() => endTime = time);
   }
+  bool _isAfter(TimeOfDay a, TimeOfDay b) {
+    return a.hour > b.hour || (a.hour == b.hour && a.minute > b.minute);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +79,15 @@ class _TimeRangePickerDialogState extends State<TimeRangePickerDialog> {
               Helper.showMessage(context, message: "Please selete a time range");
               return;
             }
+            if (startTime != null && !_isAfter(endTime!, startTime!)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('End time must be after start time'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
             Navigator.pop(context, {
               'start': startTime,
               'end': endTime,

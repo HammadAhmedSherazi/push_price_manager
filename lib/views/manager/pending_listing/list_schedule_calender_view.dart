@@ -74,7 +74,7 @@ Future<void> _selectTimeRange(int index) async {
               }
               Map<String, dynamic> data = widget.data;
               final jsonOutput = {
-  for (final item in calendarList) item.day.toLowerCase(): item.toJson(),
+  for (final item in list) item.day.toLowerCase(): item.toJson(),
 };
               data["weekly_schedule"] =  jsonOutput;
               ref
