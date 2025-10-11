@@ -426,7 +426,7 @@ class MyHttpClient extends BaseApiServices {
         return responseJson;
       case 400:
         Helper.showMessage( AppRouter.navKey.currentContext!,message: 
-          json.decode(response.body.toString())['message'] ??
+          json.decode(response.body.toString())['detail']??
               "Something went wrong!",
         );
         throw BadRequestException(
@@ -435,9 +435,13 @@ class MyHttpClient extends BaseApiServices {
         );
       case 401:
         String msg =
-            json.decode(response.body.toString())['message'] ??
+            json.decode(response.body.toString())['detail'] ??
             "Something went wrong!";
+        
         Helper.showMessage( AppRouter.navKey.currentContext!,message: msg);
+        if(msg.contains("Incorrect password")){
+          return null;
+        }
         if (SharedPreferenceManager.sharedInstance.getRefreshToken() != null &&
             SharedPreferenceManager.sharedInstance.getRefreshToken() != "") {
           // AuthRemoteRepo.authRemoteInstance.updateToken(input: {
@@ -450,7 +454,8 @@ class MyHttpClient extends BaseApiServices {
 
           AppRouter.pushAndRemoveUntil(const LoginView());
           Helper.showMessage( AppRouter.navKey.currentContext!,message: "Please login again!");
-        } else {
+        }
+        else {
           SharedPreferenceManager.sharedInstance.clearAll();
 
           AppRouter.pushAndRemoveUntil(const LoginView());
@@ -463,7 +468,7 @@ class MyHttpClient extends BaseApiServices {
       case 403:
         Helper.showMessage(
            AppRouter.navKey.currentContext!,message: 
-          json.decode(response.body.toString())['message'] ??
+          json.decode(response.body.toString())['detail'] ??
               "Something went wrong!",
         );
         throw UnauthorisedException(
@@ -474,10 +479,10 @@ class MyHttpClient extends BaseApiServices {
       case 408:
         Helper.showMessage(
            AppRouter.navKey.currentContext!,message: 
-          json.decode(response.body.toString())['message'] ??
+          json.decode(response.body.toString())['detail'] ??
               "Something went wrong!",
         );
-        if (json.decode(response.body.toString())['message'] ==
+        if (json.decode(response.body.toString())['detail'] ==
             "User Not Found") {
           SharedPreferenceManager.sharedInstance.clearAll();
 
@@ -491,7 +496,7 @@ class MyHttpClient extends BaseApiServices {
       case 422:
         Helper.showMessage(
            AppRouter.navKey.currentContext!,message: 
-          json.decode(response.body.toString())['message'] ??
+          json.decode(response.body.toString())['detail'] ??
               "Something went wrong!",
         );
         throw UnprocessableContent(
@@ -500,7 +505,7 @@ class MyHttpClient extends BaseApiServices {
         );
       case 423:
         Helper.showMessage( AppRouter.navKey.currentContext!,message: 
-          json.decode(response.body.toString())['message'] ??
+          json.decode(response.body.toString())['detail'] ??
               "Something went wrong!",
         );
         throw UnauthorisedException(
@@ -511,7 +516,7 @@ class MyHttpClient extends BaseApiServices {
       case 500:
         Helper.showMessage(
           AppRouter.navKey.currentContext!,message: 
-          json.decode( response.body.toString())['message'] ??
+          json.decode( response.body.toString())['detail'] ??
               "Something went wrong!",
         );
         throw ServerException(response.statusCode, "Server Error");

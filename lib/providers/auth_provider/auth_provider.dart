@@ -45,6 +45,17 @@ class AuthProvider  extends Notifier<AuthState> {
     }
   }
 
+  FutureOr<void> logout()async{
+    
+    try {
+      SharedPreferenceManager.sharedInstance.clearAll();
+    
+      AppRouter.pushAndRemoveUntil(LoginView());
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   void savedUserData(Map<String, dynamic> userMap) {
     String user = jsonEncode(userMap);
     SharedPreferenceManager.sharedInstance.storeUser(user);
@@ -60,6 +71,8 @@ class AuthProvider  extends Notifier<AuthState> {
     
    
   }
+
+
 
 
   

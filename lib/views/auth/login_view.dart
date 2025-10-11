@@ -20,6 +20,7 @@ class _LoginViewState extends State<LoginView> {
     final sharedPref = SharedPreferenceManager.sharedInstance;
    
     rememberMeCheck = sharedPref.getRemberMe() ?? false;
+    sharedPref.clearAll();
     if(rememberMeCheck){
       emailTextController = TextEditingController(text: sharedPref.getSavedEmail());
       passwordTextController = TextEditingController(text: sharedPref.getSavedPassword());

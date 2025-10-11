@@ -76,9 +76,15 @@ class _NavigationViewState extends State<NavigationView> {
                       ),
                     ),
                     Expanded(
-                      child: CustomButtonWidget(
-                        title: "logout",
-                        onPressed: () => AppRouter.pushAndRemoveUntil(LoginView()),
+                      child: Consumer(
+                        builder: (context, ref, child) {
+                          return CustomButtonWidget(
+                            title: "logout",
+                            onPressed: () {
+                              
+                            },
+                          );
+                        }
                       ),
                     ),
                   ],
