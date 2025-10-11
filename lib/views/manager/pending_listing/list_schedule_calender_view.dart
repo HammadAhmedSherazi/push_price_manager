@@ -58,11 +58,40 @@ Future<void> _selectTimeRange(int index) async {
     return CustomScreenTemplate(
       showBottomButton: true,
       bottomButtonText: "next",
+      customBottomWidget: Padding(padding: EdgeInsets.symmetric(
+        horizontal: AppTheme.horizontalPadding
+      ),
+      child: Consumer(
+        builder: (context, ref, child) {
+          return CustomButtonWidget(
+            isLoad: ref.watch(productProvider).setReviewApiRes.status == Status.loading,
+            title: "list now", onPressed: (){
+            final list = calendarList.where((e)=>e.isSelect).toList();
+            if(list.isNotEmpty){
+              if(list.any((e)=>e.endTime == null || e.startTime == null)){
+                Helper.showMessage(context, message: "Please properly set start time and end time of selected days");
+                return;
+              }
+              Map<String, dynamic> data = widget.data;
+              final jsonOutput = {
+  for (final item in calendarList) item.day.toLowerCase(): item.toJson(),
+};
+              data["weekly_schedule"] =  jsonOutput;
+              ref
+                            .read(productProvider.notifier)
+                            .setReview(input: data, times:  4);
+            }
+            else{
+              Helper.showMessage(context, message: "Please select any day of schedule");
+            }
+          });
+        }
+      ),
+      ),
       onButtonTap: (){
-        // ref
-        //                 .read(productProvider.notifier)
-        //                 .setReview(input: data, times:  3);
-        AppRouter.push(SelectProductView(isInstant: true,));
+        
+        
+        // AppRouter.push(SelectProductView(isInstant: true,));
       },
       title: "Listing Schedule Calender", child: Padding(
       padding: EdgeInsets.all(AppTheme.horizontalPadding),
@@ -162,10 +191,9 @@ class CalenderDataModel {
 
   CalenderDataModel copyWith({
     String? day,
-    String? timeSlot,
-    bool? isSelect,
     TimeOfDay? startTime,
-    TimeOfDay? endTime
+    TimeOfDay? endTime,
+    bool? isSelect,
   }) {
     return CalenderDataModel(
       day: day ?? this.day,
@@ -173,5 +201,44 @@ class CalenderDataModel {
       endTime: endTime ?? this.endTime,
       isSelect: isSelect ?? this.isSelect,
     );
+  }
+
+  /// ✅ Parse JSON → Model
+  factory CalenderDataModel.fromJson(String day, Map<String, dynamic> json) {
+    return CalenderDataModel(
+      day: day,
+      startTime: _parseTime(json['start_time']),
+      endTime: _parseTime(json['end_time']),
+    );
+  }
+
+  /// ✅ Convert Model → JSON (returns time as "HH:mm:ss.SSSZ")
+  Map<String, dynamic> toJson() {
+    return {
+      'start_time': _formatTime(startTime),
+      'end_time': _formatTime(endTime),
+    };
+  }
+
+  /// 🔧 Parse "17:54:07.666Z" → TimeOfDay
+  static TimeOfDay? _parseTime(String? timeString) {
+    if (timeString == null || timeString.isEmpty) return null;
+
+    // Add dummy date so DateTime.parse works
+    final parsed = DateTime.tryParse("1970-01-01T$timeString");
+    if (parsed == null) return null;
+
+    return TimeOfDay(hour: parsed.hour, minute: parsed.minute);
+  }
+
+  /// 🔧 Format TimeOfDay → "HH:mm:ss.SSSZ"
+  static String? _formatTime(TimeOfDay? time) {
+    if (time == null) return null;
+
+    final hours = time.hour.toString().padLeft(2, '0');
+    final minutes = time.minute.toString().padLeft(2, '0');
+    const seconds = '07'; // optional — can randomize or fix
+    const milliseconds = '666'; // optional
+    return '$hours:$minutes:$seconds.${milliseconds}Z';
   }
 }
