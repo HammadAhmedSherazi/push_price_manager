@@ -2,18 +2,29 @@ import 'package:push_price_manager/utils/extension.dart';
 
 import '../../../export_all.dart';
 
-class ProductLiveListingDetailView extends ConsumerWidget {
+class ProductLiveListingDetailView extends ConsumerStatefulWidget {
 
   final ListingModel data;
   const ProductLiveListingDetailView({super.key,  required this.data });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProductLiveListingDetailView> createState() => _ProductLiveListingDetailViewState();
+}
+
+class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListingDetailView> {
+  @override
+  void initState() {
+   
+    super.initState();
     Future.microtask((){
-      ref.read(productProvider.notifier).setListItem(data);
+      ref.read(productProvider.notifier).setListItem(widget.data);
     });
+  }
+  @override
+  Widget build(BuildContext context) {
+    
   final providerVM = ref.watch(productProvider);
-  final ListingModel listData = providerVM.listItem ?? data;
+  final ListingModel listData = providerVM.listItem ?? widget.data;
  List<InfoDataModel> getInfoList(String selectedType) {
   if (selectedType ==  "Best By Products") {
     return [
@@ -113,7 +124,7 @@ class ProductLiveListingDetailView extends ConsumerWidget {
                             title: "Yes",
                             isLoad: response.status == Status.loading,
                             onPressed: () {
-                              ref.read(productProvider.notifier).deleteList(listingId: data.listingId);
+                              ref.read(productProvider.notifier).deleteList(listingId: widget.data.listingId);
                             },
                           );
                         }

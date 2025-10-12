@@ -79,12 +79,14 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
     }
   });
   }
-    final providerVM = ref.watch(productProvider);
-    final listItem = providerVM.listItem ?? widget.data;
+    
+    final data = ref.watch(productProvider.select((e)=>(e.listItem, e.getSuggestionApiRes)));
+    final response = data.$2;
+    final item = data.$1;
 
     return Material(
       child: AsyncStateHandler(
-        status: providerVM.getSuggestionApiRes.status,
+        status: response.status,
         dataList: [0],
         itemBuilder: null,
         onRetry: () {
@@ -106,7 +108,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
             child: CustomButtonWidget(
               title: "next",
               isLoad: widget.isInstant!
-                  ? providerVM.getSuggestionApiRes.status == Status.loading
+                  ? response.status == Status.loading
                   : false,
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
@@ -114,22 +116,22 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
                     if (widget.isPromotionalDiscount!) {
                       data = {
                         "save_discount_for_future":
-                            listItem.saveDiscountForFuture,
-                        "go_live_date":  listItem.goLiveDate!.toIso8601String(),
-                        "listing_id": listItem.listingId,
+                            item!.saveDiscountForFuture,
+                        "go_live_date":  item.goLiveDate!.toIso8601String(),
+                        "listing_id": item.listingId,
                         "current_discount": double.parse(_currentDiscountEditTextController.text),
                         "daily_increasing_discount_percent": double.parse(_dialyDiscountEditTextController.text),
                       };
                     } else {
                       data = {
                         "save_discount_for_future":
-                            listItem.saveDiscountForFuture,
+                            item!.saveDiscountForFuture,
                         "save_duration_for_listing":
-                            listItem.saveDiscountForListing,
+                            item.saveDiscountForListing,
                         "auto_apply_for_next_batch":
-                            listItem.autoApplyForNextBatch,
-                        "go_live_date": listItem.goLiveDate!.toIso8601String(),
-                        "listing_id": listItem.listingId,
+                            item.autoApplyForNextBatch,
+                        "go_live_date": item.goLiveDate!.toIso8601String(),
+                        "listing_id": item.listingId,
                         "current_discount": double.parse(_currentDiscountEditTextController.text),
                         "daily_increasing_discount_percent": double.parse(_dialyDiscountEditTextController.text),
                       };
@@ -215,7 +217,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
                     // ✅ Safe state update after build
                     ref.read(productProvider.notifier).setGoLiveDate(date);
                   },
-                  selectedDate: null,
+                  selectedDate: item!.goLiveDate,
                 ),
                 20.ph,
       
@@ -236,10 +238,10 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
                         ),
                         side: BorderSide(color: AppColors.secondaryColor),
                         value: index == 0
-                            ? listItem.saveDiscountForFuture
+                            ? item.saveDiscountForFuture
                             : index == 1
-                            ? listItem.saveDiscountForListing
-                            : listItem.autoApplyForNextBatch,
+                            ? item.saveDiscountForListing
+                            : item.autoApplyForNextBatch,
                         onChanged: (v) {
                           ref
                               .read(productProvider.notifier)

@@ -2,7 +2,7 @@ import 'package:push_price_manager/utils/extension.dart';
 
 import '../../../export_all.dart';
 
-class PendingProductDetailView extends ConsumerWidget {
+class PendingProductDetailView extends ConsumerStatefulWidget {
   final String type;
   final ListingModel data;
   const PendingProductDetailView({
@@ -12,11 +12,21 @@ class PendingProductDetailView extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    Future.microtask(() {
-      ref.read(productProvider.notifier).setListItem(data);
+  ConsumerState<PendingProductDetailView> createState() => _PendingProductDetailViewState();
+}
+
+class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailView> {
+  @override
+  void initState() {
+    super.initState();
+     Future.microtask(() {
+      ref.read(productProvider.notifier).setListItem(widget.data);
     });
-    final listItem = ref.watch(productProvider).listItem ?? data;
+  }
+  @override
+  Widget build(BuildContext context) {
+   
+    final listItem = ref.watch(productProvider).listItem ?? widget.data;
     return CustomScreenTemplate(
       showBottomButton: true,
       customBottomWidget: Padding(
@@ -30,41 +40,44 @@ class PendingProductDetailView extends ConsumerWidget {
                 onPressed: () {
                   AppRouter.push(
                     AddDiscountView(
-                      isInstant: type == "Instant Sales",
-                      data: data,
+                      isInstant: widget.type == "Instant Sales",
+                      data: widget.data,
                     ),
+                    fun: (){
+                      ref.read(productProvider.notifier).setListItem(widget.data);
+                    }
                   );
                 },
               ),
             if (AppConstant.userType == UserType.employee &&
-                data.status == "PENDING_MANAGER_REVIEW")
+                widget.data.status == "PENDING_MANAGER_REVIEW")
               CustomButtonWidget(
                 title: "edit",
                 onPressed: () {
                   AppRouter.push(
                     ProductAddDetailView(
                       title: "Product Listings - List Product",
-                      type: type,
-                      data: data,
+                      type: widget.type,
+                      data: widget.data,
                     ),
                   );
                 },
               ),
             if (AppConstant.userType == UserType.manager &&
-                data.status == "PENDING_MANAGER_REVIEW")
+                widget.data.status == "PENDING_MANAGER_REVIEW")
               CustomOutlineButtonWidget(
                 title: "edit",
                 onPressed: () {
                   AppRouter.push(
                     ProductAddDetailView(
                       title: "Pending Listings - List Product",
-                      type: type,
-                      data: data,
+                      type: widget.type,
+                      data: widget.data,
                     ),
                   );
                 },
               ),
-            if (data.status == "PENDING_MANAGER_REVIEW")
+            if (widget.data.status == "PENDING_MANAGER_REVIEW")
               CustomButtonWidget(
                 title: "delete",
                 onPressed: () {
@@ -121,7 +134,7 @@ class PendingProductDetailView extends ConsumerWidget {
                                             ref
                                                 .read(productProvider.notifier)
                                                 .deleteList(
-                                                  listingId: data.listingId,
+                                                  listingId: widget.data.listingId,
                                                 );
                                           },
                                         );
@@ -202,9 +215,9 @@ class PendingProductDetailView extends ConsumerWidget {
                   title: "Price",
                   value: "\$${listItem.product?.price?.toStringAsFixed(2)}",
                 ),
-                ProductTitleWidget(title: "Listing Type", value: type),
-                if (type.toLowerCase().contains("best") ||
-                    type.toLowerCase().contains("weighted"))
+                ProductTitleWidget(title: "Listing Type", value: widget.type),
+                if (widget.type.toLowerCase().contains("best") ||
+                    widget.type.toLowerCase().contains("weighted"))
                   ProductTitleWidget(
                     title: "Best by Date",
                     value: Helper.selectDateFormat(listItem.bestByDate),
@@ -213,7 +226,7 @@ class PendingProductDetailView extends ConsumerWidget {
                   title: "Product Quantity",
                   value: "${listItem.quantity}",
                 ),
-                if (type == "Weighted Items" &&
+                if (widget.type == "Weighted Items" &&
                     listItem.weightedItemsPrices != null &&
                     listItem.weightedItemsPrices!.isNotEmpty) ...[
                   ...List.generate(

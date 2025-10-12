@@ -2,19 +2,30 @@ import 'package:push_price_manager/utils/extension.dart';
 
 import '../../../export_all.dart';
 
-class ListingProductDetailView extends ConsumerWidget {
+class ListingProductDetailView extends ConsumerStatefulWidget {
   final bool? isRequest;
   final String ? type;
   final ListingModel data;
   const ListingProductDetailView({super.key, this.isRequest = false, this.type = "", required this.data});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(productProvider.select((state) => state.listItem));
+  ConsumerState<ListingProductDetailView> createState() => _ListingProductDetailViewState();
+}
+
+class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailView> {
+  @override
+  void initState() {
+    super.initState();
     Future.microtask(() {
-      ref.read(productProvider.notifier).setListItem(data);
+      ref.read(productProvider.notifier).setListItem(widget.data);
     });
-    final listItem = ref.watch(productProvider).listItem ?? data;
+    
+  }
+  @override
+  Widget build(BuildContext context) {
+    final listItem = ref.watch(productProvider.select((state) => state.listItem)) ?? widget.data;
+    
+    
     return CustomScreenTemplate(
       bottomButtonText: "next",
       showBottomButton: true,
@@ -22,8 +33,8 @@ class ListingProductDetailView extends ConsumerWidget {
          if(AppConstant.userType == UserType.employee){
        
        
-         if(isRequest!){
-           AppRouter.push(ListingProductView(type: type!,popTime: 6, isRequest: isRequest!,),settings: RouteSettings(
+         if(widget.isRequest!){
+           AppRouter.push(ListingProductView(type: widget.type!,popTime: 6, isRequest: widget.isRequest!,),settings: RouteSettings(
             arguments: {
               "listing_id": listItem.listingId
             }
@@ -84,7 +95,7 @@ class ListingProductDetailView extends ConsumerWidget {
                   ],
                 ),
                 10.ph,
-                ProductTitleWidget(title: "Category", value: "${data.product?.category?.title}"),
+                ProductTitleWidget(title: "Category", value: "${widget.data.product?.category?.title}"),
                 
                if(listItem.store.storeName.isNotEmpty)...[ ProductTitleWidget(
                   title: "Store",
@@ -94,7 +105,7 @@ class ListingProductDetailView extends ConsumerWidget {
                 //   title: "Product Details",
                 //   value: data.description,
                 // ),
-                ProductTitleWidget(title: "Regular Price", value: "\$${data.product?.price!.toStringAsFixed(2)}"),
+                ProductTitleWidget(title: "Regular Price", value: "\$${widget.data.product?.price!.toStringAsFixed(2)}"),
               ],
             ),
           ),
