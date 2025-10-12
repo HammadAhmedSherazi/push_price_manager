@@ -29,11 +29,15 @@ class PendingProductDetailView extends ConsumerWidget {
                 title: "next",
                 onPressed: () {
                   AppRouter.push(
-                    AddDiscountView(isInstant: type == "Instant Sales", data: data,),
+                    AddDiscountView(
+                      isInstant: type == "Instant Sales",
+                      data: data,
+                    ),
                   );
                 },
               ),
-            if (AppConstant.userType == UserType.employee && data.status == "PENDING_MANAGER_REVIEW")
+            if (AppConstant.userType == UserType.employee &&
+                data.status == "PENDING_MANAGER_REVIEW")
               CustomButtonWidget(
                 title: "edit",
                 onPressed: () {
@@ -46,7 +50,8 @@ class PendingProductDetailView extends ConsumerWidget {
                   );
                 },
               ),
-            if (AppConstant.userType == UserType.manager && data.status == "PENDING_MANAGER_REVIEW")
+            if (AppConstant.userType == UserType.manager &&
+                data.status == "PENDING_MANAGER_REVIEW")
               CustomOutlineButtonWidget(
                 title: "edit",
                 onPressed: () {
@@ -59,12 +64,81 @@ class PendingProductDetailView extends ConsumerWidget {
                   );
                 },
               ),
-            if(data.status == "PENDING_MANAGER_REVIEW")
-            CustomButtonWidget(
-              title: "delete",
-              onPressed: () {},
-              color: Color(0xffB80303),
-            ),
+            if (data.status == "PENDING_MANAGER_REVIEW")
+              CustomButtonWidget(
+                title: "delete",
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    builder: (context) {
+                      return Dialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        backgroundColor: const Color(0xFFF2F7FA),
+                        child: Padding(
+                          padding: EdgeInsets.all(AppTheme.horizontalPadding),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Delete',
+                                style: context.textStyle.displayMedium!
+                                    .copyWith(fontSize: 18.sp),
+                              ),
+                              10.ph,
+                              Text(
+                                'Are you sure you want to delete?',
+                                textAlign: TextAlign.center,
+                                style: context.textStyle.bodyMedium!.copyWith(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              30.ph,
+                              Row(
+                                spacing: 20,
+                                children: [
+                                  Expanded(
+                                    child: CustomOutlineButtonWidget(
+                                      title: "cancel",
+                                      onPressed: () => AppRouter.back(),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Consumer(
+                                      builder: (context, ref, child) {
+                                        final response = ref.watch(
+                                          productProvider.select(
+                                            (e) => e.deleteApiRes,
+                                          ),
+                                        );
+                                        return CustomButtonWidget(
+                                          title: "Yes",
+                                          isLoad:
+                                              response.status == Status.loading,
+                                          onPressed: () {
+                                            ref
+                                                .read(productProvider.notifier)
+                                                .deleteList(
+                                                  listingId: data.listingId,
+                                                );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                color: Color(0xffB80303),
+              ),
           ],
         ),
       ),
@@ -133,17 +207,22 @@ class PendingProductDetailView extends ConsumerWidget {
                     type.toLowerCase().contains("weighted"))
                   ProductTitleWidget(
                     title: "Best by Date",
-                    value: Helper.selectDateFormat(
-                      listItem.bestByDate,
-                    ),
+                    value: Helper.selectDateFormat(listItem.bestByDate),
                   ),
                 ProductTitleWidget(
                   title: "Product Quantity",
                   value: "${listItem.quantity}",
                 ),
-                if (type == "Weighted Items" && listItem.weightedItemsPrices != null && listItem.weightedItemsPrices!.isNotEmpty) ...[
-                  ...List.generate(listItem.weightedItemsPrices!.length, (index) => ProductTitleWidget(title: "Price ${index + 1}", value: "\$${listItem.weightedItemsPrices![index]}"))
-                  
+                if (type == "Weighted Items" &&
+                    listItem.weightedItemsPrices != null &&
+                    listItem.weightedItemsPrices!.isNotEmpty) ...[
+                  ...List.generate(
+                    listItem.weightedItemsPrices!.length,
+                    (index) => ProductTitleWidget(
+                      title: "Price ${index + 1}",
+                      value: "\$${listItem.weightedItemsPrices![index]}",
+                    ),
+                  ),
                 ],
               ],
             ),

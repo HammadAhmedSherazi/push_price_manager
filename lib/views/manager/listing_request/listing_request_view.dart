@@ -118,6 +118,7 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
                         onTap: () {
                           AppRouter.push(
                             ListingProductDetailView(data: ListingModel(product: product)),
+                            fun: (){fetchProduct(skip: 0);}
                           );
                         },
                       );

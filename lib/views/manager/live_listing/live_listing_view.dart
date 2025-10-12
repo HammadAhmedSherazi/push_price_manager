@@ -216,7 +216,9 @@ class _LiveListingViewState extends ConsumerState<LiveListingView> {
                 onTap: (){
                    AppRouter.push(ProductLiveListingDetailView(
                         data: item,
-                       ));
+                       ),fun: (){
+                        fetchProduct(skip: 0);
+                       });
                 },
               );
               }, ),

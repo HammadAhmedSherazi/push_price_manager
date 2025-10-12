@@ -250,6 +250,7 @@ class StoreCardWidget extends StatelessWidget {
             //   maxLines: 1,
             //   textAlign: TextAlign.center,
             // ),
+            Spacer(),
             data.isSelected
                 ? Expanded(
                     child: Icon(

@@ -241,6 +241,9 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                       type: types[selectIndex],
                       data: item,
                     ),
+                    fun: (){
+                      fetchProduct(skip: 0);
+                    }
                   );
                 },
                 data: item.product!,

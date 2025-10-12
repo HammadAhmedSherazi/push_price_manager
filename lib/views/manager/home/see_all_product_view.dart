@@ -121,7 +121,10 @@ class _SeeAllProductViewState extends ConsumerState<SeeAllProductView> {
                 onTap: () {
                   if (widget.title == "Listing Request") {
                     AppRouter.push(
-                      ListingProductDetailView(isRequest: true, type:setType(index), data: list[index])
+                      ListingProductDetailView(isRequest: true, type:setType(index), data: list[index]),
+                      fun: () {
+                        fetchProducts(skip: 0);
+                      },
                     
                   );
                     // AppRouter.push(

@@ -59,7 +59,9 @@ class ScanProductView extends StatelessWidget {
                 ),
                 5.ph,
                 CustomButtonWidget(title: "select product", onPressed: (){
-                  // AppRouter.push(ListingProductDetailView());
+                  AppRouter.push(ListingProductDetailView(
+                    data: ListingModel(product: data),
+                  ));
                 })
               ],
             ),

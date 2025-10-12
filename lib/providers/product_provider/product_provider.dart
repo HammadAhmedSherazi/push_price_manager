@@ -707,8 +707,10 @@ class ProductProvider extends Notifier<ProductState> {
       
       // Add condition check
       if (response != null && !(response is Map && response.containsKey('detail'))) {
+        AppRouter.customback(times:2);
         state = state.copyWith(deleteApiRes: ApiResponse.completed(response));
       } else {
+        AppRouter.back();
         // Show error message if condition is false
         Helper.showMessage(
           AppRouter.navKey.currentContext!,
@@ -718,6 +720,7 @@ class ProductProvider extends Notifier<ProductState> {
       }
     } catch (e) {
       // Show error message for exceptions
+      AppRouter.back();
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
         message: "An error occurred while deleting listing. Please try again.",
