@@ -215,69 +215,76 @@ late final ScrollController _scrollController;
           )
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding:  EdgeInsets.symmetric(
-              horizontal: AppTheme.horizontalPadding
-            ),
-            child: CustomSearchBarWidget(
-              controller: _searchTextEditController,
-              onChanged: (text){
-                if (_searchDebounce?.isActive ?? false) {
-                    _searchDebounce!.cancel();
-                  }
-
-                  _searchDebounce = Timer(
-                    const Duration(milliseconds: 500),
-                    () {
-                      if (text.length >= 3) {
-                       fetchProduct(text: text, skip: 0);
-                      }
-                      else{
-                        fetchProduct(skip: 0);
-                      }
-                    },
-                  );
-              },
-              hintText: "Hinted search text", suffixIcon: SvgPicture.asset(Assets.filterIcon), onTapOutside: (v){
-               FocusScope.of(context).unfocus();
-              
-            }, ),
-          ),
-           Expanded(
-            child: AsyncStateHandler(
-              status: providerVM.listRequestApiResponse.status,
-              dataList: providerVM.listRequestproducts!,
-              onRetry: () {
-                fetchProduct(skip: 0);
-              },
-              scrollController: _scrollController,
-              padding: EdgeInsets.all(
-                AppTheme.horizontalPadding,
-              ).copyWith(bottom: 100.r),
-              itemBuilder: (context, index) {
-                final item =providerVM.listRequestproducts![index];
-                return ProductDisplayWidget(
-                onTap: () {
-                   AppRouter.push(
-                      ListingProductDetailView(isRequest: true, type:setType(index), data: ListingModel(product: item.product!), )
-                    
-                  );
-                  // AppRouter.push(
-                  //   PendingProductDetailView(
-                  //     type: types[selectIndex],
-                  //     data: providerVM.listRequestproducts![index],
-                  //   ),
-                  // );
+      body: RefreshIndicator.adaptive(
+        onRefresh: ()async {
+          fetchProduct(skip: 0);
+        },
+        child: Column(
+          children: [
+            Padding(
+              padding:  EdgeInsets.symmetric(
+                horizontal: AppTheme.horizontalPadding
+              ),
+              child: CustomSearchBarWidget(
+                controller: _searchTextEditController,
+                onChanged: (text){
+                  if (_searchDebounce?.isActive ?? false) {
+                      _searchDebounce!.cancel();
+                    }
+        
+                    _searchDebounce = Timer(
+                      const Duration(milliseconds: 500),
+                      () {
+                        if (text.length >= 3) {
+                         fetchProduct(text: text, skip: 0);
+                        }
+                        else{
+                          fetchProduct(skip: 0);
+                        }
+                      },
+                    );
                 },
-                data: item.product!,
-              );
-              },
+                hintText: "Hinted search text", suffixIcon: SvgPicture.asset(Assets.filterIcon), onTapOutside: (v){
+                 FocusScope.of(context).unfocus();
+                
+              }, ),
             ),
-          ),
-       
-        ],
+             Expanded(
+              child: AsyncStateHandler(
+                status: providerVM.listRequestApiResponse.status,
+                dataList: providerVM.listRequestproducts!,
+                onRetry: () {
+                  fetchProduct(skip: 0);
+                },
+                scrollController: _scrollController,
+                padding: EdgeInsets.all(
+                  AppTheme.horizontalPadding,
+                ).copyWith(bottom: 100.r),
+                itemBuilder: (context, index) {
+                  final item =providerVM.listRequestproducts![index];
+                  return ProductDisplayWidget(
+                  onTap: () {
+                     AppRouter.push(
+                        ListingProductDetailView(isRequest: true, type:setType(index), data: ListingModel(product: item.product!), ),fun: (){
+                          fetchProduct(skip: 0);
+                        }
+                      
+                    );
+                    // AppRouter.push(
+                    //   PendingProductDetailView(
+                    //     type: types[selectIndex],
+                    //     data: providerVM.listRequestproducts![index],
+                    //   ),
+                    // );
+                  },
+                  data: item.product!,
+                );
+                },
+              ),
+            ),
+         
+          ],
+        ),
       ),
     );
   }

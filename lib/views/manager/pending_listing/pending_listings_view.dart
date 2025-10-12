@@ -193,65 +193,70 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
         
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: AppTheme.horizontalPadding,
-            ),
-            child: CustomSearchBarWidget(
-              hintText: "Hinted search text",
-              suffixIcon: SvgPicture.asset(Assets.filterIcon),
-              onChanged: (text) {
-                if (_searchDebounce?.isActive ?? false) {
-                  _searchDebounce!.cancel();
-                }
-
-                _searchDebounce = Timer(const Duration(milliseconds: 500), () {
-                  if (text.length >= 3) {
-                    fetchProduct(text: text, skip: 0);
+      body: RefreshIndicator.adaptive(
+        onRefresh: ()async {
+          fetchProduct(skip: 0);
+        },
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppTheme.horizontalPadding,
+              ),
+              child: CustomSearchBarWidget(
+                hintText: "Hinted search text",
+                suffixIcon: SvgPicture.asset(Assets.filterIcon),
+                onChanged: (text) {
+                  if (_searchDebounce?.isActive ?? false) {
+                    _searchDebounce!.cancel();
                   }
-                  else{
-                    fetchProduct(skip: 0);
-                  }
-                });
-              },
-              onTapOutside: (v) {
-                FocusScope.of(context).unfocus();
-              },
-            ),
-          ),
-          Expanded(
-            child: AsyncStateHandler(
-              status: response.status,
-              dataList: list!,
-              onRetry: () {
-                fetchProduct(skip: 0);
-              },
-              scrollController: _scrollController,
-              padding: EdgeInsets.all(
-                AppTheme.horizontalPadding,
-              ).copyWith(bottom: 100.r),
-              itemBuilder: (context, index) {
-                final item =list[index];
-                return ProductDisplayWidget(
-                onTap: () {
-                  AppRouter.push(
-                    PendingProductDetailView(
-                      type: types[selectIndex],
-                      data: item,
-                    ),
-                    fun: (){
+        
+                  _searchDebounce = Timer(const Duration(milliseconds: 500), () {
+                    if (text.length >= 3) {
+                      fetchProduct(text: text, skip: 0);
+                    }
+                    else{
                       fetchProduct(skip: 0);
                     }
-                  );
+                  });
                 },
-                data: item.product!,
-              );
-              },
+                onTapOutside: (v) {
+                  FocusScope.of(context).unfocus();
+                },
+              ),
             ),
-          ),
-        ],
+            Expanded(
+              child: AsyncStateHandler(
+                status: response.status,
+                dataList: list!,
+                onRetry: () {
+                  fetchProduct(skip: 0);
+                },
+                scrollController: _scrollController,
+                padding: EdgeInsets.all(
+                  AppTheme.horizontalPadding,
+                ).copyWith(bottom: 100.r),
+                itemBuilder: (context, index) {
+                  final item =list[index];
+                  return ProductDisplayWidget(
+                  onTap: () {
+                    AppRouter.push(
+                      PendingProductDetailView(
+                        type: types[selectIndex],
+                        data: item,
+                      ),
+                      fun: (){
+                        fetchProduct(skip: 0);
+                      }
+                    );
+                  },
+                  data: item.product!,
+                );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

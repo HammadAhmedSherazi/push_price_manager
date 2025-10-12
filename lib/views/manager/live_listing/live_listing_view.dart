@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:push_price_manager/utils/extension.dart';
+
 import '../../../export_all.dart';
 
 class LiveListingView extends ConsumerStatefulWidget {
@@ -174,56 +175,61 @@ class _LiveListingViewState extends ConsumerState<LiveListingView> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding:  EdgeInsets.symmetric(
-              horizontal: AppTheme.horizontalPadding
-            ),
-            child: CustomSearchBarWidget(hintText: "Hinted search text", suffixIcon: SvgPicture.asset(Assets.filterIcon), onTapOutside: (v){
-               FocusScope.of(context).unfocus();
-              
-            },  onChanged: (text) {
-                if (_searchDebounce?.isActive ?? false) {
-                  _searchDebounce!.cancel();
-                }
-
-                _searchDebounce = Timer(const Duration(milliseconds: 500), () {
-                  if (text.length >= 3) {
-                    fetchProduct(text: text, skip: 0);
-                  }
-                  else{
-                    fetchProduct(skip: 0);
-                  }
-                });
-              },),
-          ),
-          Expanded(
-            child: AsyncStateHandler(
-              status: providerVM.listLiveApiResponse.status,
-              scrollController: _scrollController,
-              dataList: providerVM.listLiveProducts!,
-              onRetry: (){
-                fetchProduct(skip: 0);
-              },
-              padding: EdgeInsets.all(AppTheme.horizontalPadding).copyWith(
-                bottom: 100.r
+      body: RefreshIndicator.adaptive(
+        onRefresh: ()async {
+          fetchProduct(skip: 0);
+        },
+        child: Column(
+          children: [
+            Padding(
+              padding:  EdgeInsets.symmetric(
+                horizontal: AppTheme.horizontalPadding
               ),
-              itemBuilder: (context, index) {
-                final item = providerVM.listLiveProducts![index];
-                return ProductDisplayWidget(
-                data: item.product!,
-                onTap: (){
-                   AppRouter.push(ProductLiveListingDetailView(
-                        data: item,
-                       ),fun: (){
-                        fetchProduct(skip: 0);
-                       });
+              child: CustomSearchBarWidget(hintText: "Hinted search text", suffixIcon: SvgPicture.asset(Assets.filterIcon), onTapOutside: (v){
+                 FocusScope.of(context).unfocus();
+                
+              },  onChanged: (text) {
+                  if (_searchDebounce?.isActive ?? false) {
+                    _searchDebounce!.cancel();
+                  }
+        
+                  _searchDebounce = Timer(const Duration(milliseconds: 500), () {
+                    if (text.length >= 3) {
+                      fetchProduct(text: text, skip: 0);
+                    }
+                    else{
+                      fetchProduct(skip: 0);
+                    }
+                  });
+                },),
+            ),
+            Expanded(
+              child: AsyncStateHandler(
+                status: providerVM.listLiveApiResponse.status,
+                scrollController: _scrollController,
+                dataList: providerVM.listLiveProducts!,
+                onRetry: (){
+                  fetchProduct(skip: 0);
                 },
-              );
-              }, ),
-          )
-        ],
+                padding: EdgeInsets.all(AppTheme.horizontalPadding).copyWith(
+                  bottom: 100.r
+                ),
+                itemBuilder: (context, index) {
+                  final item = providerVM.listLiveProducts![index];
+                  return ProductDisplayWidget(
+                  data: item.product!,
+                  onTap: (){
+                     AppRouter.push(ProductLiveListingDetailView(
+                          data: item,
+                         ),fun: (){
+                          fetchProduct(skip: 0);
+                         });
+                  },
+                );
+                }, ),
+            )
+          ],
+        ),
       ),
     );
   }

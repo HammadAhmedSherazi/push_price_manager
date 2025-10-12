@@ -699,8 +699,8 @@ class ProductProvider extends Notifier<ProductState> {
       state = state.copyWith(deleteApiRes: ApiResponse.loading());
       final response = await MyHttpClient.instance.delete(
         AppConstant.userType == UserType.employee
-            ? "${ApiEndpoints.myListings}$listingId"
-            : "${ApiEndpoints.myListings}manager/$listingId",
+            ? "${ApiEndpoints.listings}$listingId"
+            : "${ApiEndpoints.listings}manager/$listingId",
         null,
         isJsonEncode: false,
       );
@@ -737,8 +737,8 @@ class ProductProvider extends Notifier<ProductState> {
       state = state.copyWith(updateApiRes: ApiResponse.loading());
       final Map<String, dynamic>? response = await MyHttpClient.instance.put(
         AppConstant.userType == UserType.employee
-            ? "${ApiEndpoints.myListings}$listingId"
-            : "${ApiEndpoints.myListings}manager/$listingId",
+            ? "${ApiEndpoints.listings}$listingId"
+            : "${ApiEndpoints.listings}manager/$listingId",
         input,
       );
       
