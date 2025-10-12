@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:push_price_manager/providers/product_provider/product_provider.dart';
 import 'package:push_price_manager/utils/extension.dart';
 
 import '../../../export_all.dart';

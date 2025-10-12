@@ -118,7 +118,7 @@ class PendingProductDetailView extends ConsumerWidget {
                 ),
                 ProductTitleWidget(
                   title: "Store",
-                  value: "${listItem.store.storeName}",
+                  value: listItem.store.storeName,
                 ),
                 // ProductTitleWidget(
                 //   title: "Product Details",

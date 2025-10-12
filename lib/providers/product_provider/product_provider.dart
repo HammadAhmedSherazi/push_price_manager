@@ -152,7 +152,9 @@ class ProductProvider extends Notifier<ProductState> {
         "${ApiEndpoints.getProductDetailByBarCode}$code",
       );
       AppRouter.back();
-      if (response != null) {
+      
+      // Add condition check
+      if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(
           getProductReponse: ApiResponse.completed(
             ProductDataModel.fromJson(response),
@@ -160,10 +162,20 @@ class ProductProvider extends Notifier<ProductState> {
         );
         AppRouter.push(ScanProductView(data: state.getProductReponse.data!));
       } else {
+        // Show error message if condition is false
+        Helper.showMessage(
+          AppRouter.navKey.currentContext!,
+          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to get product data. Please try again.",
+        );
         state = state.copyWith(getProductReponse: ApiResponse.error());
       }
     } catch (e) {
       AppRouter.back();
+      // Show error message for exceptions
+      Helper.showMessage(
+        AppRouter.navKey.currentContext!,
+        message: "An error occurred while getting product data. Please try again.",
+      );
       state = state.copyWith(getProductReponse: ApiResponse.error());
     }
   }
@@ -180,7 +192,9 @@ class ProductProvider extends Notifier<ProductState> {
             : ApiEndpoints.managerCreate,
         input,
       );
-      if (response != null) {
+      
+      // Add condition check
+      if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(
           listNowApiResponse: ApiResponse.completed(response),
         );
@@ -193,9 +207,19 @@ class ProductProvider extends Notifier<ProductState> {
           ),
         );
       } else {
+        // Show error message if condition is false
+        Helper.showMessage(
+          AppRouter.navKey.currentContext!,
+          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to create listing. Please try again.",
+        );
         state = state.copyWith(listNowApiResponse: ApiResponse.error());
       }
     } catch (e) {
+      // Show error message for exceptions
+      Helper.showMessage(
+        AppRouter.navKey.currentContext!,
+        message: "An error occurred while creating listing. Please try again.",
+      );
       state = state.copyWith(listNowApiResponse: ApiResponse.error());
     }
   }
@@ -231,7 +255,9 @@ class ProductProvider extends Notifier<ProductState> {
         ApiEndpoints.myListings,
         params: params,
       );
-      if (response != null) {
+      
+      // Add condition check
+      if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(
           listRequestApiResponse: ApiResponse.completed("done"),
         );
@@ -249,6 +275,13 @@ class ProductProvider extends Notifier<ProductState> {
           );
         }
       } else {
+        // Show error message if condition is false
+        if (skip == 0) {
+          Helper.showMessage(
+            AppRouter.navKey.currentContext!,
+            message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to load list request products. Please try again.",
+          );
+        }
         state = state.copyWith(
           listRequestApiResponse: skip == 0
               ? ApiResponse.error()
@@ -256,6 +289,13 @@ class ProductProvider extends Notifier<ProductState> {
         );
       }
     } catch (e) {
+      // Show error message for exceptions
+      if (skip == 0) {
+        Helper.showMessage(
+          AppRouter.navKey.currentContext!,
+          message: "An error occurred while loading list request products. Please try again.",
+        );
+      }
       state = state.copyWith(
         listRequestApiResponse: skip == 0
             ? ApiResponse.error()
@@ -272,7 +312,7 @@ class ProductProvider extends Notifier<ProductState> {
   }) async {
     try {
       if (skip == 0 && state.listApprovedproducts!.isNotEmpty) {
-        state = state.copyWith(listRequestproducts: []);
+        state = state.copyWith(listApprovedproducts: []);
       }
       state = state.copyWith(
         productListingApiResponse: skip == 0
@@ -294,7 +334,9 @@ class ProductProvider extends Notifier<ProductState> {
         ApiEndpoints.myListings,
         params: params,
       );
-      if (response != null) {
+      
+      // Add condition check
+      if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(
           productListingApiResponse: ApiResponse.completed("done"),
         );
@@ -311,6 +353,13 @@ class ProductProvider extends Notifier<ProductState> {
         );
         // }
       } else {
+        // Show error message if condition is false
+        if (skip == 0) {
+          Helper.showMessage(
+            AppRouter.navKey.currentContext!,
+            message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to load approved products. Please try again.",
+          );
+        }
         state = state.copyWith(
           productListingApiResponse: skip == 0
               ? ApiResponse.error()
@@ -318,6 +367,13 @@ class ProductProvider extends Notifier<ProductState> {
         );
       }
     } catch (e) {
+      // Show error message for exceptions
+      if (skip == 0) {
+        Helper.showMessage(
+          AppRouter.navKey.currentContext!,
+          message: "An error occurred while loading approved products. Please try again.",
+        );
+      }
       state = state.copyWith(
         productListingApiResponse: skip == 0
             ? ApiResponse.error()
@@ -355,7 +411,9 @@ class ProductProvider extends Notifier<ProductState> {
         ApiEndpoints.pendingReview,
         params: params,
       );
-      if (response != null) {
+      
+      // Add condition check
+      if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(
           pendingReviewApiRes: ApiResponse.completed(response),
         );
@@ -372,6 +430,13 @@ class ProductProvider extends Notifier<ProductState> {
         );
         // }
       } else {
+        // Show error message if condition is false
+        if (skip == 0) {
+          Helper.showMessage(
+            AppRouter.navKey.currentContext!,
+            message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to load pending review list. Please try again.",
+          );
+        }
         state = state.copyWith(
           pendingReviewApiRes: skip == 0
               ? ApiResponse.error()
@@ -379,6 +444,13 @@ class ProductProvider extends Notifier<ProductState> {
         );
       }
     } catch (e) {
+      // Show error message for exceptions
+      if (skip == 0) {
+        Helper.showMessage(
+          AppRouter.navKey.currentContext!,
+          message: "An error occurred while loading pending review list. Please try again.",
+        );
+      }
       state = state.copyWith(
         pendingReviewApiRes: skip == 0
             ? ApiResponse.error()
@@ -414,7 +486,9 @@ class ProductProvider extends Notifier<ProductState> {
         ApiEndpoints.liveList,
         params: params,
       );
-      if (response != null) {
+      
+      // Add condition check
+      if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(
           listLiveApiResponse: ApiResponse.completed(response),
         );
@@ -431,6 +505,13 @@ class ProductProvider extends Notifier<ProductState> {
         );
         // }
       } else {
+        // Show error message if condition is false
+        if (skip == 0) {
+          Helper.showMessage(
+            AppRouter.navKey.currentContext!,
+            message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to load live products. Please try again.",
+          );
+        }
         state = state.copyWith(
           listLiveApiResponse: skip == 0
               ? ApiResponse.error()
@@ -438,6 +519,13 @@ class ProductProvider extends Notifier<ProductState> {
         );
       }
     } catch (e) {
+      // Show error message for exceptions
+      if (skip == 0) {
+        Helper.showMessage(
+          AppRouter.navKey.currentContext!,
+          message: "An error occurred while loading live products. Please try again.",
+        );
+      }
       state = state.copyWith(
         listLiveApiResponse: skip == 0
             ? ApiResponse.error()
@@ -460,7 +548,9 @@ class ProductProvider extends Notifier<ProductState> {
         ApiEndpoints.suggestionsDiscount,
         params: {"product_id": productId, "store_id": storeId},
       );
-      if (response != null) {
+      
+      // Add condition check
+      if (response != null ) {
         final ListingModel item = state.listItem!.copyWith(
           dailyIncreasingDiscountPercent:
               response['daily_increasing_discount_percent'],
@@ -474,9 +564,19 @@ class ProductProvider extends Notifier<ProductState> {
           listItem: item,
         );
       } else {
+        // Show error message if condition is false
+        Helper.showMessage(
+          AppRouter.navKey.currentContext!,
+          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to get suggestions. Please try again.",
+        );
         state = state.copyWith(getSuggestionApiRes: ApiResponse.error());
       }
     } catch (e) {
+      // Show error message for exceptions
+      Helper.showMessage(
+        AppRouter.navKey.currentContext!,
+        message: "An error occurred while getting suggestions. Please try again.",
+      );
       state = state.copyWith(getSuggestionApiRes: ApiResponse.error());
     }
   }
@@ -491,13 +591,25 @@ class ProductProvider extends Notifier<ProductState> {
         ApiEndpoints.review,
         input,
       );
-      if (response != null) {
+      
+      // Add condition check
+      if (response != null && !(response is Map && response.containsKey('detail'))) {
         AppRouter.customback(times: times);
         AppRouter.push(SuccessListingRequestView(message: "Listing is Live!"));
       } else {
+        // Show error message if condition is false
+        Helper.showMessage(
+          AppRouter.navKey.currentContext!,
+          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to set review. Please try again.",
+        );
         state = state.copyWith(setReviewApiRes: ApiResponse.error());
       }
     } catch (e) {
+      // Show error message for exceptions
+      Helper.showMessage(
+        AppRouter.navKey.currentContext!,
+        message: "An error occurred while setting review. Please try again.",
+      );
       state = state.copyWith(setReviewApiRes: ApiResponse.error());
     }
   }
@@ -506,7 +618,9 @@ class ProductProvider extends Notifier<ProductState> {
     try {
       state = state.copyWith(getStoresApiRes: ApiResponse.loading());
       final response = await MyHttpClient.instance.get(ApiEndpoints.getMyStore);
-      if (response != null) {
+      
+      // Add condition check
+      if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(
           getStoresApiRes: ApiResponse.completed(response),
         );
@@ -520,9 +634,19 @@ class ProductProvider extends Notifier<ProductState> {
         );
         // }
       } else {
+        // Show error message if condition is false
+        Helper.showMessage(
+          AppRouter.navKey.currentContext!,
+          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to load stores. Please try again.",
+        );
         state = state.copyWith(getStoresApiRes: ApiResponse.error());
       }
     } catch (e) {
+      // Show error message for exceptions
+      Helper.showMessage(
+        AppRouter.navKey.currentContext!,
+        message: "An error occurred while loading stores. Please try again.",
+      );
       state = state.copyWith(getStoresApiRes: ApiResponse.error());
     }
   }
@@ -538,7 +662,9 @@ class ProductProvider extends Notifier<ProductState> {
         ApiEndpoints.updateEmployeeListRequest(id),
         input,
       );
-      if (response != null) {
+      
+      // Add condition check
+      if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(
           listNowApiResponse: ApiResponse.completed(response),
         );
@@ -551,9 +677,19 @@ class ProductProvider extends Notifier<ProductState> {
           ),
         );
       } else {
+        // Show error message if condition is false
+        Helper.showMessage(
+          AppRouter.navKey.currentContext!,
+          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to update list request. Please try again.",
+        );
         state = state.copyWith(listNowApiResponse: ApiResponse.error());
       }
     } catch (e) {
+      // Show error message for exceptions
+      Helper.showMessage(
+        AppRouter.navKey.currentContext!,
+        message: "An error occurred while updating list request. Please try again.",
+      );
       state = state.copyWith(listNowApiResponse: ApiResponse.error());
     }
   }
@@ -568,12 +704,24 @@ class ProductProvider extends Notifier<ProductState> {
         null,
         isJsonEncode: false,
       );
-      if (response != null) {
+      
+      // Add condition check
+      if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(deleteApiRes: ApiResponse.completed(response));
       } else {
+        // Show error message if condition is false
+        Helper.showMessage(
+          AppRouter.navKey.currentContext!,
+          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to delete listing. Please try again.",
+        );
         state = state.copyWith(deleteApiRes: ApiResponse.error());
       }
     } catch (e) {
+      // Show error message for exceptions
+      Helper.showMessage(
+        AppRouter.navKey.currentContext!,
+        message: "An error occurred while deleting listing. Please try again.",
+      );
       state = state.copyWith(deleteApiRes: ApiResponse.error());
     }
   }
@@ -584,18 +732,21 @@ class ProductProvider extends Notifier<ProductState> {
   }) async {
     try {
       state = state.copyWith(updateApiRes: ApiResponse.loading());
-      final response = await MyHttpClient.instance.put(
+      final Map<String, dynamic>? response = await MyHttpClient.instance.put(
         AppConstant.userType == UserType.employee
             ? "${ApiEndpoints.myListings}$listingId"
             : "${ApiEndpoints.myListings}manager/$listingId",
         input,
       );
-      if (response != null) {
+      
+      // Add condition check
+      if (response != null && !response.containsKey('detail')) {
         ListingModel data = ListingModel.fromJson(response);
         state = state.copyWith(updateApiRes: ApiResponse.completed(response), listItem: data);
-          if (AppConstant.userType == UserType.manager) {
+        
+        if (AppConstant.userType == UserType.manager) {
           AppRouter.customback(times: 2); 
-          } else {
+        } else {
           AppRouter.customback(times: 2);
           AppRouter.push(
             SuccessListingRequestView(
@@ -604,9 +755,19 @@ class ProductProvider extends Notifier<ProductState> {
           );
         }
       } else {
+        // Show error message if condition is false
+        Helper.showMessage(
+          AppRouter.navKey.currentContext!,
+          message: response?.containsKey('detail') == true ? response!['detail'] as String : "Failed to update listing. Please try again.",
+        );
         state = state.copyWith(updateApiRes: ApiResponse.error());
       }
     } catch (e) {
+      // Show error message for exceptions
+      Helper.showMessage(
+        AppRouter.navKey.currentContext!,
+        message: "An error occurred while updating the listing. Please try again.",
+      );
       state = state.copyWith(updateApiRes: ApiResponse.error());
     }
   }

@@ -20,7 +20,9 @@ class AuthProvider  extends Notifier<AuthState> {
   "email": email,
   "password": password
 }, isToken: false);
-      if(response != null){
+      
+      // Add condition check
+      if(response != null && !(response is Map && response.containsKey('detail'))){
         Helper.showMessage( AppRouter.navKey.currentContext!,message: "Successfully Login!");
         
         state = state.copyWith(loginApiResponse: ApiResponse.completed(response['data']));
@@ -36,12 +38,20 @@ class AuthProvider  extends Notifier<AuthState> {
         
       }
       else{
+        // Show error message if condition is false
+        Helper.showMessage(
+          AppRouter.navKey.currentContext!,
+          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Login failed. Please check your credentials and try again.",
+        );
         state = state.copyWith(loginApiResponse: ApiResponse.error());
       }
     } catch (e) {
-      
+      // Show error message for exceptions
+      Helper.showMessage(
+        AppRouter.navKey.currentContext!,
+        message: "An error occurred during login. Please try again.",
+      );
       state = state.copyWith(loginApiResponse: ApiResponse.error());
-      throw Exception(e);
     }
   }
 

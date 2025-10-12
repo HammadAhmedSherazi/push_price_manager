@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:push_price_manager/providers/product_provider/product_provider.dart';
 
 import '../../../export_all.dart';
 

@@ -1,5 +1,4 @@
 import 'package:flutter/gestures.dart';
-import 'package:push_price_manager/providers/auth_provider/auth_provider.dart';
 import 'package:push_price_manager/utils/extension.dart';
 
 import '../../export_all.dart';

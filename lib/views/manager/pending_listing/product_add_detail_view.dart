@@ -129,6 +129,44 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                   Status.loading,
               title: "update",
               onPressed: () {
+                // Manual validation for price controllers before form validation
+                if (selectType == types[2] && quantity > 0) {
+                  // Check if we have the right number of controllers
+                  if (priceControllers.length != quantity) {
+                    Helper.showMessage(
+                      context,
+                      message: "Please set the quantity first",
+                    );
+                    return;
+                  }
+                  
+                  // Validate each price controller
+                  for (int i = 0; i < priceControllers.length; i++) {
+                    final priceText = priceControllers[i]!.text;
+                    if (priceText.isEmpty) {
+                      Helper.showMessage(
+                        context,
+                        message: "Price ${i + 1} is required",
+                      );
+                      return;
+                    }
+                    if (double.tryParse(priceText) == null) {
+                      Helper.showMessage(
+                        context,
+                        message: "Price ${i + 1} must be a valid number",
+                      );
+                      return;
+                    }
+                    if (double.parse(priceText) <= 0) {
+                      Helper.showMessage(
+                        context,
+                        message: "Price ${i + 1} must be greater than 0",
+                      );
+                      return;
+                    }
+                  }
+                }
+                
                 if (_formKey.currentState!.validate()) {
                   Map<String, dynamic> data = {
                     "listing_type": Helper.setType(selectType),
@@ -248,18 +286,25 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                       if (value != null) {
                         setState(() {
                           selectType = value;
-                          if (selectType == types[2] &&
-                              priceControllers.length != quantity) {
+                          if (selectType == types[2]) {
+                            // Clear existing controllers
                             if (priceControllers.isNotEmpty) {
                               priceControllers.clear();
                             }
-
-                            priceControllers.addAll(
-                              List.generate(
-                                quantity,
-                                (_) => TextEditingController(),
-                              ),
-                            );
+                            // Initialize controllers based on current quantity
+                            if (quantity > 0) {
+                              priceControllers.addAll(
+                                List.generate(
+                                  quantity,
+                                  (_) => TextEditingController(),
+                                ),
+                              );
+                            }
+                          } else {
+                            // Clear controllers when switching away from Weighted Items
+                            if (priceControllers.isNotEmpty) {
+                              priceControllers.clear();
+                            }
                           }
                         });
                       }
@@ -342,8 +387,14 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                           ),
                         ],
                         validator: (value) {
-                          if (value == null) {
-                            return "Required";
+                          if (value == null || value.isEmpty) {
+                            return "Price is required";
+                          }
+                          if (double.tryParse(value) == null) {
+                            return "Please enter a valid price";
+                          }
+                          if (double.parse(value) <= 0) {
+                            return "Price must be greater than 0";
                           }
                           return null;
                         },

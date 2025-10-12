@@ -31,14 +31,15 @@ class _HomeViewConsumerState extends ConsumerState<HomeView> {
             children: [
               Consumer(
                 builder: (context, ref, child) {
-                  ref.watch(authProvider.select((e)=>e.userData));
-                  final user = ref.watch(authProvider).userData!;
+                  final user = ref.watch(
+                    authProvider.select((e) => e.userData),
+                  );
                   return UserProfileWidget(
                     radius: 18.r,
                     imageUrl: Assets.userImage,
                     borderWidth: 1.4,
                   );
-                }
+                },
               ),
               10.pw,
               Text("ABC BUSINESS", style: context.textStyle.displayMedium),
@@ -80,8 +81,15 @@ class PendingListingSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(productProvider.select((e) => e.pendingReviewApiRes));
-    final providerVM = ref.watch(productProvider);
+    final data = ref.watch(
+      productProvider.select(
+        (e) => (e.pendingReviewApiRes, e.pendingReviewList),
+      ),
+    );
+
+    final response = data.$1;
+    final products = data.$2 ?? [];
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -98,16 +106,14 @@ class PendingListingSection extends ConsumerWidget {
                 AppRouter.push(
                   SeeAllProductView(
                     title: "Pending Listings",
-                    
-                    //   , onTap: (){
-                    //   AppRouter.push(PendingProductDetailView(
-                    //     type: "Best By Products",
-                    //   ));
-                    // },
+
+                   
                   ),
-                  fun: (){
-                     ref.read(productProvider.notifier).getPendingReviewList(limit: 10);
-                  }
+                  fun: () {
+                    ref
+                        .read(productProvider.notifier)
+                        .getPendingReviewList(limit: 10);
+                  },
                 );
               },
               child: Text(
@@ -124,8 +130,8 @@ class PendingListingSection extends ConsumerWidget {
           height: 125.h,
           child: AsyncStateHandler(
             padding: EdgeInsets.zero,
-            status: providerVM.pendingReviewApiRes.status,
-            dataList: providerVM.pendingReviewList ?? [],
+            status: response.status,
+            dataList: products ,
             onRetry: () {
               ref
                   .read(productProvider.notifier)
@@ -137,17 +143,17 @@ class PendingListingSection extends ConsumerWidget {
               onTap: () {
                 AppRouter.push(
                   PendingProductDetailView(
-                    type: Helper.getTypeTitle(providerVM.pendingReviewList![index].listingType),
-                    data: providerVM.pendingReviewList![index],
+                    type: Helper.getTypeTitle(products[index].listingType),
+                    data: products[index],
                   ),
-                  fun: (){
-                    ref.read(productProvider.notifier).getPendingReviewList(limit: 10);
-                  }
+                  fun: () {
+                    ref
+                        .read(productProvider.notifier)
+                        .getPendingReviewList(limit: 10);
+                  },
                 );
               },
-              child: ProductDisplayBoxWidget(
-                data: providerVM.pendingReviewList![index].product!,
-              ),
+              child: ProductDisplayBoxWidget(data: products[index].product!),
             ),
           ),
         ),
@@ -162,10 +168,15 @@ class LiveListingSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(
-      
       builder: (context, ref, child) {
-         ref.watch(productProvider.select((e)=>e.listLiveApiResponse));
-         final providerVM = ref.watch(productProvider);
+        final data = ref.watch(
+          productProvider.select(
+            (e) => (e.listLiveApiResponse, e.listLiveProducts),
+          ),
+        );
+
+        final response = data.$1;
+        final products = data.$2 ?? [];
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -176,22 +187,27 @@ class LiveListingSection extends StatelessWidget {
                 TextButton(
                   style: ButtonStyle(
                     padding: WidgetStatePropertyAll(EdgeInsets.zero),
-                    visualDensity: VisualDensity(horizontal: -4.0, vertical: -4.0),
+                    visualDensity: VisualDensity(
+                      horizontal: -4.0,
+                      vertical: -4.0,
+                    ),
                   ),
                   onPressed: () {
                     AppRouter.push(
                       SeeAllProductView(
                         title: "Live Listings",
-                       
+
                         //           , onTap: (){
                         //            AppRouter.push(ProductLiveListingDetailView(
                         //   type: "Best By Products",
                         //  ));
                         //         }
                       ),
-                      fun: (){
-                        ref.read(productProvider.notifier).getLiveListProducts(limit: 10);
-                      }
+                      fun: () {
+                        ref
+                            .read(productProvider.notifier)
+                            .getLiveListProducts(limit: 10);
+                      },
                     );
                   },
                   child: Text(
@@ -207,33 +223,36 @@ class LiveListingSection extends StatelessWidget {
             SizedBox(
               height: 125.h,
               child: AsyncStateHandler(
-                dataList: providerVM.listLiveProducts!,
-                status: providerVM.listLiveApiResponse.status,
+                dataList: products,
+                status: response.status,
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.zero,
-                onRetry: (){
-                  ref.read(productProvider.notifier).getLiveListProducts(limit: 10);
+                onRetry: () {
+                  ref
+                      .read(productProvider.notifier)
+                      .getLiveListProducts(limit: 10);
                 },
                 itemBuilder: (context, index) => GestureDetector(
                   onTap: () {
                     AppRouter.push(
-                      ProductLiveListingDetailView(data: providerVM.listLiveProducts![index],),
-                      fun: (){
-                        ref.read(productProvider.notifier).getLiveListProducts(limit: 10);
-                      }
+                      ProductLiveListingDetailView(data: products[index]),
+                      fun: () {
+                        ref
+                            .read(productProvider.notifier)
+                            .getLiveListProducts(limit: 10);
+                      },
                     );
                   },
                   child: ProductDisplayBoxWidget(
-                    data: providerVM.listLiveProducts![index].product!,
+                    data: products[index].product!,
                   ),
-                  // 
+                  //
                 ),
-                
               ),
             ),
           ],
         );
-      }
+      },
     );
   }
 }

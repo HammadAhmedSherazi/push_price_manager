@@ -6,11 +6,11 @@ class TimeRangePickerDialog extends StatefulWidget {
   final TimeOfDay? initialEnd;
 
   const TimeRangePickerDialog({
-    Key? key,
+    super.key,
     this.title,
     this.initialStart,
     this.initialEnd,
-  }) : super(key: key);
+  });
 
   @override
   State<TimeRangePickerDialog> createState() => _TimeRangePickerDialogState();

@@ -1,6 +1,5 @@
 import '../export_all.dart';
 
-import '../export_all.dart';
 
 class ListingModel {
   final double averagePrice;

@@ -43,6 +43,7 @@ class _SeeAllProductViewState extends ConsumerState<SeeAllProductView> {
      
      ref.read(productProvider.notifier).getListApprovedProducts(limit: 10);
     } else if (widget.title == "Pending Listings") {
+      
       ref.read(productProvider.notifier).getPendingReviewList(limit: 10);
       //              AppRouter.push(PendingProductDetailView(
       //   type: setType(index),
@@ -117,20 +118,50 @@ class _SeeAllProductViewState extends ConsumerState<SeeAllProductView> {
               child: GestureDetector(
                 onTap: () {
                   if (widget.title == "Listing Request") {
+                    AppRouter.push(
+                      ListingProductDetailView(isRequest: true, type:setType(index), data: list[index])
+                    
+                  );
                     // AppRouter.push(
                     //  ListingProductDetailView(isRequest: true, type: setType(index),));
-                  } else if (widget.title == "Product Listings") {
+                  } 
+                  // else if (widget.title == "Product Listings") {
+                  //    AppRouter.push(
+                  //   PendingProductDetailView(
+                  //     type: Helper.getTypeTitle(item.listingType),
+                  //     data: item,
+                  //   ),
+                  //   fun: () {
+                  //     ref
+                  // .read(productProvider.notifier)
+                  // .getListApprovedProducts(limit: 10);
+                  //   },
+                  // );
+                  
+                  // } 
+                  else if (widget.title == "Pending Listings" || widget.title == "Product Listings") {
                     //              AppRouter.push(PendingProductDetailView(
                     //   type: setType(index),
                     // ));
-                  } else if (widget.title == "Pending Listings") {
-                    //              AppRouter.push(PendingProductDetailView(
-                    //   type: setType(index),
-                    // ));
+                      AppRouter.push(
+                  PendingProductDetailView(
+                    type: Helper.getTypeTitle(list[index].listingType),
+                    data: list[index],
+                  ),
+                  fun: () {
+                    fetchProducts(skip: 0);
+                  },
+                );
                   } else {
                     //                          AppRouter.push(ProductLiveListingDetailView(
                     //   type: setType(index),
                     //  ));
+                    AppRouter.push(
+                      ProductLiveListingDetailView(data: list[index]),
+                      fun: () {
+                        fetchProducts(skip: 0);
+                      },
+                    );
                   }
                 },
                 child: 

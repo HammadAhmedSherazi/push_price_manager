@@ -80,8 +80,9 @@ class ListingRequestSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(productProvider.select((e) => e.listRequestApiResponse));
-    final providerVM = ref.watch(productProvider);
+    final data =  ref.watch(productProvider.select((e) => (e.listRequestApiResponse, e.listRequestproducts)));
+    final response = data.$1;
+    final products = data.$2 ?? [];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -105,6 +106,11 @@ class ListingRequestSection extends ConsumerWidget {
                     //            ListingProductDetailView(isRequest: true, type: setType(-1),));
                     //         },
                   ),
+                  fun: (){
+                     ref
+                  .read(productProvider.notifier)
+                  .getListRequestProducts(limit: 10);
+                  }
                 );
               },
               child: Text(
@@ -121,8 +127,8 @@ class ListingRequestSection extends ConsumerWidget {
           height: 125.h,
           child: AsyncStateHandler(
             padding: EdgeInsets.zero,
-            status: providerVM.listRequestApiResponse.status,
-            dataList: providerVM.listRequestproducts ?? [],
+            status: response.status,
+            dataList: products,
             onRetry: () {
               ref
                   .read(productProvider.notifier)
@@ -130,11 +136,16 @@ class ListingRequestSection extends ConsumerWidget {
             },
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
-              final item = providerVM.listRequestproducts![index];
+              final item = products[index];
               return GestureDetector(
                 onTap: () {
                   AppRouter.push(
-                      ListingProductDetailView(isRequest: true, type:setType(index), data: item)
+                      ListingProductDetailView(isRequest: true, type:setType(index), data: item),
+                      fun: (){
+                         ref
+                  .read(productProvider.notifier)
+                  .getListRequestProducts(limit: 10);
+                      }
                     
                   );
                 },
@@ -154,8 +165,9 @@ class ProductListingSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(productProvider.select((e) => e.productListingApiResponse));
-    final providerVM = ref.watch(productProvider);
+    final data =  ref.watch(productProvider.select((e) => (e.productListingApiResponse, e.listApprovedproducts)));
+    final response = data.$1;
+    final products = data.$2 ?? [];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,6 +194,11 @@ class ProductListingSection extends ConsumerWidget {
                     //           // ListingProductDetailView());
                     //         },
                   ),
+                  fun: (){
+                    ref
+                  .read(productProvider.notifier)
+                  .getListApprovedProducts(limit: 10);
+                  }
                 );
               },
               child: Text(
@@ -198,8 +215,8 @@ class ProductListingSection extends ConsumerWidget {
           height: 125.h,
           child: AsyncStateHandler(
             padding: EdgeInsets.zero,
-            status: providerVM.productListingApiResponse.status,
-            dataList: providerVM.listApprovedproducts ?? [],
+            status: response.status,
+            dataList: products ?? [],
             onRetry: () {
               ref
                   .read(productProvider.notifier)
@@ -207,7 +224,7 @@ class ProductListingSection extends ConsumerWidget {
             },
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
-              final item = providerVM.listApprovedproducts![index];
+              final item = products[index];
               return GestureDetector(
                 onTap: () {
                   AppRouter.push(
@@ -215,6 +232,11 @@ class ProductListingSection extends ConsumerWidget {
                       type: Helper.getTypeTitle(item.listingType),
                       data: item,
                     ),
+                    fun: () {
+                      ref
+                  .read(productProvider.notifier)
+                  .getListApprovedProducts(limit: 10);
+                    },
                   );
                 },
                 child: ProductDisplayBoxWidget(data: item.product!),

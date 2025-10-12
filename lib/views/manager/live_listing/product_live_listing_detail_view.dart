@@ -119,7 +119,7 @@ class ProductLiveListingDetailView extends ConsumerWidget {
                 ProductTitleWidget(title: "Category", value: "ABC Category"),
                 ProductTitleWidget(
                   title: "Store",
-                  value: "${listData.store?.storeName}",
+                  value: "${listData.store.storeName}",
                 ),
                 ProductTitleWidget(title: "Price", value: "\$${listData.product?.price}"),
                 ...List.generate(getInfoList(Helper.getTypeTitle(listData.listingType)).length, (index)=> ProductTitleWidget(
