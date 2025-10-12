@@ -14,8 +14,8 @@ class _HomeViewConsumerState extends ConsumerState<HomeView> {
   @override
   void initState() {
     Future.microtask(() {
-      ref.read(productProvider.notifier).getPendingReviewList(limit: 10);
-      ref.read(productProvider.notifier).getLiveListProducts(limit: 10);
+      ref.read(productProvider.notifier).getPendingReviewList(limit: 10, skip: 0);
+      ref.read(productProvider.notifier).getLiveListProducts(limit: 10, skip: 0);
     });
     super.initState();
   }
@@ -112,7 +112,7 @@ class PendingListingSection extends ConsumerWidget {
                   fun: () {
                     ref
                         .read(productProvider.notifier)
-                        .getPendingReviewList(limit: 10);
+                        .getPendingReviewList(limit: 10, skip: 0);
                   },
                 );
               },
@@ -135,7 +135,7 @@ class PendingListingSection extends ConsumerWidget {
             onRetry: () {
               ref
                   .read(productProvider.notifier)
-                  .getPendingReviewList(limit: 10);
+                  .getPendingReviewList(limit: 10, skip: 0);
             },
 
             scrollDirection: Axis.horizontal,
@@ -149,7 +149,7 @@ class PendingListingSection extends ConsumerWidget {
                   fun: () {
                     ref
                         .read(productProvider.notifier)
-                        .getPendingReviewList(limit: 10);
+                        .getPendingReviewList(limit: 10, skip: 0);
                   },
                 );
               },
@@ -206,7 +206,7 @@ class LiveListingSection extends StatelessWidget {
                       fun: () {
                         ref
                             .read(productProvider.notifier)
-                            .getLiveListProducts(limit: 10);
+                            .getLiveListProducts(limit: 10, skip: 0);
                       },
                     );
                   },
@@ -230,7 +230,7 @@ class LiveListingSection extends StatelessWidget {
                 onRetry: () {
                   ref
                       .read(productProvider.notifier)
-                      .getLiveListProducts(limit: 10);
+                      .getLiveListProducts(limit: 10, skip: 0);
                 },
                 itemBuilder: (context, index) => GestureDetector(
                   onTap: () {
@@ -239,7 +239,7 @@ class LiveListingSection extends StatelessWidget {
                       fun: () {
                         ref
                             .read(productProvider.notifier)
-                            .getLiveListProducts(limit: 10);
+                            .getLiveListProducts(limit: 10, skip: 0);
                       },
                     );
                   },

@@ -34,9 +34,11 @@ class _SelectStoreViewState extends ConsumerState<SelectStoreView> {
     });
     super.initState();
   }
-  void fetchStores({String? searchText}){
+
+  void fetchStores({String? searchText}) {
     ref.read(productProvider.notifier).getMyStores(searchText: searchText);
   }
+
   @override
   Widget build(BuildContext context) {
     final providerVM = ref.watch(productProvider);
@@ -65,9 +67,14 @@ class _SelectStoreViewState extends ConsumerState<SelectStoreView> {
                 if (args is Map<String, dynamic>) {
                   data = Map<String, dynamic>.from(args);
                 }
-                data['store_ids'] = List.generate(providerVM.mySelectedStores!.length, (index)=>selectedStores[index].storeId);
-                
-                ref.read(productProvider.notifier).listNow(input: data, popTime: 6);
+                data['store_ids'] = List.generate(
+                  providerVM.mySelectedStores!.length,
+                  (index) => selectedStores[index].storeId,
+                );
+
+                ref
+                    .read(productProvider.notifier)
+                    .listNow(input: data, popTime: 6);
               },
             );
           },
@@ -86,18 +93,15 @@ class _SelectStoreViewState extends ConsumerState<SelectStoreView> {
               hintText: "Hinted search text",
               controller: searchTextEditController,
               onChanged: (text) {
-                 if (_searchDebounce?.isActive ?? false) {
-                    _searchDebounce!.cancel();
-                  }
+                if (_searchDebounce?.isActive ?? false) {
+                  _searchDebounce!.cancel();
+                }
 
-                  _searchDebounce = Timer(
-                    const Duration(milliseconds: 500),
-                    () {
-                      if (text.length >= 3) {
-                          fetchStores(searchText: text);
-                      }
-                    },
-                  );
+                _searchDebounce = Timer(const Duration(milliseconds: 500), () {
+                  if (text.length >= 3) {
+                    fetchStores(searchText: text);
+                  }
+                });
               },
             ),
           ),
@@ -170,8 +174,16 @@ class _SelectStoreViewState extends ConsumerState<SelectStoreView> {
                     childAspectRatio:
                         0.97, // Adjust if you want different box shapes
                   ),
-                  itemCount: recentStores.length, // Set how many items you want
+                  itemCount:
+                      providerVM.getStoresApiRes.status == Status.loadingMore
+                      ? recentStores.length + 1
+                      : recentStores.length, // Set how many items you want
                   itemBuilder: (context, index) {
+                    if (providerVM.getStoresApiRes.status ==
+                            Status.loadingMore &&
+                        index == recentStores.length) {
+                      return CustomLoadingWidget();
+                    }
                     return StoreCardWidget(
                       data: recentStores[index],
                       onTap: () {

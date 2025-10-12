@@ -35,21 +35,21 @@ class _SeeAllProductViewState extends ConsumerState<SeeAllProductView> {
 
   void fetchProducts({required int skip}) {
     if (widget.title == "Listing Request") {
-      ref.read(productProvider.notifier).getListRequestProducts(limit: 10);
+      ref.read(productProvider.notifier).getListRequestProducts(limit: 10, skip: skip);
       
       // AppRouter.push(
       //  ListingProductDetailView(isRequest: true, type: setType(index),));
     } else if (widget.title == "Product Listings") {
      
-     ref.read(productProvider.notifier).getListApprovedProducts(limit: 10);
+     ref.read(productProvider.notifier).getListApprovedProducts(limit: 10, skip: skip);
     } else if (widget.title == "Pending Listings") {
       
-      ref.read(productProvider.notifier).getPendingReviewList(limit: 10);
+      ref.read(productProvider.notifier).getPendingReviewList(limit: 10, skip: skip);
       //              AppRouter.push(PendingProductDetailView(
       //   type: setType(index),
       // ));
     } else {
-      ref.read(productProvider.notifier).getLiveListProducts(limit: 10);
+      ref.read(productProvider.notifier).getLiveListProducts(limit: 10, skip: skip);
       //                          AppRouter.push(ProductLiveListingDetailView(
       //   type: setType(index),
       //  ));
@@ -109,9 +109,11 @@ class _SeeAllProductViewState extends ConsumerState<SeeAllProductView> {
             childAspectRatio: 0.999,
             maxCrossAxisExtent: 200,
           ),
-          itemCount: list.length,
+          itemCount:response.status == Status.loadingMore ? list.length + 1: list.length,
           itemBuilder: (context, index) {
-           
+            if(response.status == Status.loadingMore && index == list.length){
+              return CustomLoadingWidget();
+            }
             return SizedBox(
               width: double.infinity,
               height: double.infinity,

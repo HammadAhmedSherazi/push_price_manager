@@ -14,8 +14,8 @@ class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
   @override
   void initState() {
     Future.microtask(() {
-      ref.read(productProvider.notifier).getListApprovedProducts(limit: 10);
-      ref.read(productProvider.notifier).getListRequestProducts(limit: 10);
+      ref.read(productProvider.notifier).getListApprovedProducts(limit: 10, skip: 0);
+      ref.read(productProvider.notifier).getListRequestProducts(limit: 10, skip: 0);
     });
     super.initState();
   }
@@ -109,7 +109,7 @@ class ListingRequestSection extends ConsumerWidget {
                   fun: (){
                      ref
                   .read(productProvider.notifier)
-                  .getListRequestProducts(limit: 10);
+                  .getListRequestProducts(limit: 10, skip: 0);
                   }
                 );
               },
@@ -132,7 +132,7 @@ class ListingRequestSection extends ConsumerWidget {
             onRetry: () {
               ref
                   .read(productProvider.notifier)
-                  .getListRequestProducts(limit: 10);
+                  .getListRequestProducts(limit: 10, skip: 0);
             },
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
@@ -144,7 +144,7 @@ class ListingRequestSection extends ConsumerWidget {
                       fun: (){
                          ref
                   .read(productProvider.notifier)
-                  .getListRequestProducts(limit: 10);
+                  .getListRequestProducts(limit: 10, skip: 0);
                       }
                     
                   );
@@ -197,7 +197,7 @@ class ProductListingSection extends ConsumerWidget {
                   fun: (){
                     ref
                   .read(productProvider.notifier)
-                  .getListApprovedProducts(limit: 10);
+                  .getListApprovedProducts(limit: 10, skip: 0);
                   }
                 );
               },
@@ -220,7 +220,7 @@ class ProductListingSection extends ConsumerWidget {
             onRetry: () {
               ref
                   .read(productProvider.notifier)
-                  .getListApprovedProducts(limit: 10);
+                  .getListApprovedProducts(limit: 10, skip: 0);
             },
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
@@ -235,7 +235,7 @@ class ProductListingSection extends ConsumerWidget {
                     fun: () {
                       ref
                   .read(productProvider.notifier)
-                  .getListApprovedProducts(limit: 10);
+                  .getListApprovedProducts(limit: 10, skip: 0);
                     },
                   );
                 },

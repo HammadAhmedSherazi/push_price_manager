@@ -84,7 +84,7 @@ class ProductProvider extends Notifier<ProductState> {
 
   FutureOr<void> getProductfromDatabase({
     required int limit,
-    int skip = 0,
+    required int skip ,
     String? searchText,
   }) async {
     if (skip == 0 && state.products!.isNotEmpty) {
@@ -226,7 +226,7 @@ class ProductProvider extends Notifier<ProductState> {
 
   FutureOr<void> getListRequestProducts({
     required int limit,
-    int skip = 0,
+    required int skip ,
     String? type,
     String? searchText,
   }) async {
@@ -271,7 +271,7 @@ class ProductProvider extends Notifier<ProductState> {
             listRequestproducts: skip == 0
                 ? list
                 : [...state.listRequestproducts!, ...list],
-            skip: limit >= list.length ? 1 + limit : 0,
+            skip: list.length >= limit ? 1 + limit : 0,
           );
         }
       } else {
@@ -306,7 +306,7 @@ class ProductProvider extends Notifier<ProductState> {
 
   FutureOr<void> getListApprovedProducts({
     required int limit,
-    int skip = 0,
+    required int skip ,
     String? type,
     String? searchText,
   }) async {
@@ -349,7 +349,7 @@ class ProductProvider extends Notifier<ProductState> {
           listApprovedproducts: skip == 0
               ? list
               : [...state.listApprovedproducts!, ...list],
-          skip: limit >= list.length ? 1 + limit : 0,
+          skip: list.length >= limit ? 1 + limit : 0,
         );
         // }
       } else {
@@ -384,7 +384,7 @@ class ProductProvider extends Notifier<ProductState> {
 
   FutureOr<void> getPendingReviewList({
     required int limit,
-    int skip = 0,
+    required int skip ,
     String? searchText,
     String? type,
   }) async {
@@ -426,7 +426,7 @@ class ProductProvider extends Notifier<ProductState> {
           pendingReviewList: skip == 0
               ? list
               : [...state.pendingReviewList!, ...list],
-          skip: limit >= list.length ? 1 + limit : 0,
+          skip: list.length >= limit ? 1 + limit : 0,
         );
         // }
       } else {
@@ -461,7 +461,7 @@ class ProductProvider extends Notifier<ProductState> {
 
   FutureOr<void> getLiveListProducts({
     required int limit,
-    int skip = 0,
+    required int skip ,
     String? searchText,
     String? type,
   }) async {
@@ -501,7 +501,7 @@ class ProductProvider extends Notifier<ProductState> {
           listLiveProducts: skip == 0
               ? list
               : [...state.listLiveProducts!, ...list],
-          skip: limit >= list.length ? 1 + limit : 0,
+          skip: list.length >= limit ? 1 + limit : 0,
         );
         // }
       } else {
