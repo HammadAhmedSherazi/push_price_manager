@@ -240,7 +240,7 @@ class ProductProvider extends Notifier<ProductState> {
             : ApiResponse.loadingMore(),
       );
       Map<String, dynamic> params = {
-        "status_filter": "PENDING_MANAGER_REVIEW",
+        "status_filter": "PENDING_EMPLOYEE_DETAILS",
         "skip": skip,
         "limit": limit,
       };

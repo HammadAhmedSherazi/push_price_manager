@@ -65,16 +65,16 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  flutter_localization: f43b18844a2b3d2c71fd64f04ffd6b1e64dd54d4
-  image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
-  libphonenumber_plugin: 48bf4078546377eedaab4aa54978cd0f6fa23072
-  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
-  permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
+  flutter_localization: 72299fb6cb4e51cae587bd953ed0b958040b71e6
+  image_picker_ios: 7fe1ff8e34c1790d6fff70a32484959f563a928a
+  libphonenumber_plugin: d134f173b22bfa5ede50887071f087f309277f8c
+  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
+  permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
   PhoneNumberKit: ced55861269312a5e3bc2ef82a58d6255b1c976a
-  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
-  simple_barcode_scanner: bb2603ae5228a007bd066e9f955911858ae55755
-  sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
+  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
+  simple_barcode_scanner: f1217b91fbad5848d37fa6d794f443416fd3e44d
+  sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
 
 PODFILE CHECKSUM: c1e4ff1db940fc4c9c0645a573e22d860658e26f
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
