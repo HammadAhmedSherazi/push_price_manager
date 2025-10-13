@@ -10,7 +10,7 @@ class ProductProvider extends Notifier<ProductState> {
     return ProductState(
       productApiResponse: ApiResponse.undertermined(),
       products: [],
-      getProductReponse: ApiResponse.loading(),
+      getProductReponse: ApiResponse.undertermined(),
       listNowApiResponse: ApiResponse.undertermined(),
       listRequestApiResponse: ApiResponse.undertermined(),
       productListingApiResponse: ApiResponse.undertermined(),
@@ -545,8 +545,8 @@ class ProductProvider extends Notifier<ProductState> {
         listItem: item,
       );
       final response = await MyHttpClient.instance.get(
-        ApiEndpoints.suggestionsDiscount,
-        params: {"product_id": productId, "store_id": storeId},
+        ApiEndpoints.suggestionsDiscount(productId),
+        params: {"store_id": storeId},
       );
       
       // Add condition check

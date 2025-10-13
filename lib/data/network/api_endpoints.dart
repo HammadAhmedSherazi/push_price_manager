@@ -9,7 +9,7 @@ class ApiEndpoints {
   static const String myListings = "${listings}my-listings";
   static const String pendingEmployeeTasks = "${ApiEndpoints.listings}pending-employee-tasks";
   static const String managerCreate = "${ApiEndpoints.listings}manager-create";
-  static const String suggestionsDiscount = "${ApiEndpoints.listings}suggestions/discount/";
+  static String suggestionsDiscount(int id)=> "${ApiEndpoints.listings}suggestions/discount/$id";
   static const String pendingReview = "${ApiEndpoints.listings}pending/review";
   static const String liveList = "${ApiEndpoints.listings}live";
   static const String review = "${ApiEndpoints.listings}review";

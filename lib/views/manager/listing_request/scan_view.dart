@@ -43,9 +43,11 @@ class _ScanViewState extends State<ScanView> {
                         backButtonIcon: Icon(Icons.arrow_back_ios),
                       ),
                       isShowFlashIcon: true,
-                      delayMillis: 2000,
+                      delayMillis: 100,
+                      
                    
                     );
+                    print(res);
                     if(providerVM.getProductReponse.status != Status.loading && res != null){
                       if(!context.mounted) return;
                                 Helper.showFullScreenLoader(context);
@@ -80,6 +82,7 @@ class _ScanViewState extends State<ScanView> {
                         continuous: true,
     
                         onScanned: (code) {
+                          print(code);
                           
                           if(providerVM.getProductReponse.status != Status.loading){
                             Helper.showFullScreenLoader(context);
