@@ -35,7 +35,7 @@ class ProductDataModel {
       category: json['category'] != null ? CategoryDataModel.fromJson(json['category']) : null,
       chainId: json['chain_id'] ?? -1,
       createdAt: DateTime.tryParse(json['created_at']) ?? DateTime.now(),
-      store: json['store'] ?? StoreDataModel(),
+      store: json['store']!= null ?StoreDataModel.fromJson(json['store']) :StoreDataModel(),
       stores: json['stores'] != null ? (json['stores'] as List).map((e)=> StoreDataModel.fromJson(e)).toList() : []
     );
   }

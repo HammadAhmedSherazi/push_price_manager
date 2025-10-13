@@ -27,9 +27,8 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
   Widget build(BuildContext context) {
    
     final listItem = ref.watch(productProvider.select((e)=>e.listItem))!;
-    final storeNames = AppConstant.userType == UserType.employee? listItem.product!.store!.storeName: listItem.product!.stores!
-    .map((e) => e.storeName)
-    .join(', ');
+    final storeNames = listItem.store.storeName;
+   
     return CustomScreenTemplate(
       showBottomButton: true,
       customBottomWidget: Padding(
@@ -60,8 +59,8 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                   AppRouter.push(
                     ProductAddDetailView(
                       title: "Product Listings - List Product",
-                      type: widget.type,
-                      data: widget.data,
+                      type: Helper.getTypeTitle(listItem.listingType),
+                      data: listItem,
                     ),
                   );
                 },
@@ -71,11 +70,12 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
               CustomOutlineButtonWidget(
                 title: "edit",
                 onPressed: () {
+                
                   AppRouter.push(
                     ProductAddDetailView(
                       title: "Pending Listings - List Product",
-                      type: widget.type,
-                      data: widget.data,
+                      type: Helper.getTypeTitle(listItem.listingType),
+                      data: listItem,
                     ),
                   );
                 },
@@ -218,7 +218,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                   title: "Regular Price",
                   value: "\$${listItem.product?.price?.toStringAsFixed(2)}",
                 ),
-                ProductTitleWidget(title: "Listing Type", value: widget.type),
+                ProductTitleWidget(title: "Listing Type", value: Helper.getTypeTitle(listItem.listingType)),
                 if (widget.type.toLowerCase().contains("best") ||
                     widget.type.toLowerCase().contains("weighted"))
                   ProductTitleWidget(
@@ -251,4 +251,5 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
       ),
     );
   }
+
 }

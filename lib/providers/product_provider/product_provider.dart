@@ -557,6 +557,10 @@ class ProductProvider extends Notifier<ProductState> {
           currentDiscount: response['current_discount'],
           saveDiscountForFuture: response['save_discount_for_future'],
           autoApplyForNextBatch: response['auto_apply_for_next_batch'],
+          saveDiscountForListing: response['save_discount_for_listing'],
+          hourlyIncreasingDiscountPercent: response['hourly_increasing_discount'],
+          goLiveDate: DateTime.tryParse(response['go_live_date'])
+          
         );
 
         state = state.copyWith(
@@ -745,7 +749,8 @@ class ProductProvider extends Notifier<ProductState> {
       // Add condition check
       if (response != null && !response.containsKey('detail')) {
         ListingModel data = ListingModel.fromJson(response);
-        state = state.copyWith(updateApiRes: ApiResponse.completed(response), listItem: data);
+        state = state.copyWith(updateApiRes: ApiResponse.completed(response),listItem: data);
+        // setListItem();
         
         if (AppConstant.userType == UserType.manager) {
           AppRouter.customback(times: 1); 

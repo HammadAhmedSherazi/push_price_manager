@@ -66,19 +66,40 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    if(!setDiscount){
+    // if(!setDiscount){
     ref.listen(productProvider, (previous, next) {
     final newItem = next.listItem;
-    if (newItem != null) {
+    final oldItem = previous!.listItem;
+    if(newItem != null && oldItem != null){
+      if(newItem.currentDiscount != oldItem.currentDiscount){
       _currentDiscountEditTextController.text = newItem.currentDiscount != 0.0?
           newItem.currentDiscount.toStringAsFixed(2) : "";
+    }
+    if(newItem.dailyIncreasingDiscountPercent != oldItem.dailyIncreasingDiscountPercent){
       _dialyDiscountEditTextController.text = newItem.dailyIncreasingDiscountPercent != 0.0 ?
           newItem.dailyIncreasingDiscountPercent.toStringAsFixed(2) : "";
-          setDiscount = true;
+    }
+    if(oldItem.goLiveDate == null || oldItem.goLiveDate != newItem.goLiveDate){
       ref.read(productProvider.notifier).setGoLiveDate(newItem.goLiveDate);
     }
+    if(oldItem.autoApplyForNextBatch != newItem.autoApplyForNextBatch){
+      values[2] = newItem.autoApplyForNextBatch;
+    }
+    if(oldItem.saveDiscountForFuture != newItem.saveDiscountForFuture){
+      values[0] = newItem.saveDiscountForFuture;
+    }
+    if(oldItem.saveDiscountForListing != newItem.saveDiscountForListing){
+      values[1] = newItem.saveDiscountForListing;
+    }
+    if(widget.isInstant! && oldItem.hourlyIncreasingDiscountPercent != newItem.hourlyIncreasingDiscountPercent){
+      _dialyDiscountEditTextController.text = newItem.hourlyIncreasingDiscountPercent != 0.0 ?
+          newItem.dailyIncreasingDiscountPercent.toStringAsFixed(2) : "";
+    }
+    } 
+    
+   
   });
-  }
+  // }
     
     final data = ref.watch(productProvider.select((e)=>(e.listItem, e.getSuggestionApiRes)));
     final response = data.$2;

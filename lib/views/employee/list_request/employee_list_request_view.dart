@@ -265,7 +265,7 @@ late final ScrollController _scrollController;
                   return ProductDisplayWidget(
                   onTap: () {
                      AppRouter.push(
-                        ListingProductDetailView(isRequest: true, type:setType(index), data: ListingModel(product: item.product!), ),fun: (){
+                        ListingProductDetailView(isRequest: true,  data: ListingModel(product: item.product!), ),fun: (){
                           fetchProduct(skip: 0);
                         }
                       

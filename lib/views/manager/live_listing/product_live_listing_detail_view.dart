@@ -84,7 +84,9 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
               
         
               CustomOutlineButtonWidget(title: "edit", onPressed: (){
+                
                 AppRouter.push(ProductAddDetailView(title: "Product Listings - List Product", type: Helper.getTypeTitle(listData.listingType),data: listData,));
+              
               }),
               CustomButtonWidget(title: "delete", onPressed: (){
                 // void showLogoutDialog(BuildContext context) {

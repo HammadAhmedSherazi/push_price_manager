@@ -47,7 +47,7 @@ class _ScanViewState extends State<ScanView> {
                       
                    
                     );
-                    print(res);
+                   
                     if(providerVM.getProductReponse.status != Status.loading && res != null){
                       if(!context.mounted) return;
                                 Helper.showFullScreenLoader(context);

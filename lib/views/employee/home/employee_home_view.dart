@@ -140,7 +140,7 @@ class ListingRequestSection extends ConsumerWidget {
               return GestureDetector(
                 onTap: () {
                   AppRouter.push(
-                      ListingProductDetailView(isRequest: true, type:setType(index), data: item),
+                      ListingProductDetailView(isRequest: true, data: item),
                       fun: (){
                          ref
                   .read(productProvider.notifier)

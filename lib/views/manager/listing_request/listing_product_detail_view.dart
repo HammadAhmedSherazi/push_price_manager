@@ -4,9 +4,9 @@ import '../../../export_all.dart';
 
 class ListingProductDetailView extends ConsumerStatefulWidget {
   final bool? isRequest;
-  final String ? type;
+  // final String ? type;
   final ListingModel data;
-  const ListingProductDetailView({super.key, this.isRequest = false, this.type = "", required this.data});
+  const ListingProductDetailView({super.key, this.isRequest = false,  required this.data});
 
   @override
   ConsumerState<ListingProductDetailView> createState() => _ListingProductDetailViewState();
@@ -23,7 +23,7 @@ class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailV
   }
   @override
   Widget build(BuildContext context) {
-    final listItem = ref.watch(productProvider.select((state) => state.listItem)) ?? widget.data;
+    final listItem = ref.watch(productProvider.select((state) => state.listItem))! ;
     
     final storeNames = AppConstant.userType == UserType.employee? listItem.product!.store!.storeName: listItem.product!.stores!
     .map((e) => e.storeName)
@@ -36,7 +36,7 @@ class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailV
        
        
          if(widget.isRequest!){
-           AppRouter.push(ListingProductView(type: widget.type!,popTime: 6, isRequest: widget.isRequest!,),settings: RouteSettings(
+           AppRouter.push(ListingProductView(type: Helper.getTypeTitle(listItem.listingType),popTime: 6, isRequest: widget.isRequest!,),settings: RouteSettings(
             arguments: {
               "listing_id": listItem.listingId
             }
@@ -99,14 +99,17 @@ class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailV
                 10.ph,
                 ProductTitleWidget(title: "Category", value: "${widget.data.product?.category?.title}"),
                 
-               if(listItem.product!.stores!.isNotEmpty || listItem.product!.store!.storeName.isNotEmpty)...[ ProductTitleWidget(
+               if(listItem.product!.stores!.isNotEmpty || listItem.product!.store!.storeName.isNotEmpty || (listItem.listingType != "" && listItem.store.storeName.isNotEmpty)  )...[ ProductTitleWidget(
                   title: "Store",
-                  value: storeNames,
+                  value:listItem.listingType != "" ?listItem.store.storeName :storeNames,
                 ),],
-                // ProductTitleWidget(
-                //   title: "Product Details",
-                //   value: data.description,
-                // ),
+                if(listItem.listingType != "")...[
+                  ProductTitleWidget(
+                  title: "Listing Type",
+                  value: Helper.getTypeTitle(listItem.listingType),
+                ),
+                ],
+                
                 ProductTitleWidget(title: "Regular Price", value: "\$${widget.data.product?.price!.toStringAsFixed(2)}"),
               ],
             ),
