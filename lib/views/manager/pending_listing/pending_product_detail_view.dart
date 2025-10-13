@@ -26,7 +26,10 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
   @override
   Widget build(BuildContext context) {
    
-    final listItem = ref.watch(productProvider).listItem ?? widget.data;
+    final listItem = ref.watch(productProvider.select((e)=>e.listItem))!;
+    final storeNames = AppConstant.userType == UserType.employee? listItem.product!.store!.storeName: listItem.product!.stores!
+    .map((e) => e.storeName)
+    .join(', ');
     return CustomScreenTemplate(
       showBottomButton: true,
       customBottomWidget: Padding(
@@ -205,14 +208,14 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                 ),
                 ProductTitleWidget(
                   title: "Store",
-                  value: listItem.store.storeName,
+                  value: storeNames,
                 ),
                 // ProductTitleWidget(
                 //   title: "Product Details",
                 //   value: "${data.product?.description}",
                 // ),
                 ProductTitleWidget(
-                  title: "Price",
+                  title: "Regular Price",
                   value: "\$${listItem.product?.price?.toStringAsFixed(2)}",
                 ),
                 ProductTitleWidget(title: "Listing Type", value: widget.type),
@@ -236,6 +239,10 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                       value: "\$${listItem.weightedItemsPrices![index]}",
                     ),
                   ),
+                // ProductTitleWidget(
+                //   title: "Listing Type",
+                //   value: listItem.listingType,
+                // ),
                 ],
               ],
             ),

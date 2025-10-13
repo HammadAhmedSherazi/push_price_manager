@@ -25,6 +25,7 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
     
   final providerVM = ref.watch(productProvider);
   final ListingModel listData = providerVM.listItem ?? widget.data;
+  final storeNames =  listData.store.storeName;
  List<InfoDataModel> getInfoList(String selectedType) {
   if (selectedType ==  "Best By Products") {
     return [
@@ -181,24 +182,27 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
                   ],
                 ),
                 10.ph,
-                ProductTitleWidget(title: "Category", value: "ABC Category"),
+                ProductTitleWidget(title: "Category", value: "${listData.product?.category?.title}"),
                 ProductTitleWidget(
                   title: "Store",
-                  value: "${listData.store.storeName}",
+                  value: storeNames,
                 ),
-                ProductTitleWidget(title: "Price", value: "\$${listData.product?.price}"),
+                ProductTitleWidget(title: "Regular Price", value: "\$${listData.product?.price}"),
                 ...List.generate(getInfoList(Helper.getTypeTitle(listData.listingType)).length, (index)=> ProductTitleWidget(
                   title: getInfoList(Helper.getTypeTitle(listData.listingType))[index].title,
                   value: getInfoList(Helper.getTypeTitle(listData.listingType))[index].description,
                 )),
-                if(Helper.getTypeTitle(listData.listingType) == "Instant Sales")...[
+                if(Helper.getTypeTitle(listData.listingType) == "Instant Sales" && listData.schedule!.isNotEmpty)...[
                   10.ph,
                   Row(
                     children: [
                       Text("Listing Schedule Calender", style: context.textStyle.displayMedium,),
                     ],
                   ),
-                  ProductTitleWidget(title: "Monday", value: "09:00 - 18:00")
+                  ...List.generate(listData.schedule!.length, (index) {
+                    final item = listData.schedule![index];
+                    return ProductTitleWidget(title: item.day, value: "${item.startTime!.format(context)} - ${item.endTime!.format(context)}");
+                  })
                 ],
                 if(Helper.getTypeTitle(listData.listingType) == "Promotional Products")...[
                   10.ph,

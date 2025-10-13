@@ -29,6 +29,8 @@ class ListingModel {
   final StoreDataModel store;
   final ProductDataModel? product;
   final UserDataModel? employee;
+ final List<CalenderDataModel> ? schedule;
+  final List<StoreDataModel>? stores;
 
   const ListingModel({
     this.averagePrice = 0.0,
@@ -58,56 +60,74 @@ class ListingModel {
     this.product,
     this.employee,
     this.saveDiscountForListing = false,
+    this.stores = const [],
+    this.schedule = const[]
+
   });
 
   /// ✅ Factory for parsing JSON safely with type conversion and date parsing
-  factory ListingModel.fromJson(Map<String, dynamic> json) => ListingModel(
-        averagePrice: (json['average_price'] ?? 0).toDouble(),
-        createdAt: json['created_at'] != null && json['created_at'] != ''
-            ? DateTime.tryParse(json['created_at'])
-            : null,
-        status: json['status'] ?? '',
-        currentDiscount: (json['current_discount'] ?? 0).toDouble(),
-        updatedAt: json['updated_at'] != null && json['updated_at'] != ''
-            ? DateTime.tryParse(json['updated_at'])
-            : null,
-        productId: json['product_id'] ?? 0,
-        initiatorType: json['initiator_type'] ?? '',
-        dailyIncreasingDiscountPercent:
-            (json['daily_increasing_discount_percent'] ?? 0).toDouble(),
-        hourlyIncreasingDiscountPercent:
-            (json['hourly_increasing_discount'] ?? 0).toDouble(),
-        listingType: json['listing_type'] ?? '',
-        discountStartDate: json['discount_start_date'] ?? '',
-        managerId: json['manager_id'] ?? 0,
-        quantity: json['quantity'] ?? 0,
-        discountEndDate: json['discount_end_date'] ?? '',
-        employeeId: json['employee_id'] ?? 0,
-        bestByDate: json['best_by_date'] != null && json['best_by_date'] != ''
-            ? DateTime.tryParse(json['best_by_date'])
-            : null,
-        goLiveDate: json['go_live_date'] != null && json['go_live_date'] != ''
-            ? DateTime.tryParse(json['go_live_date'])
-            : null,
-        listingId: json['listing_id'] ?? 0,
-        weightedItemsPrices:  json['weighted_items_prices'] != null ?List.from(json['weighted_items_prices'].map((e) => e.toDouble())) : [],
-        saveDiscountForFuture: json['save_discount_for_future'] ?? false,
-        saveDiscountForListing: json['save_discount_for_listing'] ?? false,
-        storeId: json['store_id'] ?? 0,
-        autoApplyForNextBatch: json['auto_apply_for_next_batch'] ?? false,
-        manager: json['manager'] != null
-            ? Manager.fromJson(json['manager'])
-            : const Manager(),
-        store: json['store'] != null
-            ? StoreDataModel.fromJson(json['store'])
-            : const StoreDataModel(),
-        product: json['product'] != null
-            ? ProductDataModel.fromJson(json['product'])
-            : null,
-        employee: json['employee'] != null
-            ? UserDataModel.fromJson(json['employee'])
-            : null,
-      );
+ListingModel.fromJson(Map<String, dynamic> json)
+    : averagePrice = (json['average_price'] ?? 0).toDouble(),
+      createdAt = json['created_at'] != null && json['created_at'] != ''
+          ? DateTime.tryParse(json['created_at'])
+          : null,
+      status = json['status'] ?? '',
+      currentDiscount = (json['current_discount'] ?? 0).toDouble(),
+      updatedAt = json['updated_at'] != null && json['updated_at'] != ''
+          ? DateTime.tryParse(json['updated_at'])
+          : null,
+      productId = json['product_id'] ?? 0,
+      initiatorType = json['initiator_type'] ?? '',
+      dailyIncreasingDiscountPercent =
+          (json['daily_increasing_discount_percent'] ?? 0).toDouble(),
+      hourlyIncreasingDiscountPercent =
+          (json['hourly_increasing_discount'] ?? 0).toDouble(),
+      listingType = json['listing_type'] ?? '',
+      discountStartDate = json['discount_start_date'] ?? '',
+      managerId = json['manager_id'] ?? 0,
+      quantity = json['quantity'] ?? 0,
+      discountEndDate = json['discount_end_date'] ?? '',
+      employeeId = json['employee_id'] ?? 0,
+      bestByDate = json['best_by_date'] != null && json['best_by_date'] != ''
+          ? DateTime.tryParse(json['best_by_date'])
+          : null,
+      goLiveDate = json['go_live_date'] != null && json['go_live_date'] != ''
+          ? DateTime.tryParse(json['go_live_date'])
+          : null,
+      listingId = json['listing_id'] ?? 0,
+      weightedItemsPrices = json['weighted_items_prices'] != null
+          ? List.from(
+              (json['weighted_items_prices'] as List).map((e) => e.toDouble()))
+          : [],
+      saveDiscountForFuture = json['save_discount_for_future'] ?? false,
+      saveDiscountForListing = json['save_discount_for_listing'] ?? false,
+      storeId = json['store_id'] ?? 0,
+      autoApplyForNextBatch = json['auto_apply_for_next_batch'] ?? false,
+      manager = json['manager'] != null
+          ? Manager.fromJson(json['manager'])
+          : const Manager(),
+      store = json['store'] != null
+          ? StoreDataModel.fromJson(json['store'])
+          : const StoreDataModel(),
+      product = json['product'] != null
+          ? ProductDataModel.fromJson(json['product'])
+          : null,
+      employee = json['employee'] != null
+          ? UserDataModel.fromJson(json['employee'])
+          : null,
+    schedule = json['weekly_schedule'] != null
+    ? (json['weekly_schedule'] as Map<String, dynamic>)
+        .entries
+        .map((entry) => CalenderDataModel.fromJson(entry.key, entry.value))
+        .toList()
+    : [],  stores = json['stores'] != null
+          ? List.from(
+              (json['stores'] as List).map((e) => StoreDataModel.fromJson(e)))
+          : []
+   
+          ;
+      
+
 
   /// ✅ Convert to JSON safely
   Map<String, dynamic> toJson() => {

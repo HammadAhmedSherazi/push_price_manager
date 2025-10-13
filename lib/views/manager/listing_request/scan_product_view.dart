@@ -51,7 +51,7 @@ class ScanProductView extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Price", style: context.textStyle.bodyMedium!.copyWith(
+                    Text("Regular Price", style: context.textStyle.bodyMedium!.copyWith(
                       color: Colors.grey
                     ),),
                     Text("\$${data.price!.toStringAsFixed(2)}", style: context.textStyle.bodyMedium!,),

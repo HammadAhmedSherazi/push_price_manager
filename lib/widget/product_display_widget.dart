@@ -34,7 +34,7 @@ class ProductDisplayWidget extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: Text(data.description, style:  context.textStyle.bodySmall!.copyWith(
+                    child: Text(data.category!.title, style:  context.textStyle.bodySmall!.copyWith(
                                       color: AppColors.primaryTextColor
                                           .withValues(alpha: 0.7),
                                     ),),

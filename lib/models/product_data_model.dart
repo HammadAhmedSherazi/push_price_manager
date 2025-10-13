@@ -9,6 +9,8 @@ class ProductDataModel {
   final int ? chainId;
   final DateTime ? createdAt;
   final CategoryDataModel? category;
+  final StoreDataModel ? store;
+  final List<StoreDataModel>? stores;
 
   const ProductDataModel({
     required this.title,
@@ -18,7 +20,9 @@ class ProductDataModel {
     this.id,
     this.category,
     this.chainId,
-    this.createdAt
+    this.createdAt,
+    this.store,
+    this.stores
   });
 
   factory ProductDataModel.fromJson(Map<String, dynamic> json) {
@@ -30,7 +34,9 @@ class ProductDataModel {
       price: (json['base_price'] as num?) ?? 0,
       category: json['category'] != null ? CategoryDataModel.fromJson(json['category']) : null,
       chainId: json['chain_id'] ?? -1,
-      createdAt: DateTime.tryParse(json['created_at']) ?? DateTime.now()
+      createdAt: DateTime.tryParse(json['created_at']) ?? DateTime.now(),
+      store: json['store'] ?? StoreDataModel(),
+      stores: json['stores'] != null ? (json['stores'] as List).map((e)=> StoreDataModel.fromJson(e)).toList() : []
     );
   }
 

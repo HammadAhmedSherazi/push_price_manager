@@ -25,7 +25,9 @@ class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailV
   Widget build(BuildContext context) {
     final listItem = ref.watch(productProvider.select((state) => state.listItem)) ?? widget.data;
     
-    
+    final storeNames = AppConstant.userType == UserType.employee? listItem.product!.store!.storeName: listItem.product!.stores!
+    .map((e) => e.storeName)
+    .join(', ');
     return CustomScreenTemplate(
       bottomButtonText: "next",
       showBottomButton: true,
@@ -97,9 +99,9 @@ class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailV
                 10.ph,
                 ProductTitleWidget(title: "Category", value: "${widget.data.product?.category?.title}"),
                 
-               if(listItem.store.storeName.isNotEmpty)...[ ProductTitleWidget(
+               if(listItem.product!.stores!.isNotEmpty || listItem.product!.store!.storeName.isNotEmpty)...[ ProductTitleWidget(
                   title: "Store",
-                  value: listItem.store.storeName,
+                  value: storeNames,
                 ),],
                 // ProductTitleWidget(
                 //   title: "Product Details",

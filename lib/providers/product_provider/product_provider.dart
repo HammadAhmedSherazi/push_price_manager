@@ -748,7 +748,7 @@ class ProductProvider extends Notifier<ProductState> {
         state = state.copyWith(updateApiRes: ApiResponse.completed(response), listItem: data);
         
         if (AppConstant.userType == UserType.manager) {
-          AppRouter.customback(times: 2); 
+          AppRouter.customback(times: 1); 
         } else {
           AppRouter.customback(times: 2);
           AppRouter.push(
