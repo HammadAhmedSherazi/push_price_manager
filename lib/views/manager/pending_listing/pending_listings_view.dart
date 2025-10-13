@@ -62,7 +62,7 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
         .read(productProvider.notifier)
         .getPendingReviewList(
           limit: 10,
-          type: Helper.setType(types[selectIndex]),
+          type: selectIndex == -1? null: Helper.setType(types[selectIndex]),
           searchText: text ?? txt,
           skip: skip
           
@@ -78,9 +78,9 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
 
   @override
   Widget build(BuildContext context) {
-    final providerVM = ref.watch(productProvider);
-    final response = AppConstant.userType == UserType.employee? providerVM.productListingApiResponse : providerVM.pendingReviewApiRes;
-    final list = AppConstant.userType == UserType.employee? providerVM.listApprovedproducts: providerVM.pendingReviewList;
+    final data = ref.watch(productProvider.select((e)=>(e.productListingApiResponse, e.pendingReviewApiRes, e.listApprovedproducts, e.pendingReviewList)));
+    final response = AppConstant.userType == UserType.employee? data.$1 : data.$2;
+    final list = AppConstant.userType == UserType.employee? data.$3: data.$4;
     return Scaffold(
       appBar: CustomAppBarWidget(
         height: context.screenheight * 0.22,
