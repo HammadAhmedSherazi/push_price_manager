@@ -22,7 +22,7 @@ class _LiveListingViewState extends ConsumerState<LiveListingView> {
     "Weighted Items",
     "Promotional Products",
   ];
-  int selectIndex = 0;
+  int selectIndex = -1;
   @override
   void initState() {
     super.initState();
@@ -50,7 +50,7 @@ class _LiveListingViewState extends ConsumerState<LiveListingView> {
         .read(productProvider.notifier)
         .getLiveListProducts(
           limit: 10,
-          type: Helper.setType(types[selectIndex]),
+          type: selectIndex == -1? null: Helper.setType(types[selectIndex]),
           searchText: text ?? txt,
           skip: skip
           

@@ -22,7 +22,7 @@ late final ScrollController _scrollController;
     "Weighted Items",
     "Promotional Products",
   ];
-  int selectIndex = 0;
+  int selectIndex = -1;
   @override
   void initState() {
     super.initState();
@@ -49,7 +49,7 @@ late final ScrollController _scrollController;
         .read(productProvider.notifier)
         .getListRequestProducts(
           limit: 10,
-          type: Helper.setType(types[selectIndex]),
+          type:selectIndex == -1? null: Helper.setType(types[selectIndex]),
           searchText: text ?? txt,
           skip: skip
           
