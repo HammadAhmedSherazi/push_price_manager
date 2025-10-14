@@ -239,10 +239,10 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                       value: "\$${listItem.weightedItemsPrices![index]}",
                     ),
                   ),
-                // ProductTitleWidget(
-                //   title: "Listing Type",
-                //   value: listItem.listingType,
-                // ),
+                 ProductTitleWidget(
+                  title: "Average Price",
+                  value: "\$${listItem.averagePrice.toStringAsFixed(2)}",
+                ),
                 ],
               ],
             ),

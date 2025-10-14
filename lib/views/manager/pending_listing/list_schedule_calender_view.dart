@@ -207,8 +207,8 @@ class CalenderDataModel {
   factory CalenderDataModel.fromJson(String day, Map<String, dynamic> json) {
     return CalenderDataModel(
       day: day,
-      startTime: _parseTime(json['start_time']),
-      endTime: _parseTime(json['end_time']),
+      startTime:json['start_time'] != null ? _parseTime(json['start_time']) : null,
+      endTime:json['end_time'] != null ? _parseTime(json['end_time']) : null,
     );
   }
 

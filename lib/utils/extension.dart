@@ -199,6 +199,12 @@ extension ReadableDateTime on DateTime {
     return '$dayLabel ${timeFormat.format(localDate)}';
   }
 }
+extension CapitalizeExtension on String {
+  String get capitalizeFirst {
+    if (isEmpty) return this;
+    return this[0].toUpperCase() + substring(1);
+  }
+}
 enum OrderStatus {
   inProcess,
   completed,

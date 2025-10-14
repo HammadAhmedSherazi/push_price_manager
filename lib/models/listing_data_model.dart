@@ -117,9 +117,11 @@ ListingModel.fromJson(Map<String, dynamic> json)
           : null,
     schedule = json['weekly_schedule'] != null
     ? (json['weekly_schedule'] as Map<String, dynamic>)
-        .entries
-        .map((entry) => CalenderDataModel.fromJson(entry.key, entry.value))
-        .toList()
+    .entries
+    .where((entry) => entry.value != null)
+    .map((entry) =>
+        CalenderDataModel.fromJson(entry.key, entry.value as Map<String, dynamic>))
+    .toList()
     : [],  stores = json['stores'] != null
           ? List.from(
               (json['stores'] as List).map((e) => StoreDataModel.fromJson(e)))

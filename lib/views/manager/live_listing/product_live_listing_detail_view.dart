@@ -79,15 +79,15 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
           spacing: 10,
           children: [
             if(Helper.getTypeTitle(listData.listingType) == "Promotional Products")
-            CustomButtonWidget(title: "Pause", onPressed: (){}),
+            CustomButtonWidget(title: listData.status, onPressed: (){}),
             
               
         
-              CustomOutlineButtonWidget(title: "edit", onPressed: (){
+              // CustomOutlineButtonWidget(title: "edit", onPressed: (){
                 
-                AppRouter.push(ProductAddDetailView(title: "Product Listings - List Product", type: Helper.getTypeTitle(listData.listingType),data: listData,));
+              //   AppRouter.push(ProductAddDetailView(title: "Product Listings - List Product", type: Helper.getTypeTitle(listData.listingType),data: listData,));
               
-              }),
+              // }),
               CustomButtonWidget(title: "delete", onPressed: (){
                 // void showLogoutDialog(BuildContext context) {
     showDialog(
@@ -203,7 +203,7 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
                   ),
                   ...List.generate(listData.schedule!.length, (index) {
                     final item = listData.schedule![index];
-                    return ProductTitleWidget(title: item.day, value: "${item.startTime!.format(context)} - ${item.endTime!.format(context)}");
+                    return ProductTitleWidget(title: item.day.capitalizeFirst, value: "${item.startTime!.format(context)} - ${item.endTime!.format(context)}");
                   })
                 ],
                 if(Helper.getTypeTitle(listData.listingType) == "Promotional Products")...[

@@ -41,16 +41,26 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
           );
      
     });
+
     _currentDiscountEditTextController = TextEditingController(
+      text: widget.data.currentDiscount != 0.0 ? widget.data.currentDiscount.toString(): null
+    );
+    if(widget.isInstant!){
+      _dialyDiscountEditTextController = TextEditingController(
+      text: widget.data.hourlyIncreasingDiscountPercent != 0.0 ? widget.data.hourlyIncreasingDiscountPercent.toString() : null
+    );
+    }
+    else{
+        _dialyDiscountEditTextController = TextEditingController(
+      text: widget.data.dailyIncreasingDiscountPercent != 0.0 ? widget.data.dailyIncreasingDiscountPercent.toString() : null
+    );
+    }
     
-    );
-    _dialyDiscountEditTextController = TextEditingController(
-     
-    );
+
 
     if (widget.isPromotionalDiscount!) {
       titles = ['Save Discount For Future Listings'];
-      values = [false];
+      values = [widget.data.saveDiscountForFuture];
     } else {
       values = [
         widget.data.saveDiscountForFuture,
@@ -91,7 +101,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
     if(oldItem.saveDiscountForListing != newItem.saveDiscountForListing){
       values[1] = newItem.saveDiscountForListing;
     }
-    if(widget.isInstant!){
+    if(widget.isInstant! && oldItem.hourlyIncreasingDiscountPercent != newItem.hourlyIncreasingDiscountPercent){
       _dialyDiscountEditTextController.text = newItem.hourlyIncreasingDiscountPercent != 0.0 ?
           newItem.hourlyIncreasingDiscountPercent.toStringAsFixed(2) : "";
     }
