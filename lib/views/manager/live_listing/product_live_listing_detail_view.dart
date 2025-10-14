@@ -97,61 +97,61 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
               //   AppRouter.push(ProductAddDetailView(title: "Product Listings - List Product", type: Helper.getTypeTitle(listData.listingType),data: listData,));
               
               // }),
-              CustomButtonWidget(title: "delete", onPressed: (){
-                // void showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          backgroundColor: const Color(0xFFF2F7FA),
-          child: Padding(
-            padding: EdgeInsets.all(AppTheme.horizontalPadding),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('Delete', style: context.textStyle.displayMedium!.copyWith(fontSize: 18.sp)),
-                10.ph,
-                Text(
-                  'Are you sure you want to delete?',
-                  textAlign: TextAlign.center,
-                  style: context.textStyle.bodyMedium!.copyWith(color: Colors.grey),
-                ),
-                30.ph,
-                Row(
-                  spacing: 20,
-                  children: [
-                    Expanded(
-                      child: CustomOutlineButtonWidget(
-                        title: "cancel",
-                        onPressed: () => AppRouter.back(),
-                      ),
-                    ),
-                    Expanded(
-                      child: Consumer(
-                        builder: (context, ref, child) {
-                          final response = ref.watch(productProvider.select((e)=>e.deleteApiRes));
-                          return CustomButtonWidget(
-                            title: "Yes",
-                            isLoad: response.status == Status.loading,
-                            onPressed: () {
-                              ref.read(productProvider.notifier).deleteList(listingId: widget.data.listingId);
-                            },
-                          );
-                        }
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  // }
-              }, color: Color(0xffB80303),)
+  //             CustomButtonWidget(title: "delete", onPressed: (){
+  //               // void showLogoutDialog(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: true,
+  //     builder: (context) {
+  //       return Dialog(
+  //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+  //         backgroundColor: const Color(0xFFF2F7FA),
+  //         child: Padding(
+  //           padding: EdgeInsets.all(AppTheme.horizontalPadding),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               Text('Delete', style: context.textStyle.displayMedium!.copyWith(fontSize: 18.sp)),
+  //               10.ph,
+  //               Text(
+  //                 'Are you sure you want to delete?',
+  //                 textAlign: TextAlign.center,
+  //                 style: context.textStyle.bodyMedium!.copyWith(color: Colors.grey),
+  //               ),
+  //               30.ph,
+  //               Row(
+  //                 spacing: 20,
+  //                 children: [
+  //                   Expanded(
+  //                     child: CustomOutlineButtonWidget(
+  //                       title: "cancel",
+  //                       onPressed: () => AppRouter.back(),
+  //                     ),
+  //                   ),
+  //                   Expanded(
+  //                     child: Consumer(
+  //                       builder: (context, ref, child) {
+  //                         final response = ref.watch(productProvider.select((e)=>e.deleteApiRes));
+  //                         return CustomButtonWidget(
+  //                           title: "Yes",
+  //                           isLoad: response.status == Status.loading,
+  //                           onPressed: () {
+  //                             ref.read(productProvider.notifier).deleteList(listingId: widget.data.listingId);
+  //                           },
+  //                         );
+  //                       }
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // // }
+  //             }, color: Color(0xffB80303),)
            
           ],
         ),
