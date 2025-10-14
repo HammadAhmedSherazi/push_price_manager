@@ -569,11 +569,11 @@ class ProductProvider extends Notifier<ProductState> {
         );
       } else {
         // Show error message if condition is false
-        Helper.showMessage(
-          AppRouter.navKey.currentContext!,
-          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to get suggestions. Please try again.",
-        );
-        state = state.copyWith(getSuggestionApiRes: ApiResponse.error());
+        // Helper.showMessage(
+        //   AppRouter.navKey.currentContext!,
+        //   message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to get suggestions. Please try again.",
+        // );
+        state = state.copyWith(getSuggestionApiRes: ApiResponse.completed(""));
       }
     } catch (e) {
       // Show error message for exceptions
@@ -589,6 +589,7 @@ class ProductProvider extends Notifier<ProductState> {
     required Map<String, dynamic> input,
     required int times,
   }) async {
+    
     try {
       state = state.copyWith(setReviewApiRes: ApiResponse.loading());
       final response = await MyHttpClient.instance.post(

@@ -26,7 +26,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
   @override
   Widget build(BuildContext context) {
    
-    final listItem = ref.watch(productProvider.select((e)=>e.listItem))!;
+    final listItem = ref.watch(productProvider.select((e)=>e.listItem)) ?? widget.data;
     final storeNames = listItem.store.storeName;
    
     return CustomScreenTemplate(

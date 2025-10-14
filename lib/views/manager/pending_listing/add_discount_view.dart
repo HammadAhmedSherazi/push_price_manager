@@ -91,9 +91,9 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
     if(oldItem.saveDiscountForListing != newItem.saveDiscountForListing){
       values[1] = newItem.saveDiscountForListing;
     }
-    if(widget.isInstant! && oldItem.hourlyIncreasingDiscountPercent != newItem.hourlyIncreasingDiscountPercent){
+    if(widget.isInstant!){
       _dialyDiscountEditTextController.text = newItem.hourlyIncreasingDiscountPercent != 0.0 ?
-          newItem.dailyIncreasingDiscountPercent.toStringAsFixed(2) : "";
+          newItem.hourlyIncreasingDiscountPercent.toStringAsFixed(2) : "";
     }
     } 
     

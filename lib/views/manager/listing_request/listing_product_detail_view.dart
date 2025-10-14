@@ -23,7 +23,7 @@ class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailV
   }
   @override
   Widget build(BuildContext context) {
-    final listItem = ref.watch(productProvider.select((state) => state.listItem))! ;
+    final listItem = ref.watch(productProvider.select((state) => state.listItem)) ?? widget.data ;
     
     final storeNames = AppConstant.userType == UserType.employee? listItem.product!.store!.storeName: listItem.product!.stores!
     .map((e) => e.storeName)

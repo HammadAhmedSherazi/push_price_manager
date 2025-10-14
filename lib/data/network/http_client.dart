@@ -105,6 +105,7 @@ class MyHttpClient extends BaseApiServices {
     String? variableName,
   }) async {
     dynamic responseJson;
+    print(body);
 
     var customUrl = isBaseUrl ? BaseApiServices.baseURL : "";
     var uri =
@@ -413,6 +414,7 @@ class MyHttpClient extends BaseApiServices {
       case 200:
       case 201:
       case 203:
+      case 204:
       case 404:
       //  if (json.decode(response.body.toString())['details'] ==
       //       "User Not Found") {
