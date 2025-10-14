@@ -101,6 +101,7 @@ export './models/store_data_model.dart';
 export './models/info_data_model.dart';
 export './models/user_data_model.dart';
 export './models/listing_data_model.dart';
+export './models/staff_data_model.dart';
 
 
 

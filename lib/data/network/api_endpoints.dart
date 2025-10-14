@@ -15,6 +15,7 @@ class ApiEndpoints {
   static const String review = "${ApiEndpoints.listings}review";
   static String updateEmployeeListRequest(int id)=> "${ApiEndpoints.listings}$id/employee-details";
   static const String getMyStore = "${adminStaff}my-stores";
+  static String updateStatus(int id)=>"${ApiEndpoints.listings}$id/status";
 
 
 }

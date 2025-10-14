@@ -16,6 +16,7 @@ class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
     Future.microtask(() {
       ref.read(productProvider.notifier).getListApprovedProducts(limit: 10, skip: 0);
       ref.read(productProvider.notifier).getListRequestProducts(limit: 10, skip: 0);
+      ref.read(authProvider.notifier).getMyStores();
     });
     super.initState();
   }
@@ -29,10 +30,15 @@ class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
         children: [
           Row(
             children: [
-              UserProfileWidget(
-                radius: 18.r,
-                imageUrl: Assets.userImage,
-                borderWidth: 1.4,
+              Consumer(
+                builder: (context, ref, child) {
+                  final userData = ref.watch(authProvider.select((e)=>e.staffInfo));
+                  return UserProfileWidget(
+                    radius: 18.r,
+                    imageUrl: userData!.profileImage,
+                    borderWidth: 1.4,
+                  );
+                }
               ),
               10.pw,
               Expanded(
@@ -66,10 +72,19 @@ class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
           ),
         ],
       ),
-      body: ListView(
-        padding: EdgeInsets.all(AppTheme.horizontalPadding),
-        controller: widget.scrollController,
-        children: [ListingRequestSection(), 30.ph, ProductListingSection()],
+      body: RefreshIndicator.adaptive(
+        onRefresh: ()async{
+          ref.read(productProvider.notifier).getListApprovedProducts(limit: 10, skip: 0);
+      ref.read(productProvider.notifier).getListRequestProducts(limit: 10, skip: 0);
+    
+
+        },
+        child: ListView(
+          padding: EdgeInsets.all(AppTheme.horizontalPadding),
+          physics: AlwaysScrollableScrollPhysics(),
+          controller: widget.scrollController,
+          children: [ListingRequestSection(), 30.ph, ProductListingSection()],
+        ),
       ),
     );
   }
@@ -229,7 +244,7 @@ class ProductListingSection extends ConsumerWidget {
                 onTap: () {
                   AppRouter.push(
                     PendingProductDetailView(
-                      type: Helper.getTypeTitle(item.listingType),
+                     
                       data: item,
                     ),
                     fun: () {

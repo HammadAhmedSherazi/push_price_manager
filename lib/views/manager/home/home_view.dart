@@ -16,6 +16,7 @@ class _HomeViewConsumerState extends ConsumerState<HomeView> {
     Future.microtask(() {
       ref.read(productProvider.notifier).getPendingReviewList(limit: 10, skip: 0);
       ref.read(productProvider.notifier).getLiveListProducts(limit: 10, skip: 0);
+      ref.read(authProvider.notifier).getMyStores();
     });
     super.initState();
   }
@@ -31,12 +32,13 @@ class _HomeViewConsumerState extends ConsumerState<HomeView> {
             children: [
               Consumer(
                 builder: (context, ref, child) {
-                  final user = ref.watch(
-                    authProvider.select((e) => e.userData),
+                  final userData = ref.watch(
+                    authProvider.select((e) => e.staffInfo),
                   );
+    
                   return UserProfileWidget(
                     radius: 18.r,
-                    imageUrl: Assets.userImage,
+                    imageUrl: userData != null ? userData.profileImage : "",
                     borderWidth: 1.4,
                   );
                 },
@@ -143,7 +145,7 @@ class PendingListingSection extends ConsumerWidget {
               onTap: () {
                 AppRouter.push(
                   PendingProductDetailView(
-                    type: Helper.getTypeTitle(products[index].listingType),
+                    
                     data: products[index],
                   ),
                   fun: () {

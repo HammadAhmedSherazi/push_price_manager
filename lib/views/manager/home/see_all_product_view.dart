@@ -150,7 +150,7 @@ class _SeeAllProductViewState extends ConsumerState<SeeAllProductView> {
                     // ));
                       AppRouter.push(
                   PendingProductDetailView(
-                    type: Helper.getTypeTitle(list[index].listingType),
+                    
                     data: list[index],
                   ),
                   fun: () {

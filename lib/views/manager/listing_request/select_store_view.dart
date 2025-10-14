@@ -36,14 +36,14 @@ class _SelectStoreViewState extends ConsumerState<SelectStoreView> {
   }
 
   void fetchStores({String? searchText}) {
-    ref.read(productProvider.notifier).getMyStores(searchText: searchText);
+    ref.read(authProvider.notifier).getMyStores(searchText: searchText);
   }
 
   @override
   Widget build(BuildContext context) {
-    final providerVM = ref.watch(productProvider);
+    final providerVM = ref.watch(authProvider);
     final recentStores = providerVM.myStores ?? [];
-    final selectedStores = providerVM.mySelectedStores ?? [];
+    final selectedStores = providerVM.selectedStores ?? [];
     return CustomScreenTemplate(
       title: "Select Store",
       showBottomButton: true,
@@ -51,9 +51,9 @@ class _SelectStoreViewState extends ConsumerState<SelectStoreView> {
         padding: EdgeInsets.symmetric(horizontal: AppTheme.horizontalPadding),
         child: Consumer(
           builder: (context, ref, child) {
-            ref.watch(productProvider.select((e) => e.listNowApiResponse));
+            final response =  ref.watch(productProvider.select((e) => e.listNowApiResponse));
             return CustomButtonWidget(
-              isLoad: providerVM.listNowApiResponse.status == Status.loading,
+              isLoad: response.status == Status.loading,
               title: "send request",
               onPressed: () {
                 if (selectedStores.isEmpty) {
@@ -68,7 +68,7 @@ class _SelectStoreViewState extends ConsumerState<SelectStoreView> {
                   data = Map<String, dynamic>.from(args);
                 }
                 data['store_ids'] = List.generate(
-                  providerVM.mySelectedStores!.length,
+                  selectedStores.length,
                   (index) => selectedStores[index].storeId,
                 );
 
@@ -134,7 +134,7 @@ class _SelectStoreViewState extends ConsumerState<SelectStoreView> {
                   return StoreCardWidget(
                     data: selectedStores[index],
                     onTap: () {
-                      ref.read(productProvider.notifier).removeProduct(index);
+                      ref.read(authProvider.notifier).removeStore(index);
                     },
                   );
                 },
@@ -161,7 +161,7 @@ class _SelectStoreViewState extends ConsumerState<SelectStoreView> {
                 dataList: recentStores,
                 itemBuilder: null,
                 onRetry: () {
-                  ref.read(productProvider.notifier).getMyStores();
+                  fetchStores();
                 },
                 customSuccessWidget: GridView.builder(
                   padding: EdgeInsets.symmetric(
@@ -188,8 +188,8 @@ class _SelectStoreViewState extends ConsumerState<SelectStoreView> {
                       data: recentStores[index],
                       onTap: () {
                         ref
-                            .read(productProvider.notifier)
-                            .addSelectProduct(index);
+                            .read(authProvider.notifier)
+                            .addSelectStore(index);
                       },
                     );
                   },

@@ -23,8 +23,8 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
   @override
   Widget build(BuildContext context) {
     
-  final providerVM = ref.watch(productProvider);
-  final ListingModel listData = providerVM.listItem ?? widget.data;
+  // final providerVM = ref.watch(productProvider);
+  final ListingModel listData = ref.watch(productProvider.select((e)=>e.listItem)) ?? widget.data;
   final storeNames =  listData.store.storeName;
  List<InfoDataModel> getInfoList(String selectedType) {
   if (selectedType ==  "Best By Products") {
@@ -78,8 +78,17 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
         child: Column(
           spacing: 10,
           children: [
-            if(Helper.getTypeTitle(listData.listingType) == "Promotional Products")
-            CustomButtonWidget(title: listData.status, onPressed: (){}),
+            
+            Consumer(
+              builder: (context, ref, child) {
+                final res = ref.watch(productProvider.select((e)=>e.updateApiRes)); 
+                return CustomButtonWidget(
+                  isLoad: res.status == Status.loading,
+                  title: listData.status == "APPROVED" ? "PAUSE" : "RESUME", onPressed: (){
+                    ref.read(productProvider.notifier).pauseList(listingId: listData.listingId, status: listData.status == "APPROVED"? "PAUSED" : "APPROVED");
+                  });
+              }
+            ),
             
               
         

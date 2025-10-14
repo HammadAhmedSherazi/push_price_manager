@@ -242,7 +242,7 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                   onTap: () {
                     AppRouter.push(
                       PendingProductDetailView(
-                        type: types[selectIndex],
+                        
                         data: item,
                       ),
                       fun: (){

@@ -17,7 +17,7 @@ class ProductProvider extends Notifier<ProductState> {
       pendingReviewApiRes: ApiResponse.undertermined(),
       getSuggestionApiRes: ApiResponse.undertermined(),
       setReviewApiRes: ApiResponse.undertermined(),
-      getStoresApiRes: ApiResponse.undertermined(),
+    
       deleteApiRes: ApiResponse.undertermined(),
       updateApiRes: ApiResponse.undertermined(),
       listLiveApiResponse: ApiResponse.undertermined(),
@@ -56,33 +56,7 @@ class ProductProvider extends Notifier<ProductState> {
     }
   }
 
-  void addSelectProduct(int index) {
-    final stores = List<StoreSelectDataModel>.from(state.myStores ?? []);
-    final selectedStores = List<StoreSelectDataModel>.from(
-      state.mySelectedStores ?? [],
-    );
-
-    final store = stores[index];
-    selectedStores.add(store.copyWith(isSelected: true));
-    stores.removeAt(index);
-
-    state = state.copyWith(myStores: stores, mySelectedStores: selectedStores);
-  }
-
-  void removeProduct(int index) {
-    final stores = List<StoreSelectDataModel>.from(state.myStores ?? []);
-    final selectedStores = List<StoreSelectDataModel>.from(
-      state.mySelectedStores ?? [],
-    );
-
-    final store = selectedStores[index];
-    stores.add(store.copyWith(isSelected: false));
-    selectedStores.removeAt(index);
-
-    state = state.copyWith(myStores: stores, mySelectedStores: selectedStores);
-  }
-
-  FutureOr<void> getProductfromDatabase({
+ FutureOr<void> getProductfromDatabase({
     required int limit,
     required int skip ,
     String? searchText,
@@ -619,42 +593,42 @@ class ProductProvider extends Notifier<ProductState> {
     }
   }
 
-  FutureOr<void> getMyStores({String? searchText}) async {
-    try {
-      state = state.copyWith(getStoresApiRes: ApiResponse.loading());
-      final response = await MyHttpClient.instance.get(ApiEndpoints.getMyStore);
+  // FutureOr<void> getMyStores({String? searchText}) async {
+  //   try {
+  //     state = state.copyWith(getStoresApiRes: ApiResponse.loading());
+  //     final response = await MyHttpClient.instance.get(ApiEndpoints.getMyStore);
       
-      // Add condition check
-      if (response != null && !(response is Map && response.containsKey('detail'))) {
-        state = state.copyWith(
-          getStoresApiRes: ApiResponse.completed(response),
-        );
-        List temp = response['assigned_stores'] ?? [];
-        // if (temp.isNotEmpty) {
-        state = state.copyWith(
-          mySelectedStores: [],
-          myStores: List.from(
-            temp.map((e) => StoreSelectDataModel.fromJson(e)),
-          ),
-        );
-        // }
-      } else {
-        // Show error message if condition is false
-        Helper.showMessage(
-          AppRouter.navKey.currentContext!,
-          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to load stores. Please try again.",
-        );
-        state = state.copyWith(getStoresApiRes: ApiResponse.error());
-      }
-    } catch (e) {
-      // Show error message for exceptions
-      Helper.showMessage(
-        AppRouter.navKey.currentContext!,
-        message: "An error occurred while loading stores. Please try again.",
-      );
-      state = state.copyWith(getStoresApiRes: ApiResponse.error());
-    }
-  }
+  //     // Add condition check
+  //     if (response != null && !(response is Map && response.containsKey('detail'))) {
+  //       state = state.copyWith(
+  //         getStoresApiRes: ApiResponse.completed(response),
+  //       );
+  //       List temp = response['assigned_stores'] ?? [];
+  //       // if (temp.isNotEmpty) {
+  //       state = state.copyWith(
+  //         mySelectedStores: [],
+  //         myStores: List.from(
+  //           temp.map((e) => StoreSelectDataModel.fromJson(e)),
+  //         ),
+  //       );
+  //       // }
+  //     } else {
+  //       // Show error message if condition is false
+  //       Helper.showMessage(
+  //         AppRouter.navKey.currentContext!,
+  //         message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to load stores. Please try again.",
+  //       );
+  //       state = state.copyWith(getStoresApiRes: ApiResponse.error());
+  //     }
+  //   } catch (e) {
+  //     // Show error message for exceptions
+  //     Helper.showMessage(
+  //       AppRouter.navKey.currentContext!,
+  //       message: "An error occurred while loading stores. Please try again.",
+  //     );
+  //     state = state.copyWith(getStoresApiRes: ApiResponse.error());
+  //   }
+  // }
 
   FutureOr<void> updateListRequest({
     required Map<String, dynamic> input,
@@ -712,6 +686,10 @@ class ProductProvider extends Notifier<ProductState> {
       
       // Add condition check
       if (response != null && !(response is Map && response.containsKey('detail'))) {
+         Helper.showMessage(
+        AppRouter.navKey.currentContext!,
+        message: "Successfully List Deleted",
+      );
         AppRouter.customback(times:2);
         state = state.copyWith(deleteApiRes: ApiResponse.completed(response));
       } else {
@@ -777,6 +755,30 @@ class ProductProvider extends Notifier<ProductState> {
         AppRouter.navKey.currentContext!,
         message: "An error occurred while updating the listing. Please try again.",
       );
+      state = state.copyWith(updateApiRes: ApiResponse.error());
+    }
+  }
+
+  FutureOr<void> pauseList({required int listingId, required String status})async{
+    try {
+      state = state.copyWith(updateApiRes: ApiResponse.loading());
+      final response = await MyHttpClient.instance.patch(ApiEndpoints.updateStatus(listingId), {
+        "status" : status
+      });
+
+      if(response != null && !response.containsKey('detail')){
+         ListingModel data = ListingModel.fromJson(response);
+        state = state.copyWith(updateApiRes: ApiResponse.completed(response),listItem: data);
+        Helper.showMessage(AppRouter.navKey.currentContext!, message: "Successfully Update Status!");
+      }
+      else{
+         Helper.showMessage(
+          AppRouter.navKey.currentContext!,
+          message: response?.containsKey('detail') == true ? response!['detail'] as String : "Failed to update status of listing. Please try again.",
+        );
+        state = state.copyWith(updateApiRes: ApiResponse.error());
+      }
+    } catch (e) {
       state = state.copyWith(updateApiRes: ApiResponse.error());
     }
   }

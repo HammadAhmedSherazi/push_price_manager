@@ -3,11 +3,11 @@ import 'package:push_price_manager/utils/extension.dart';
 import '../../../export_all.dart';
 
 class PendingProductDetailView extends ConsumerStatefulWidget {
-  final String type;
+  // final String type;
   final ListingModel data;
   const PendingProductDetailView({
     super.key,
-    required this.type,
+    // required this.type,
     required this.data,
   });
 
@@ -28,6 +28,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
    
     final listItem = ref.watch(productProvider.select((e)=>e.listItem)) ?? widget.data;
     final storeNames = listItem.store.storeName;
+    final type = Helper.getTypeTitle(listItem.listingType);
    
     return CustomScreenTemplate(
       showBottomButton: true,
@@ -42,11 +43,11 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                 onPressed: () {
                   AppRouter.push(
                     AddDiscountView(
-                      isInstant: widget.type == "Instant Sales",
+                      isInstant: type == "Instant Sales",
                       data: widget.data,
                     ),
                     fun: (){
-                      ref.read(productProvider.notifier).setListItem(widget.data);
+                      ref.read(productProvider.notifier).setListItem(listItem);
                     }
                   );
                 },
@@ -219,8 +220,8 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                   value: "\$${listItem.product?.price?.toStringAsFixed(2)}",
                 ),
                 ProductTitleWidget(title: "Listing Type", value: Helper.getTypeTitle(listItem.listingType)),
-                if (widget.type.toLowerCase().contains("best") ||
-                    widget.type.toLowerCase().contains("weighted"))
+                if (type.toLowerCase().contains("best") ||
+                    type.toLowerCase().contains("weighted"))
                   ProductTitleWidget(
                     title: "Best by Date",
                     value: Helper.selectDateFormat(listItem.bestByDate),
@@ -229,7 +230,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                   title: "Product Quantity",
                   value: "${listItem.quantity}",
                 ),
-                if (widget.type == "Weighted Items" &&
+                if (type == "Weighted Items" &&
                     listItem.weightedItemsPrices != null &&
                     listItem.weightedItemsPrices!.isNotEmpty) ...[
                   ...List.generate(

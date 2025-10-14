@@ -233,13 +233,13 @@ class _NavigationViewState extends State<NavigationView> {
                   50.ph,
                   Consumer(
                     builder: (context, ref, child) {
-                      ref.watch(authProvider.select((e)=>e.userData));
-                      final user = ref.watch(authProvider).userData!;
+                      
+                      final user = ref.watch(authProvider.select((e)=>e.staffInfo))!;
                       return Center(
                         child: Column(
                           spacing: 7,
                           children: [
-                            UserProfileWidget(radius: 45.r, imageUrl: Assets.userImage),
+                            UserProfileWidget(radius: 45.r, imageUrl: user.profileImage),
                             5.ph,
                             Text(user.username, style: context.textStyle.headlineMedium!.copyWith(fontSize: 18.sp)),
                             Text(user.email, style: context.textStyle.bodyMedium),
