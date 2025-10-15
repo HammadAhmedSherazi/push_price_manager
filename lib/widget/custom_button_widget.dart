@@ -55,6 +55,7 @@ class CustomButtonWidget extends StatelessWidget {
                   (!isLoad
                       ? Text( 
                           title.toUpperCase(),
+                          textAlign: TextAlign.center,
                           style: context.textStyle.labelMedium!.copyWith(
                               color: textColor ?? Colors.white,
                              ),
@@ -114,6 +115,7 @@ class CustomOutlineButtonWidget extends StatelessWidget {
                   (!isLoad
                       ? Text( 
                           title.toUpperCase(),
+                           textAlign: TextAlign.center,
                           style: context.textStyle.labelMedium!.copyWith(
                               color: textColor ?? AppColors.primaryTextColor,
                               ),

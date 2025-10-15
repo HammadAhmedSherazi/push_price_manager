@@ -55,7 +55,7 @@ class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
 
               CustomButtonWidget(
                 height: 30.h,
-                width: 115.w,
+                width: 112.w,
                 title: "",
                 onPressed: () {
                   AppRouter.push(ListingRequestView());
