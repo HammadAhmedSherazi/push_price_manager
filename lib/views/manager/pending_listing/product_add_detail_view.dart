@@ -26,10 +26,10 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
   late final TextEditingController productBestDateController;
   late final TextEditingController storeTitleController;
   final List<String> types = [
-    "Best By Products",
-    "Instant Sales",
-    "Weighted Items",
-    "Promotional Products",
+  "best_by_products",
+  "instant_sales",
+  "weighted_items",
+  "promotional_products",
   ];
   String selectType = "";
   DateTime? bestByDate;
@@ -116,7 +116,7 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
   Widget build(BuildContext context) {
     return CustomScreenTemplate(
       showBottomButton: true,
-      bottomButtonText: "next",
+      bottomButtonText: context.tr("next"),
       customBottomWidget: Padding(
         padding: EdgeInsetsGeometry.symmetric(
           horizontal: AppTheme.horizontalPadding,
@@ -130,7 +130,7 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
               title: "update",
               onPressed: () {
                 // Manual validation for price controllers before form validation
-                if (selectType == types[2] && quantity > 0) {
+                if (selectType == Helper.getTypeTitle(Helper.setType(types[2])) && quantity > 0) {
                   // Check if we have the right number of controllers
                   if (priceControllers.length != quantity) {
                     Helper.showMessage(
@@ -172,7 +172,7 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                     "listing_type": Helper.setType(selectType),
                     "quantity" : quantity
                   };
-                  if (selectType == types[0] || selectType == types[2]) {
+                  if (selectType == Helper.getTypeTitle(Helper.setType(types[0])) || selectType == Helper.getTypeTitle(Helper.setType(types[2]))) {
                     if (bestByDate == null) {
                       Helper.showMessage(
                         context,
@@ -182,7 +182,7 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                     }
                     data["best_by_date"] = bestByDate!.toIso8601String();
                   }
-                  if (selectType == types[2]) {
+                  if (selectType == Helper.getTypeTitle(Helper.setType(types[2]))) {
                     data['weighted_items_prices'] = List.generate(
                       priceControllers.length,
                       (index) => num.parse(priceControllers[index]!.text),
@@ -285,8 +285,8 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                     onChanged: (value) {
                       if (value != null) {
                         setState(() {
-                          selectType = value;
-                          if (selectType == types[2]) {
+                          selectType = Helper.getTypeTitle(Helper.setType(value));
+                          if (selectType == Helper.getTypeTitle(Helper.setType(types[2]))) {
                             // Clear existing controllers
                             if (priceControllers.isNotEmpty) {
                               priceControllers.clear();
@@ -317,7 +317,7 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                       );
                     }).toList(),
                   ),
-                  if (selectType == types[0] || selectType == types[2])
+                  if (selectType == Helper.getTypeTitle(Helper.setType(types[0])) || selectType == Helper.getTypeTitle(Helper.setType(types[2])))
                     CustomDateSelectWidget(
                       label: "Date",
                       selectedDate: bestByDate,
@@ -373,7 +373,7 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                     initialQuantity: quantity,
                     onQuantityChanged: changeQuantity,
                   ),
-                  if (selectType == types[2] && quantity > 0) ...[
+                  if (selectType == Helper.getTypeTitle(Helper.setType(types[2])) && quantity > 0) ...[
                     ...List.generate(
                       priceControllers.length,
                       (index) => TextFormField(

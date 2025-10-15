@@ -11,18 +11,18 @@ class SelectListingTypeView extends StatefulWidget {
 
 class _SelectListingTypeViewState extends State<SelectListingTypeView> {
   int selectIndex = 0;
-  List<String> types = [
-    "Best By Products",
-    "Instant Sales",
-    "Weighted Items",
-    "Promotional Products",
-  ];
+List<String> types = [
+  "best_by_products",
+  "instant_sales",
+  "weighted_items",
+  "promotional_products",
+];
   
 
   @override
   Widget build(BuildContext context) {
     return CustomScreenTemplate(
-      bottomButtonText: "next",
+      bottomButtonText: context.tr("next"),
       onButtonTap: () {
         final route = ModalRoute.of(context);
         final args = route?.settings.arguments;
@@ -35,7 +35,7 @@ class _SelectListingTypeViewState extends State<SelectListingTypeView> {
         data['listing_type'] = Helper.setType(types[selectIndex]);
         if (AppConstant.userType == UserType.employee) {
           AppRouter.push(
-            ListingProductView(type: types[selectIndex], popTime: 6),
+            ListingProductView(type: Helper.getTypeTitle(Helper.setType(types[selectIndex])), popTime: 6),
             settings: RouteSettings(arguments: data),
           );
         } else {
@@ -56,7 +56,7 @@ class _SelectListingTypeViewState extends State<SelectListingTypeView> {
               types.length,
               (index) => SelectTypeWidget(
                 isSelect: selectIndex == index,
-                title: types[index],
+                title: context.tr(types[index]),
                 onTap: () {
                   setState(() {
                     selectIndex = index;

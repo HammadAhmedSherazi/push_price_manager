@@ -52,7 +52,7 @@ class AuthProvider  extends Notifier<AuthState> {
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
-        message: "An error occurred during login. Please try again.",
+        message: AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
       );
       state = state.copyWith(loginApiResponse: ApiResponse.error());
     }
@@ -100,7 +100,7 @@ class AuthProvider  extends Notifier<AuthState> {
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
-        message: "An error occurred while loading stores. Please try again.",
+        message: AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
       );
       state = state.copyWith(getStoresApiRes: ApiResponse.error());
     }

@@ -17,10 +17,10 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
   late final TextEditingController _searchTextEditController;
   Timer? _searchDebounce;
   List<String> types = [
-    "Best By Products",
-    "Instant Sales",
-    "Weighted Items",
-    "Promotional Products",
+    "best_by_products",
+  "instant_sales",
+  "weighted_items",
+  "promotional_products",
   ];
   int selectIndex = -1;
   @override
@@ -87,7 +87,7 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
         backgroundColor: Colors.transparent,
         radius: 0.0,
         title: AppConstant.userType == UserType.employee
-            ? "Product Listings - Select Product"
+            ? context.tr("product_listings_select_product")
             : "Pending Listing - Select Product",
         children: [
           15.ph,
@@ -132,7 +132,7 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                                         ),
                                 ),
                                 child: Text(
-                                  types[i],
+                                  context.tr(types[i]),
                                   style: selectIndex == i
                                       ? context.textStyle.displaySmall!
                                             .copyWith(color: Colors.white)
@@ -170,7 +170,7 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                                           ),
                                   ),
                                   child: Text(
-                                    types[i + 1],
+                                    context.tr(types[i + 1]),
                                     style: selectIndex == i + 1
                                         ? context.textStyle.displaySmall!
                                               .copyWith(color: Colors.white)
@@ -204,7 +204,7 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                 horizontal: AppTheme.horizontalPadding,
               ),
               child: CustomSearchBarWidget(
-                hintText: "Hinted search text",
+                hintText: context.tr("hinted_search_text"),
                 suffixIcon: SvgPicture.asset(Assets.filterIcon),
                 onChanged: (text) {
                   if (_searchDebounce?.isActive ?? false) {

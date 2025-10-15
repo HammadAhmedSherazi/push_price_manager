@@ -148,7 +148,7 @@ class ProductProvider extends Notifier<ProductState> {
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
-        message: "Something went wrong. Please try again.",
+        message: AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
       );
       state = state.copyWith(getProductReponse: ApiResponse.error());
     }
@@ -176,8 +176,8 @@ class ProductProvider extends Notifier<ProductState> {
         AppRouter.push(
           SuccessListingRequestView(
             message: AppConstant.userType == UserType.employee
-                ? "Product Listing Successful!"
-                : "Listing Request Sent Successfully!",
+                ? AppRouter.navKey.currentContext!.tr("product_listing_successful")
+                : AppRouter.navKey.currentContext!.tr("listing_request_sent_successfully"),
           ),
         );
       } else {
@@ -192,7 +192,7 @@ class ProductProvider extends Notifier<ProductState> {
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
-        message: "Something went wrong. Please try again.",
+        message: AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
       );
       state = state.copyWith(listNowApiResponse: ApiResponse.error());
     }
@@ -267,7 +267,7 @@ class ProductProvider extends Notifier<ProductState> {
       if (skip == 0) {
         Helper.showMessage(
           AppRouter.navKey.currentContext!,
-          message: "Something went wrong. Please try again.",
+          message: AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
         );
       }
       state = state.copyWith(
@@ -345,7 +345,7 @@ class ProductProvider extends Notifier<ProductState> {
       if (skip == 0) {
         Helper.showMessage(
           AppRouter.navKey.currentContext!,
-          message: "Something went wrong. Please try again.",
+          message: AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
         );
       }
       state = state.copyWith(
@@ -422,7 +422,7 @@ class ProductProvider extends Notifier<ProductState> {
       if (skip == 0) {
         Helper.showMessage(
           AppRouter.navKey.currentContext!,
-          message: "Something went wrong. Please try again.",
+          message: AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
         );
       }
       state = state.copyWith(
@@ -497,7 +497,7 @@ class ProductProvider extends Notifier<ProductState> {
       if (skip == 0) {
         Helper.showMessage(
           AppRouter.navKey.currentContext!,
-          message: "Something went wrong. Please try again.",
+          message: AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
         );
       }
       state = state.copyWith(
@@ -553,7 +553,7 @@ class ProductProvider extends Notifier<ProductState> {
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
-        message: "Something went wrong. Please try again.",
+        message: AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
       );
       state = state.copyWith(getSuggestionApiRes: ApiResponse.error());
     }
@@ -588,7 +588,7 @@ class ProductProvider extends Notifier<ProductState> {
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
-        message: "Something went wrong. Please try again.",
+        message: AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
       );
       state = state.copyWith(setReviewApiRes: ApiResponse.error());
     }
@@ -652,8 +652,8 @@ class ProductProvider extends Notifier<ProductState> {
         AppRouter.push(
           SuccessListingRequestView(
             message: AppConstant.userType == UserType.employee
-                ? "Product Listing Successful!"
-                : "Listing Request Sent Successfully!",
+                ? AppRouter.navKey.currentContext!.tr("product_listing_successful")
+                : AppRouter.navKey.currentContext!.tr("listing_request_sent_successfully"),
           ),
         );
       } else {
@@ -668,7 +668,7 @@ class ProductProvider extends Notifier<ProductState> {
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
-        message: "Something went wrong. Please try again.",
+        message: AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
       );
       state = state.copyWith(listNowApiResponse: ApiResponse.error());
     }
@@ -703,7 +703,7 @@ class ProductProvider extends Notifier<ProductState> {
         // Show error message if condition is false
         // Helper.showMessage(
         //   AppRouter.navKey.currentContext!,
-        //   message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Something went wrong. Please try again.",
+        //   message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
         // );
         // state = state.copyWith(deleteApiRes: ApiResponse.error());
       }
@@ -712,7 +712,7 @@ class ProductProvider extends Notifier<ProductState> {
       AppRouter.back();
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
-        message: "Something went wrong. Please try again.",
+        message: AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
       );
       state = state.copyWith(deleteApiRes: ApiResponse.error());
     }
@@ -759,7 +759,7 @@ class ProductProvider extends Notifier<ProductState> {
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
-        message: "Something went wrong. Please try again.",
+        message: AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
       );
       state = state.copyWith(updateApiRes: ApiResponse.error());
     }
@@ -780,7 +780,7 @@ class ProductProvider extends Notifier<ProductState> {
       else{
          Helper.showMessage(
           AppRouter.navKey.currentContext!,
-          message: response?.containsKey('detail') == true ? response!['detail'] as String : "Something went wrong. Please try again.",
+          message: response?.containsKey('detail') == true ? response!['detail'] as String : AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
         );
         state = state.copyWith(updateApiRes: ApiResponse.error());
       }

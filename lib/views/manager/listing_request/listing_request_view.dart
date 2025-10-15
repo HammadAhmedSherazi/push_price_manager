@@ -1,6 +1,5 @@
 import 'dart:async';
 
-
 import '../../../export_all.dart';
 
 class ListingRequestView extends ConsumerStatefulWidget {
@@ -53,13 +52,13 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
   Widget build(BuildContext context) {
     return CustomScreenTemplate(
       showBottomButton: true,
-      bottomButtonText: "scan",
+      bottomButtonText: context.tr("scan"),
       onButtonTap: () {
         AppRouter.push(ScanView());
       },
       title: AppConstant.userType == UserType.employee
-          ? "Search From Database"
-          : "Listing Request - Select Product",
+          ? context.tr("search_from_database")
+          : context.tr("listing_request_select_product"),
       child: RefreshIndicator.adaptive(
         onRefresh: () async {
           ref
@@ -92,7 +91,7 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
                 onTapOutside: (v) {
                   FocusScope.of(context).unfocus();
                 },
-                hintText: "Hinted search text",
+                hintText: context.tr("hinted_search_text"),
                 suffixIcon: SvgPicture.asset(Assets.filterIcon),
               ),
             ),
@@ -139,10 +138,10 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
     // return Scaffold(
     //   appBar: CustomAppBarWidget(
     //     height: context.screenheight * 0.15,
-    //     title: AppConstant.userType == UserType.employee? "Search From Database": "Listing Request - Select Product",
+    //     title: AppConstant.userType == UserType.employee? context.tr("search_from_database"): "context.tr("listing_request_select_product")",
     //     children: [
     // CustomSearchBarWidget(
-    //   hintText: "Hinted search text",
+    //   hintText: context.tr("hinted_search_text"),
     //   suffixIcon: SvgPicture.asset(Assets.filterIcon),
     // ),
     //     ],
@@ -156,7 +155,7 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
     //   ), separatorBuilder: (context, index)=> 10.ph, itemCount: 10)),
     //       Padding(
     //         padding: EdgeInsets.all(AppTheme.horizontalPadding),
-    //         child: CustomButtonWidget(title: "scan", onPressed: (){
+    //         child: CustomButtonWidget(title: context.tr("scan"), onPressed: (){
     //           AppRouter.push(ScanView());
     //         }),
     //       )

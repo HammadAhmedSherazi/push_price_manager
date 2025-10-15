@@ -39,7 +39,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
           children: [
             if (AppConstant.userType == UserType.manager)
               CustomButtonWidget(
-                title: "next",
+                title: context.tr("next"),
                 onPressed: () {
                   AppRouter.push(
                     AddDiscountView(
@@ -59,7 +59,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                 onPressed: () {
                   AppRouter.push(
                     ProductAddDetailView(
-                      title: "Product Listings - List Product",
+                      title: context.tr("product_listings_list_product"),
                       type: Helper.getTypeTitle(listItem.listingType),
                       data: listItem,
                     ),
@@ -74,7 +74,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                 
                   AppRouter.push(
                     ProductAddDetailView(
-                      title: "Pending Listings - List Product",
+                      title: context.tr("pending_listings_list_product"),
                       type: Helper.getTypeTitle(listItem.listingType),
                       data: listItem,
                     ),
@@ -159,7 +159,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
           ],
         ),
       ),
-      title: "Product Listings - List Product",
+      title: context.tr("product_listings_list_product"),
       child: ListView(
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),

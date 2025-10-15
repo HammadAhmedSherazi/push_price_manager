@@ -45,7 +45,7 @@ class _SalesViewState extends State<SalesView> {
       padding: EdgeInsets.all(AppTheme.horizontalPadding),
       children: [
         CustomSearchBarWidget(
-          hintText: "Hinted search text",
+          hintText: context.tr("hinted_search_text"),
           suffixIcon: SvgPicture.asset(Assets.filterIcon),
           onTapOutside: (v){
                FocusScope.of(context).unfocus();

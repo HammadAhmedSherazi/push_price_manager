@@ -29,7 +29,7 @@ class CustomScreenTemplate extends StatelessWidget {
         appBar:AppBar(
           centerTitle: true,
           backgroundColor: Colors.transparent,
-          title: Text(title, style: context.textStyle.labelMedium),
+          title: Text(title, style: context.textStyle.labelMedium, maxLines: 2, textAlign: TextAlign.center,),
           elevation: 0.0,
           // leadingWidth: 24.r,
           leading: Padding(

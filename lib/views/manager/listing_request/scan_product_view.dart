@@ -7,7 +7,7 @@ class ScanProductView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScreenTemplate(title: "Barcode", child: SizedBox(
+    return CustomScreenTemplate(title: context.tr("barcode"), child: SizedBox(
       height: double.infinity,
       child: Column(
         children: [

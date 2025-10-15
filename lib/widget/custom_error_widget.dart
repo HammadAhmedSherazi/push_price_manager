@@ -18,7 +18,7 @@ class CustomErrorWidget extends StatelessWidget {
       children: [
         
         Text( 
-          "Something went wrong!\nPlease check your internet connection",
+          context.tr("something_went_wrong"),
           style: context.textStyle.bodyMedium!.copyWith(fontSize: 16.sp),
           textAlign: TextAlign.center,
         ),
@@ -29,7 +29,7 @@ class CustomErrorWidget extends StatelessWidget {
             SizedBox(
               width: 120.w,
               height: 40.h,
-              child: CustomButtonWidget(title: "Load Again!", onPressed: onPressed) 
+              child: CustomButtonWidget(title: context.tr('load_again'), onPressed: onPressed) 
               
             ),
           ],

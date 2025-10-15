@@ -34,15 +34,15 @@ class _SeeAllProductViewState extends ConsumerState<SeeAllProductView> {
   }
 
   void fetchProducts({required int skip}) {
-    if (widget.title == "Listing Request") {
+    if (widget.title == "listing_request") {
       ref.read(productProvider.notifier).getListRequestProducts(limit: 10, skip: skip);
       
       // AppRouter.push(
       //  ListingProductDetailView(isRequest: true, type: setType(index),));
-    } else if (widget.title == "Product Listings") {
+    } else if (widget.title == "product_listing") {
      
      ref.read(productProvider.notifier).getListApprovedProducts(limit: 10, skip: skip);
-    } else if (widget.title == "Pending Listings") {
+    } else if (widget.title == "pending_listings") {
       
       ref.read(productProvider.notifier).getPendingReviewList(limit: 10, skip: skip);
       //              AppRouter.push(PendingProductDetailView(
@@ -60,18 +60,18 @@ class _SeeAllProductViewState extends ConsumerState<SeeAllProductView> {
   Widget build(BuildContext context) {
   
     final providerVM = ref.watch(productProvider);
-    if (widget.title == "Listing Request") {
+    if (widget.title == "listing_request") {
       response = providerVM.listRequestApiResponse;
       list = providerVM.listRequestproducts!;
       // AppRouter.push(
       //  ListingProductDetailView(isRequest: true, type: setType(index),));
-    } else if (widget.title == "Product Listings") {
+    } else if (widget.title ==  "product_listing") {
       response = providerVM.productListingApiResponse;
       list = providerVM.listApprovedproducts!;
       //              AppRouter.push(PendingProductDetailView(
       //   type: setType(index),
       // ));
-    } else if (widget.title == "Pending Listings") {
+    } else if (widget.title == "pending_listings") {
      
       response = providerVM.pendingReviewApiRes;
       list = providerVM.pendingReviewList!;
@@ -87,7 +87,7 @@ class _SeeAllProductViewState extends ConsumerState<SeeAllProductView> {
       //  ));
     }
     return CustomScreenTemplate(
-      title: widget.title,
+      title: context.tr(widget.title),
       child: AsyncStateHandler(
         status: response.status,
         dataList: list,
@@ -119,7 +119,7 @@ class _SeeAllProductViewState extends ConsumerState<SeeAllProductView> {
               height: double.infinity,
               child: GestureDetector(
                 onTap: () {
-                  if (widget.title == "Listing Request") {
+                  if (widget.title == "listing_request") {
                     AppRouter.push(
                       ListingProductDetailView(isRequest: true,  data: list[index]),
                       fun: () {
@@ -144,7 +144,7 @@ class _SeeAllProductViewState extends ConsumerState<SeeAllProductView> {
                   // );
                   
                   // } 
-                  else if (widget.title == "Pending Listings" || widget.title == "Product Listings") {
+                  else if (widget.title == "pending_listings" || widget.title == "product_listing") {
                     //              AppRouter.push(PendingProductDetailView(
                     //   type: setType(index),
                     // ));

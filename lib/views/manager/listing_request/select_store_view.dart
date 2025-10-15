@@ -90,7 +90,7 @@ class _SelectStoreViewState extends ConsumerState<SelectStoreView> {
               onTapOutside: (v) {
                 FocusScope.of(context).unfocus();
               },
-              hintText: "Hinted search text",
+              hintText: context.tr("hinted_search_text"),
               controller: searchTextEditController,
               onChanged: (text) {
                 if (_searchDebounce?.isActive ?? false) {

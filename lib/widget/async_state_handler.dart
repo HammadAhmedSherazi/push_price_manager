@@ -48,7 +48,7 @@ class AsyncStateHandler<T> extends StatelessWidget {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ShowEmptyItemDisplayWidget(message: emptyMessage ?? "No items found!"),
+            ShowEmptyItemDisplayWidget(message: emptyMessage ?? context.tr('no_item_found')),
           ],
         );
       }

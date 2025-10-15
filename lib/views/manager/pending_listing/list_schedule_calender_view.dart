@@ -63,7 +63,7 @@ class _ListScheduleCalenderViewState extends State<ListScheduleCalenderView> {
   Widget build(BuildContext context) {
     return CustomScreenTemplate(
       showBottomButton: true,
-      bottomButtonText: "next",
+      bottomButtonText: context.tr("next"),
       customBottomWidget: Padding(
         padding: EdgeInsets.symmetric(horizontal: AppTheme.horizontalPadding),
         child: Consumer(

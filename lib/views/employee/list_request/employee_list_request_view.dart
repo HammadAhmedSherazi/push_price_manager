@@ -17,11 +17,11 @@ late final ScrollController _scrollController;
   late final TextEditingController _searchTextEditController;
   Timer? _searchDebounce;
   List<String> types = [
-    "Best By Products",
-    "Instant Sales",
-    "Weighted Items",
-    "Promotional Products",
-  ];
+  "best_by_products",
+  "instant_sales",
+  "weighted_items",
+  "promotional_products",
+];
   int selectIndex = -1;
   @override
   void initState() {
@@ -69,7 +69,7 @@ late final ScrollController _scrollController;
         height: context.screenheight * 0.22,
         backgroundColor: Colors.transparent,
         radius: 0.0,
-        title: "Listing Requests",
+        title: context.tr("listing_requests"),
         children: [
           15.ph,
           Expanded( 
@@ -114,7 +114,7 @@ late final ScrollController _scrollController;
                         : Border.all(color: AppColors.borderColor),
                   ),
                   child: Text(
-                    types[i],
+                    context.tr(types[i]),
                     style: selectIndex == i
                         ? context.textStyle.displaySmall!
                             .copyWith(color: Colors.white)
@@ -151,7 +151,7 @@ late final ScrollController _scrollController;
                           : Border.all(color: AppColors.borderColor),
                     ),
                     child: Text(
-                      types[i + 1],
+                      context.tr(types[i + 1]),
                       style: selectIndex == i + 1
                           ? context.textStyle.displaySmall!
                               .copyWith(color: Colors.white)
@@ -244,7 +244,7 @@ late final ScrollController _scrollController;
                       },
                     );
                 },
-                hintText: "Hinted search text", suffixIcon: SvgPicture.asset(Assets.filterIcon), onTapOutside: (v){
+                hintText: context.tr("hinted_search_text"), suffixIcon: SvgPicture.asset(Assets.filterIcon), onTapOutside: (v){
                  FocusScope.of(context).unfocus();
                 
               }, ),

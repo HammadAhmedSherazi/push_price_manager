@@ -99,7 +99,7 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
         
               // CustomOutlineButtonWidget(title: "edit", onPressed: (){
                 
-              //   AppRouter.push(ProductAddDetailView(title: "Product Listings - List Product", type: Helper.getTypeTitle(listData.listingType),data: listData,));
+              //   AppRouter.push(ProductAddDetailView(title: "context.tr("product_listings_list_product")", type: Helper.getTypeTitle(listData.listingType),data: listData,));
               
               // }),
   //             CustomButtonWidget(title: "delete", onPressed: (){
@@ -161,7 +161,7 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
           ],
         ),
       ),
-      title: "Product Listings - List Product",
+      title: context.tr("product_listings_list_product"),
       child: ListView(
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),

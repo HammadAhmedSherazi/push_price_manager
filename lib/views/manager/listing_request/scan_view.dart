@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:push_price_manager/utils/extension.dart';
 
 import '../../../export_all.dart';
@@ -18,9 +16,9 @@ class _ScanViewState extends State<ScanView> {
   Widget build(BuildContext context) {
    
     return CustomScreenTemplate(
-      title: "Barcode",
+      title: context.tr("barcode"),
       showBottomButton: false,
-      bottomButtonText: "scan now",
+      bottomButtonText: context.tr("scan_now"),
       // onButtonTap: (){
       //   AppRouter.push(ScanProductView());
       // },
@@ -106,7 +104,7 @@ class _ScanViewState extends State<ScanView> {
           Padding(padding: EdgeInsets.symmetric(
             vertical: 20.r,
             horizontal: 50.r
-          ), child: Text("Align Barcode Within The Frame To Scan", textAlign: TextAlign.center, style: context.textStyle.displayMedium!.copyWith(
+          ), child: Text(context.tr("align_bar_code_within_the_frame_to_scan"), textAlign: TextAlign.center, style: context.textStyle.displayMedium!.copyWith(
             fontSize: 16.sp
           ),),)
 

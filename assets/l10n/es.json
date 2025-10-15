@@ -161,5 +161,26 @@
   "pending_listings": "Listados Pendientes",
   "live_listings": "Listados en Vivo",
   "listing_request": "Nueva Solicitud",
-  "product_listing": "Listado de Productos"
+  "product_listing": "Listado de Productos",
+  "no_item_found" : "¡No se encontró ningún elemento!",
+  "load_again" : "Cargar de nuevo",
+  "something_went_wrong" : "¡Algo salió mal!\nPor favor, revisa tu conexión a internet.",
+  "something_went_wrong_try_again" : "Algo salió mal. Por favor, inténtalo de nuevo.",
+   "see_details": "Ver detalles",
+   "list_product": "Listar producto",
+    "product_listing_successful": "¡Publicación del producto exitosa!",
+    "listing_request_sent_successfully": "¡Solicitud de publicación enviada con éxito!",
+    "product_listings_list_product": "Publicaciones de productos - Listar producto",
+     "pending_listings_list_product": "Publicaciones pendientes - Listar producto",
+      "listing_request_select_product": "Solicitud de publicación - Seleccionar producto",
+      "search_from_database": "Buscar en la base de datos",
+       "live_listing_select_product": "Publicación en vivo - Seleccionar producto",
+       "product_listings_select_product": "Publicaciones de productos - Seleccionar producto",
+  "pending_listings_select_product": "Publicaciones pendientes - Seleccionar producto",
+  "go_home": "Ir al inicio"
+
+
+
+
+
 }

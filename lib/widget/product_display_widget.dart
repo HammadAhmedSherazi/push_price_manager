@@ -39,7 +39,7 @@ class ProductDisplayWidget extends StatelessWidget {
                                           .withValues(alpha: 0.7),
                                     ),),
                   ),
-                  Text("See Details", style: context.textStyle.bodySmall!.copyWith(
+                  Text(context.tr("see_details"), style: context.textStyle.bodySmall!.copyWith(
                     color: AppColors.primaryColor,
                     decoration: TextDecoration.underline
                   ),)

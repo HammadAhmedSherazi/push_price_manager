@@ -57,7 +57,7 @@ class _SelectProductViewState extends State<SelectProductView> {
         children: [
           Padding(
             padding: EdgeInsets.all(AppTheme.horizontalPadding),
-            child: CustomSearchBarWidget(hintText: "Hinted search text", controller: searchTextEditController, onChanged: (v){
+            child: CustomSearchBarWidget(hintText: context.tr("hinted_search_text"), controller: searchTextEditController, onChanged: (v){
               setState(() {
                 
               });

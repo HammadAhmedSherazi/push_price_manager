@@ -29,7 +29,7 @@ class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailV
     .map((e) => e.storeName)
     .join(', ');
     return CustomScreenTemplate(
-      bottomButtonText: "next",
+      bottomButtonText: context.tr("next"),
       showBottomButton: true,
       onButtonTap: () {
          if(AppConstant.userType == UserType.employee){
@@ -60,7 +60,7 @@ class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailV
        }
         
       },
-      title: "Product Listings - List Product",
+      title: context.tr("product_listings_list_product"),
       child: ListView(
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),

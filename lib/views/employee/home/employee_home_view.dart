@@ -26,7 +26,7 @@ class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
     return Scaffold(
       appBar: CustomAppBarWidget(
         height: context.screenheight * 0.15,
-        title: "Home",
+        title: context.tr("home"),
         children: [
           Row(
             children: [
@@ -55,7 +55,7 @@ class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
 
               CustomButtonWidget(
                 height: 30.h,
-                width: 110.w,
+                width: 115.w,
                 title: "",
                 onPressed: () {
                   AppRouter.push(ListingRequestView());
@@ -64,10 +64,12 @@ class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.add),
-                    Text(
-                      "List Product",
-                      style: context.textStyle.bodySmall!.copyWith(
-                        color: Colors.white,
+                    Expanded(
+                      child: Text(
+                        context.tr("list_product"),
+                        style: context.textStyle.bodySmall!.copyWith(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ],
@@ -109,7 +111,7 @@ class ListingRequestSection extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Listing Request", style: context.textStyle.displayMedium),
+            Text(context.tr('listing_request'), style: context.textStyle.displayMedium),
             TextButton(
               style: ButtonStyle(
                 padding: WidgetStatePropertyAll(EdgeInsets.zero),
@@ -118,7 +120,7 @@ class ListingRequestSection extends ConsumerWidget {
               onPressed: () {
                 AppRouter.push(
                   SeeAllProductView(
-                    title: "Listing Request",
+                    title: 'listing_request',
                    
                     // ,onTap: (){
 
@@ -134,7 +136,7 @@ class ListingRequestSection extends ConsumerWidget {
                 );
               },
               child: Text(
-                "See All",
+                 context.tr("see_all"),
                 style: context.textStyle.displayMedium!.copyWith(
                   color: AppColors.primaryColor,
                   decoration: TextDecoration.underline,
@@ -195,7 +197,7 @@ class ProductListingSection extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Product Listings", style: context.textStyle.displayMedium),
+            Text(context.tr("product_listing"), style: context.textStyle.displayMedium),
             TextButton(
               style: ButtonStyle(
                 padding: WidgetStatePropertyAll(EdgeInsets.zero),
@@ -204,7 +206,7 @@ class ProductListingSection extends ConsumerWidget {
               onPressed: () {
                 AppRouter.push(
                   SeeAllProductView(
-                    title: "Product Listings",
+                    title:  "product_listing",
                    
                     // , onTap: (){
                     //           AppRouter.push(PendingProductDetailView(
@@ -222,7 +224,7 @@ class ProductListingSection extends ConsumerWidget {
                 );
               },
               child: Text(
-                "See All",
+              context.tr("see_all"),
                 style: context.textStyle.displayMedium!.copyWith(
                   color: AppColors.primaryColor,
                   decoration: TextDecoration.underline,
@@ -236,7 +238,7 @@ class ProductListingSection extends ConsumerWidget {
           child: AsyncStateHandler(
             padding: EdgeInsets.zero,
             status: response.status,
-            dataList: products ?? [],
+            dataList: products,
             onRetry: () {
               ref
                   .read(productProvider.notifier)
@@ -269,20 +271,20 @@ class ProductListingSection extends ConsumerWidget {
   }
 }
 
-String setType(int index) {
-  switch (index) {
-    case 0:
-      return "Best By Products";
-    case 1:
-      return "Instant Sales";
-    case 2:
-      return "Weighted Items";
-    case 3:
-      return "Promotional Products";
-    default:
-      return "Best By Products";
-  }
-}
+// String setType(int index) {
+//   switch (index) {
+//     case 0:
+//       return "Best By Products";
+//     case 1:
+//       return "Instant Sales";
+//     case 2:
+//       return "Weighted Items";
+//     case 3:
+//       return "Promotional Products";
+//     default:
+//       return "Best By Products";
+//   }
+// }
   // List<String> types = [
   //   "Best By Products",
   //   "Instant Sales",

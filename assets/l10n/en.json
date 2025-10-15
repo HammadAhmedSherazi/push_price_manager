@@ -41,7 +41,7 @@
     "get_discounts_when_travelling_4_times_per_month": "Get discounts when travelling, 4 times per month",
     "get_discounts_when_travelling_1_time_per_month": "Get discounts when travelling, 1 time per month",
      "home": "Home",
-  "hinted_search_text": "Hinted search text",
+  "hinted_search_text": "hinted_search_text",
   "travel_mode": "Travel Mode",
   "special_offers": "Special Offers",
   "categories": "Categories",
@@ -70,7 +70,7 @@
   "add_new_favorite": "Add New Favorite",
   "search": "Search",
   "scan": "Scan",
-  "scan_now": "scan now",
+  "scan_now": "Scan Now",
   "barcode": "Barcode",
   "align_bar_code_within_the_frame_to_scan": "Align Barcode Within The Frame To Scan",
   "category": "Category",
@@ -161,5 +161,27 @@
   "pending_listings": "Pending Listings",
   "live_listings": "Live Listings",
   "listing_request": "Listing Request",
-  "product_listing": "Product Listing"
+  "product_listing": "Product Listing",
+  "no_item_found" : "No Item found!",
+  "load_again" : "Load again",
+  "something_went_wrong" : "Something went wrong!\nPlease check your internet connection.",
+  "something_went_wrong_try_again" : "Something went wrong. Please try again.",
+  "see_details": "See Details",
+  "list_product": "List Product",
+  "product_listing_successful": "Product Listing Successful!",
+    "listing_request_sent_successfully": "Listing Request Sent Successfully!",
+    "product_listings_list_product": "Product Listings - List Product",
+    "pending_listings_list_product": "Pending Listings - List Product",
+    "listing_request_select_product": "Listing Request - Select Product",
+    "search_from_database": "Search From Database",
+    "live_listing_select_product": "Live Listing - Select Product",
+    "product_listings_select_product": "Product Listings - Select Product",
+  "pending_listings_select_product": "Pending Listings - Select Product",
+  "go_home": "Go Home"
+    
+    
+    
+
+
+  
 }
