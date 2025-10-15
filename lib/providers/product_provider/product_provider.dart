@@ -694,13 +694,18 @@ class ProductProvider extends Notifier<ProductState> {
         AppRouter.customback(times:2);
         state = state.copyWith(deleteApiRes: ApiResponse.completed(response));
       } else {
-        AppRouter.back();
+         Helper.showMessage(
+        AppRouter.navKey.currentContext!,
+        message: "Successfully List Deleted",
+      );
+        AppRouter.customback(times:2);
+        state = state.copyWith(deleteApiRes: ApiResponse.completed(response));
         // Show error message if condition is false
-        Helper.showMessage(
-          AppRouter.navKey.currentContext!,
-          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to delete listing. Please try again.",
-        );
-        state = state.copyWith(deleteApiRes: ApiResponse.error());
+        // Helper.showMessage(
+        //   AppRouter.navKey.currentContext!,
+        //   message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Something went wrong. Please try again.",
+        // );
+        // state = state.copyWith(deleteApiRes: ApiResponse.error());
       }
     } catch (e) {
       // Show error message for exceptions
