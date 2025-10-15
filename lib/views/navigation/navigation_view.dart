@@ -153,9 +153,9 @@ class _NavigationViewState extends State<NavigationView> {
         selectIndex = 2;
       });
     }),
-     MenuDataModel(title: "Analytics", icon: Assets.menuAnaylicIcon, onTap: () {
-      AppRouter.push(AnalyticsView());
-    }),
+    //  MenuDataModel(title: "Analytics", icon: Assets.menuAnaylicIcon, onTap: () {
+    //   AppRouter.push(AnalyticsView());
+    // }),
     MenuDataModel(title: "Profile", icon: Assets.menuProfileIcon, onTap: () {
       AppRouter.back();
       setState(() {

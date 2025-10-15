@@ -29,15 +29,19 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
  List<InfoDataModel> getInfoList(String selectedType) {
   if (selectedType ==  "Best By Products") {
     return [
+      InfoDataModel(title: "Discounted Price", description: "\$${listData.product?.discounted_price}"),
+
       InfoDataModel(title: "Listing Type", description: selectedType),
       InfoDataModel(title: "Best By Date", description: Helper.selectDateFormat(listData.bestByDate)),
       InfoDataModel(title: "Product Quantity", description: "${listData.quantity}"),
       InfoDataModel(title: "Current Discount", description: "${listData.currentDiscount}%"),
       InfoDataModel(title: "Daily Increasing Discount", description: "${listData.dailyIncreasingDiscountPercent}%"),
       InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(listData.goLiveDate)),
+      
     ];
   } else if (selectedType == "Instant Sales") {
     return [
+      InfoDataModel(title: "Discounted Price", description: "\$${listData.product?.discounted_price}"),
       InfoDataModel(title: "Listing Type", description: selectedType),
       InfoDataModel(title: "Product Quantity", description: "${listData.quantity}"),
       InfoDataModel(title: "Current Discount", description: "${listData.currentDiscount}%"),
@@ -56,6 +60,7 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
      ];
   } else {
     return [
+      InfoDataModel(title: "Discounted Price", description: "\$${listData.product?.discounted_price}"),
       InfoDataModel(title: "Listing Type", description: selectedType),
       InfoDataModel(title: "Product Quantity", description: "${listData.quantity}"),
       InfoDataModel(title: "Current Discount", description: "${listData.currentDiscount}%"),
@@ -199,6 +204,7 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
                   value: storeNames,
                 ),
                 ProductTitleWidget(title: "Regular Price", value: "\$${listData.product?.price}"),
+
                 ...List.generate(getInfoList(Helper.getTypeTitle(listData.listingType)).length, (index)=> ProductTitleWidget(
                   title: getInfoList(Helper.getTypeTitle(listData.listingType))[index].title,
                   value: getInfoList(Helper.getTypeTitle(listData.listingType))[index].description,

@@ -5,6 +5,7 @@ class ProductDataModel {
   final String description;
   final String image;
   final num? price;
+  final num? discounted_price;
   final int? id;
   final int ? chainId;
   final DateTime ? createdAt;
@@ -17,6 +18,7 @@ class ProductDataModel {
     required this.description,
     required this.image,
     this.price,
+    this.discounted_price,
     this.id,
     this.category,
     this.chainId,
@@ -32,6 +34,8 @@ class ProductDataModel {
       description: json['product_description'] ?? '',
       image: json['product_image'] ?? '',
       price: (json['base_price'] as num?) ?? 0,
+      discounted_price: (json['discounted_price'] as num?) ?? 0,
+
       category: json['category'] != null ? CategoryDataModel.fromJson(json['category']) : null,
       chainId: json['chain_id'] ?? -1,
       createdAt: DateTime.tryParse(json['created_at']) ?? DateTime.now(),
@@ -46,6 +50,7 @@ class ProductDataModel {
       'product_description': description,
       'product_image': image,
       'base_price': price,
+      'discounted_price': discounted_price,
     };
   }
 
@@ -60,6 +65,7 @@ class ProductDataModel {
       description: description ?? this.description,
       image: image ?? this.image,
       price: price ?? this.price,
+      discounted_price: discounted_price ?? this.discounted_price,
     );
   }
 }

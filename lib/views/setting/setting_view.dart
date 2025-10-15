@@ -18,11 +18,11 @@ class _SettingViewState extends State<SettingView> {
       icon: Assets.notificationToggleIcon,
       onTap: () {},
     ),
-    MenuDataModel(
-      title: "Travel Mode",
-      icon: Assets.travelModeIcon,
-      onTap: () {},
-    ),
+    // MenuDataModel(
+    //   title: "Travel Mode",
+    //   icon: Assets.travelModeIcon,
+    //   onTap: () {},
+    // ),
     MenuDataModel(
       title: "Change Language",
       icon: Assets.languageIcon,
@@ -30,14 +30,14 @@ class _SettingViewState extends State<SettingView> {
         AppRouter.push(ChangeLanguageView());
       },
     ),
-    MenuDataModel(
-      title: "Change Password",
-      icon: Assets.securityIcon,
-      onTap: () {
-        AppRouter.push(ChangePasswordView());
+    // MenuDataModel(
+    //   title: "Change Password",
+    //   icon: Assets.securityIcon,
+    //   onTap: () {
+    //     AppRouter.push(ChangePasswordView());
 
-      },
-    ),
+    //   },
+    // ),
     MenuDataModel(
       title: "Privacy Policy",
       icon: Assets.privacyIcon,
