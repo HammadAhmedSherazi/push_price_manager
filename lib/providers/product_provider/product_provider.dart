@@ -148,7 +148,7 @@ class ProductProvider extends Notifier<ProductState> {
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
-        message: "An error occurred while getting product data. Please try again.",
+        message: "Something went wrong. Please try again.",
       );
       state = state.copyWith(getProductReponse: ApiResponse.error());
     }
@@ -192,7 +192,7 @@ class ProductProvider extends Notifier<ProductState> {
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
-        message: "An error occurred while creating listing. Please try again.",
+        message: "Something went wrong. Please try again.",
       );
       state = state.copyWith(listNowApiResponse: ApiResponse.error());
     }
@@ -267,7 +267,7 @@ class ProductProvider extends Notifier<ProductState> {
       if (skip == 0) {
         Helper.showMessage(
           AppRouter.navKey.currentContext!,
-          message: "An error occurred while loading list request products. Please try again.",
+          message: "Something went wrong. Please try again.",
         );
       }
       state = state.copyWith(
@@ -345,7 +345,7 @@ class ProductProvider extends Notifier<ProductState> {
       if (skip == 0) {
         Helper.showMessage(
           AppRouter.navKey.currentContext!,
-          message: "An error occurred while loading approved products. Please try again.",
+          message: "Something went wrong. Please try again.",
         );
       }
       state = state.copyWith(
@@ -422,7 +422,7 @@ class ProductProvider extends Notifier<ProductState> {
       if (skip == 0) {
         Helper.showMessage(
           AppRouter.navKey.currentContext!,
-          message: "An error occurred while loading pending review list. Please try again.",
+          message: "Something went wrong. Please try again.",
         );
       }
       state = state.copyWith(
@@ -497,7 +497,7 @@ class ProductProvider extends Notifier<ProductState> {
       if (skip == 0) {
         Helper.showMessage(
           AppRouter.navKey.currentContext!,
-          message: "An error occurred while loading live products. Please try again.",
+          message: "Something went wrong. Please try again.",
         );
       }
       state = state.copyWith(
@@ -553,7 +553,7 @@ class ProductProvider extends Notifier<ProductState> {
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
-        message: "An error occurred while getting suggestions. Please try again.",
+        message: "Something went wrong. Please try again.",
       );
       state = state.copyWith(getSuggestionApiRes: ApiResponse.error());
     }
@@ -573,6 +573,7 @@ class ProductProvider extends Notifier<ProductState> {
       
       // Add condition check
       if (response != null && !(response is Map && response.containsKey('detail'))) {
+        state = state.copyWith(setReviewApiRes: ApiResponse.completed(response));
         AppRouter.customback(times: times);
         AppRouter.push(SuccessListingRequestView(message: "Listing is Live!"));
       } else {
@@ -587,7 +588,7 @@ class ProductProvider extends Notifier<ProductState> {
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
-        message: "An error occurred while setting review. Please try again.",
+        message: "Something went wrong. Please try again.",
       );
       state = state.copyWith(setReviewApiRes: ApiResponse.error());
     }
@@ -667,7 +668,7 @@ class ProductProvider extends Notifier<ProductState> {
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
-        message: "An error occurred while updating list request. Please try again.",
+        message: "Something went wrong. Please try again.",
       );
       state = state.copyWith(listNowApiResponse: ApiResponse.error());
     }
@@ -706,7 +707,7 @@ class ProductProvider extends Notifier<ProductState> {
       AppRouter.back();
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
-        message: "An error occurred while deleting listing. Please try again.",
+        message: "Something went wrong. Please try again.",
       );
       state = state.copyWith(deleteApiRes: ApiResponse.error());
     }
@@ -753,7 +754,7 @@ class ProductProvider extends Notifier<ProductState> {
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
-        message: "An error occurred while updating the listing. Please try again.",
+        message: "Something went wrong. Please try again.",
       );
       state = state.copyWith(updateApiRes: ApiResponse.error());
     }
@@ -774,7 +775,7 @@ class ProductProvider extends Notifier<ProductState> {
       else{
          Helper.showMessage(
           AppRouter.navKey.currentContext!,
-          message: response?.containsKey('detail') == true ? response!['detail'] as String : "Failed to update status of listing. Please try again.",
+          message: response?.containsKey('detail') == true ? response!['detail'] as String : "Something went wrong. Please try again.",
         );
         state = state.copyWith(updateApiRes: ApiResponse.error());
       }

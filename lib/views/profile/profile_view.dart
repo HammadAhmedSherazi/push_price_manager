@@ -14,7 +14,11 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:  SizedBox(
+      body:  Consumer(builder: (context, ref, child){
+        final response = ref.watch(authProvider.select((e)=>e.getStoresApiRes));
+        return AsyncStateHandler(status: response.status, dataList: [1], itemBuilder: null, onRetry: (){
+          ref.read(authProvider.notifier).getMyStores();
+        }, customSuccessWidget: SizedBox(
         width: double.infinity,
         height: double.infinity,
         child: Stack(
@@ -120,7 +124,8 @@ class _ProfileViewState extends State<ProfileView> {
           ],
         ),
       ),
-    );
+   );
+      }) );
   }
 }
 

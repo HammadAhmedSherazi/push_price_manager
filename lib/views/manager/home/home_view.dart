@@ -14,8 +14,12 @@ class _HomeViewConsumerState extends ConsumerState<HomeView> {
   @override
   void initState() {
     Future.microtask(() {
-      ref.read(productProvider.notifier).getPendingReviewList(limit: 10, skip: 0);
-      ref.read(productProvider.notifier).getLiveListProducts(limit: 10, skip: 0);
+      ref
+          .read(productProvider.notifier)
+          .getPendingReviewList(limit: 10, skip: 0);
+      ref
+          .read(productProvider.notifier)
+          .getLiveListProducts(limit: 10, skip: 0);
       ref.read(authProvider.notifier).getMyStores();
     });
     super.initState();
@@ -32,19 +36,29 @@ class _HomeViewConsumerState extends ConsumerState<HomeView> {
             children: [
               Consumer(
                 builder: (context, ref, child) {
-                  final userData = ref.watch(
+                  final userImage = ref.watch(
                     authProvider.select((e) => e.staffInfo),
-                  );
-    
+                  )?.profileImage ?? "";
+
                   return UserProfileWidget(
                     radius: 18.r,
-                    imageUrl: userData != null ? userData.profileImage : "",
+                    imageUrl: userImage,
                     borderWidth: 1.4,
                   );
                 },
               ),
               10.pw,
-              Text("ABC BUSINESS", style: context.textStyle.displayMedium),
+              Consumer(
+                builder: (context, ref, child) {
+                  final userName = ref.watch(
+                    authProvider.select((e) => e.staffInfo) ,
+                  )?.username ?? "";
+                  return Text(
+                    userName.toUpperCase(),
+                    style: context.textStyle.displayMedium,
+                  );
+                },
+              ),
               Spacer(),
               CustomButtonWidget(
                 height: 30.h,
@@ -69,10 +83,21 @@ class _HomeViewConsumerState extends ConsumerState<HomeView> {
           ),
         ],
       ),
-      body: ListView(
-        padding: EdgeInsets.all(AppTheme.horizontalPadding),
-        controller: widget.scrollController,
-        children: [PendingListingSection(), 30.ph, LiveListingSection()],
+      body: RefreshIndicator.adaptive(
+        onRefresh: () async {
+          ref
+              .read(productProvider.notifier)
+              .getPendingReviewList(limit: 10, skip: 0);
+          ref
+              .read(productProvider.notifier)
+              .getLiveListProducts(limit: 10, skip: 0);
+        },
+        child: ListView(
+          physics: AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.all(AppTheme.horizontalPadding),
+          controller: widget.scrollController,
+          children: [PendingListingSection(), 30.ph, LiveListingSection()],
+        ),
       ),
     );
   }
@@ -91,7 +116,7 @@ class PendingListingSection extends ConsumerWidget {
 
     final response = data.$1;
     final products = data.$2 ?? [];
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -106,11 +131,7 @@ class PendingListingSection extends ConsumerWidget {
               ),
               onPressed: () {
                 AppRouter.push(
-                  SeeAllProductView(
-                    title: "Pending Listings",
-
-                   
-                  ),
+                  SeeAllProductView(title: "Pending Listings"),
                   fun: () {
                     ref
                         .read(productProvider.notifier)
@@ -133,7 +154,7 @@ class PendingListingSection extends ConsumerWidget {
           child: AsyncStateHandler(
             padding: EdgeInsets.zero,
             status: response.status,
-            dataList: products ,
+            dataList: products,
             onRetry: () {
               ref
                   .read(productProvider.notifier)
@@ -144,10 +165,7 @@ class PendingListingSection extends ConsumerWidget {
             itemBuilder: (context, index) => GestureDetector(
               onTap: () {
                 AppRouter.push(
-                  PendingProductDetailView(
-                    
-                    data: products[index],
-                  ),
+                  PendingProductDetailView(data: products[index]),
                   fun: () {
                     ref
                         .read(productProvider.notifier)

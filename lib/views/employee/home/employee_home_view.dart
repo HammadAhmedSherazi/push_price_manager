@@ -32,19 +32,24 @@ class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
             children: [
               Consumer(
                 builder: (context, ref, child) {
-                  final userData = ref.watch(authProvider.select((e)=>e.staffInfo));
+                  final userImage = ref.watch(authProvider.select((e)=>e.staffInfo))?.profileImage ?? "";
                   return UserProfileWidget(
                     radius: 18.r,
-                    imageUrl: userData!.profileImage,
+                    imageUrl: userImage,
                     borderWidth: 1.4,
                   );
                 }
               ),
               10.pw,
               Expanded(
-                child: Text(
-                  "ABC BUSINESS",
-                  style: context.textStyle.displayMedium,
+                child: Consumer(
+                  builder: (context, ref, child) {
+                    final userName = ref.watch(authProvider.select((e)=>e.staffInfo))?.username ?? "";
+                    return Text(
+                      userName.toUpperCase(),
+                      style: context.textStyle.displayMedium,
+                    );
+                  }
                 ),
               ),
 

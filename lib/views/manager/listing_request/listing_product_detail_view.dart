@@ -97,12 +97,14 @@ class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailV
                   ],
                 ),
                 10.ph,
-                ProductTitleWidget(title: "Category", value: "${widget.data.product?.category?.title}"),
-                
-               if(listItem.product!.stores!.isNotEmpty || listItem.product!.store!.storeName.isNotEmpty || (listItem.listingType != "" && listItem.store.storeName.isNotEmpty)  )...[ ProductTitleWidget(
+                 if(listItem.product!.stores!.isNotEmpty || listItem.product!.store!.storeName.isNotEmpty || (listItem.listingType != "" && listItem.store.storeName.isNotEmpty)  )...[ ProductTitleWidget(
                   title: "Store",
                   value:listItem.listingType != "" ?listItem.store.storeName :storeNames,
                 ),],
+                ProductTitleWidget(title: "Category", value: "${widget.data.product?.category?.title}"),
+                
+                ProductTitleWidget(title: "Regular Price", value: "\$${widget.data.product?.price!.toStringAsFixed(2)}"),
+
                 if(listItem.listingType != "")...[
                   ProductTitleWidget(
                   title: "Listing Type",
@@ -110,7 +112,6 @@ class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailV
                 ),
                 ],
                 
-                ProductTitleWidget(title: "Regular Price", value: "\$${widget.data.product?.price!.toStringAsFixed(2)}"),
               ],
             ),
           ),
