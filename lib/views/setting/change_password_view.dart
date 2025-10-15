@@ -25,33 +25,33 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
   Widget build(BuildContext context) {
     return CustomScreenTemplate(
      
-      title: "Change password", child: ListView(
+      title: context.tr("change_password"), child: ListView(
         padding: EdgeInsets.all(AppTheme.horizontalPadding),
         children: [
           GenericPasswordTextField(
             controller: existingTextController,
             
-              hint: "Existing Password",
-              label: "Enter your existing password"
+              hint: context.tr("existing_password"),
+              label: context.tr("enter_your_password")
             
           ),
           10.ph,
           GenericPasswordTextField(
             
               controller: newPassTextController,
-              hint: "New Password",
-              label: "Enter new password"
+              hint: context.tr("new_password"),
+              label: context.tr("new_password")
             
           ),
           10.ph,
           GenericPasswordTextField(
               controller: confirmPassTextController,
-              hint: "Confirm New Password",
-              label: "Enter confimr new password"
+              hint: context.tr("confirm_password"),
+              label: context.tr("confirm_password")
           
           ),
           10.ph,
-          CustomButtonWidget(title: "change password", onPressed: (){})
+          CustomButtonWidget(title: context.tr("change_password_lowercase"), onPressed: (){})
         ],
       ));
   }

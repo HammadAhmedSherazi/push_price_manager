@@ -1,21 +1,25 @@
 import 'export_all.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
-  SharedPreferenceManager.init();
+  await SharedPreferenceManager.init();
    runApp(
     // Adding ProviderScope enables Riverpod for the entire project
     const ProviderScope(child: MyApp()),
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentLocale = ref.watch(localeProvider);
+    
     //Set the fit size (Find your UI design, look at the dimensions of the device screen and fill it in,unit in dp)
     return ScreenUtilInit(
       designSize: const Size(360, 690),
@@ -34,30 +38,22 @@ class MyApp extends StatelessWidget {
           ),
             child: MaterialApp(
               navigatorKey: AppRouter.navKey,
-                //       localizationsDelegates: [
-            
-                //    GlobalMaterialLocalizations.delegate,
-            
-                //    GlobalWidgetsLocalizations.delegate,
-            
-                //    GlobalCupertinoLocalizations.delegate,
-            
-                //  ],
-                 supportedLocales: [
-            
-                   const Locale('en', ""), // English
-            
-                   const Locale('es', ""), // Spanish
-            
-                   // Add more languages here
-            
-                 ],
-            
-                 locale: Locale('en'),
+              localizationsDelegates: const [
+                LocalizationService.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: const [
+                Locale('en', ""), // English
+                Locale('es', ""), // Spanish
+                // Add more languages here
+              ],
+              locale: currentLocale,
               debugShowCheckedModeBanner: false,
               title: 'Push Price Store',
               theme: AppTheme.lightTheme,
-               builder: (context, child) {
+              builder: (context, child) {
                 return MediaQuery(
                   data: MediaQuery.of(context).copyWith(
                     textScaler: const TextScaler.linear(1.0),

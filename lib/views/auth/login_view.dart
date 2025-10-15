@@ -79,12 +79,12 @@ class _LoginViewState extends State<LoginView> {
                   ),
       
                   children: [
-                    TextSpan(text: "Terms & Conditions",  recognizer: TapGestureRecognizer()
+                    TextSpan(text: context.tr("terms_conditions"),  recognizer: TapGestureRecognizer()
             ..onTap = () {
              AppRouter.push(TermConditionsView());
             },),
                     TextSpan(text: "  |  "),
-                    TextSpan(text: "Privacy Policy",  recognizer: TapGestureRecognizer()
+                    TextSpan(text: context.tr("privacy_policy"),  recognizer: TapGestureRecognizer()
             ..onTap = () {
              AppRouter.push(PrivacyPolicyView());
             },),
@@ -95,7 +95,7 @@ class _LoginViewState extends State<LoginView> {
           ),
         ),
         
-        title: "Sign In",
+        title: context.tr("sign_in"),
         
         childrens: [
           TextFormField(
@@ -111,12 +111,12 @@ class _LoginViewState extends State<LoginView> {
                 color: AppColors.secondaryColor,
               ),
       
-              labelText: "Email",
-              hintText: "Enter Email Address",
+              labelText: context.tr("email"),
+              hintText: context.tr("enter_email_address"),
             ),
           ),
           10.ph,
-          GenericPasswordTextField(controller: passwordTextController, label: "Password", hint: "Enter Password",validator: (value) => value?.validatePassword(), ),
+          GenericPasswordTextField(controller: passwordTextController, label: context.tr("password"), hint: context.tr("enter_password"),validator: (value) => value?.validatePassword(), ),
           
           // 10.ph,
           Row(
@@ -132,7 +132,7 @@ class _LoginViewState extends State<LoginView> {
                   },
                 
               ),
-              Text("Remember Me", style: context.textStyle.displayMedium),
+              Text(context.tr("remember_me"), style: context.textStyle.displayMedium),
               Spacer(),
               // TextButton(
               //   onPressed: () {
@@ -153,7 +153,7 @@ class _LoginViewState extends State<LoginView> {
               final authVM = ref.watch(authProvider);
               return CustomButtonWidget(
                 isLoad: authVM.loginApiResponse.status == Status.loading,
-                title: "login", onPressed: () {
+                title: context.tr("sign_in"), onPressed: () {
                 if(_formKey.currentState!.validate()){
                   final prefs = SharedPreferenceManager.sharedInstance;
                   if(rememberMeCheck){

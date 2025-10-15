@@ -12,54 +12,62 @@ class SettingView extends StatefulWidget {
 class _SettingViewState extends State<SettingView> {
   bool notificationOn = false;
   bool travelModeOn = false;
-  final List<MenuDataModel> menuList = [
-    MenuDataModel(
-      title: "Push Notifications",
-      icon: Assets.notificationToggleIcon,
-      onTap: () {},
-    ),
-    // MenuDataModel(
-    //   title: "Travel Mode",
-    //   icon: Assets.travelModeIcon,
-    //   onTap: () {},
-    // ),
-    MenuDataModel(
-      title: "Change Language",
-      icon: Assets.languageIcon,
-      onTap: () {
-        AppRouter.push(ChangeLanguageView());
-      },
-    ),
-    // MenuDataModel(
-    //   title: "Change Password",
-    //   icon: Assets.securityIcon,
-    //   onTap: () {
-    //     AppRouter.push(ChangePasswordView());
-
-    //   },
-    // ),
-    MenuDataModel(
-      title: "Privacy Policy",
-      icon: Assets.privacyIcon,
-      onTap: () {
-        AppRouter.push(PrivacyPolicyView());
-      },
-    ),
-    MenuDataModel(
-      title: "Terms & Conditions",
-      icon: Assets.termConditionIcon,
-      onTap: () {
-        AppRouter.push(TermConditionsView());
-      },
-    ),
-    MenuDataModel(title: "About App", icon: Assets.aboutIcon, onTap: () {
-      AppRouter.push(AboutAppView());
-    }),
-  ];
+  
+  List<MenuDataModel> _getMenuList(BuildContext context) {
+    return [
+      MenuDataModel(
+        title: context.tr("push_notifications"),
+        icon: Assets.notificationToggleIcon,
+        onTap: () {},
+      ),
+      // MenuDataModel(
+      //   title: context.tr("travel_mode"),
+      //   icon: Assets.travelModeIcon,
+      //   onTap: () {},
+      // ),
+      MenuDataModel(
+        title: context.tr("change_language"),
+        icon: Assets.languageIcon,
+        onTap: () {
+          AppRouter.push(ChangeLanguageView());
+        },
+      ),
+      // MenuDataModel(
+      //   title: context.tr("change_password"),
+      //   icon: Assets.securityIcon,
+      //   onTap: () {
+      //     AppRouter.push(ChangePasswordView());
+      //   },
+      // ),
+      MenuDataModel(
+        title: context.tr("privacy_policy"),
+        icon: Assets.privacyIcon,
+        onTap: () {
+          AppRouter.push(PrivacyPolicyView());
+        },
+      ),
+      MenuDataModel(
+        title: context.tr("terms_conditions"),
+        icon: Assets.termConditionIcon,
+        onTap: () {
+          AppRouter.push(TermConditionsView());
+        },
+      ),
+      MenuDataModel(
+        title: context.tr("about_app"), 
+        icon: Assets.aboutIcon, 
+        onTap: () {
+          AppRouter.push(AboutAppView());
+        }
+      ),
+    ];
+  }
+  
   @override
   Widget build(BuildContext context) {
+    final menuList = _getMenuList(context);
     return CustomScreenTemplate(
-      title: "Settings",
+      title: context.tr("settings"),
       child: ListView.separated(
         padding: EdgeInsets.all(AppTheme.horizontalPadding),
         itemBuilder: (context, index) {

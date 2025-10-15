@@ -30,7 +30,7 @@ class _HomeViewConsumerState extends ConsumerState<HomeView> {
     return Scaffold(
       appBar: CustomAppBarWidget(
         height: context.screenheight * 0.15,
-        title: "Home",
+        title: context.tr("home"),
         children: [
           Row(
             children: [
@@ -71,7 +71,7 @@ class _HomeViewConsumerState extends ConsumerState<HomeView> {
                   children: [
                     Icon(Icons.add),
                     Text(
-                      "Listing Request",
+                      context.tr("listing_request"),
                       style: context.textStyle.bodySmall!.copyWith(
                         color: Colors.white,
                       ),
@@ -123,7 +123,7 @@ class PendingListingSection extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Pending Listings", style: context.textStyle.displayMedium),
+            Text(context.tr("pending_listings"), style: context.textStyle.displayMedium),
             TextButton(
               style: ButtonStyle(
                 padding: WidgetStatePropertyAll(EdgeInsets.zero),
@@ -131,7 +131,7 @@ class PendingListingSection extends ConsumerWidget {
               ),
               onPressed: () {
                 AppRouter.push(
-                  SeeAllProductView(title: "Pending Listings"),
+                  SeeAllProductView(title: context.tr("pending_listings")),
                   fun: () {
                     ref
                         .read(productProvider.notifier)
@@ -140,7 +140,7 @@ class PendingListingSection extends ConsumerWidget {
                 );
               },
               child: Text(
-                "See All",
+                context.tr("see_all"),
                 style: context.textStyle.displayMedium!.copyWith(
                   color: AppColors.primaryColor,
                   decoration: TextDecoration.underline,
@@ -203,7 +203,7 @@ class LiveListingSection extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Live Listings", style: context.textStyle.displayMedium),
+                Text(context.tr("live_listings"), style: context.textStyle.displayMedium),
                 TextButton(
                   style: ButtonStyle(
                     padding: WidgetStatePropertyAll(EdgeInsets.zero),
@@ -215,7 +215,7 @@ class LiveListingSection extends StatelessWidget {
                   onPressed: () {
                     AppRouter.push(
                       SeeAllProductView(
-                        title: "Live Listings",
+                        title: context.tr("live_listings"),
 
                         //           , onTap: (){
                         //            AppRouter.push(ProductLiveListingDetailView(
@@ -231,7 +231,7 @@ class LiveListingSection extends StatelessWidget {
                     );
                   },
                   child: Text(
-                    "See All",
+                    context.tr("see_all"),
                     style: context.textStyle.displayMedium!.copyWith(
                       color: AppColors.primaryColor,
                       decoration: TextDecoration.underline,

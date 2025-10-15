@@ -125,7 +125,7 @@ SlideTransition(position: _imageOffset, child: FadeTransition(opacity: _opacity,
            
 ),),
              Spacer(),
-            CustomButtonWidget(title: "GET STARTED", onPressed: (){
+            CustomButtonWidget(title: context.tr("get_started"), onPressed: (){
               AppRouter.pushReplacement(SelectLanguageView());
             })
 

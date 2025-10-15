@@ -45,9 +45,9 @@ class _SignUpViewState extends State<SignUpView> {
                 style: context.textStyle.bodyMedium!,
 
                 children: [
-                  TextSpan(text: "You Already Have An Account?"),
+                  TextSpan(text: context.tr("you_already_have_an_account?")),
                   TextSpan(
-                    text: " Sign In",
+                    text: " ${context.tr("sign_in")}",
                     style: context.textStyle.bodyMedium!.copyWith(
                       color: context.colors.primary,
                     ),
@@ -68,7 +68,7 @@ class _SignUpViewState extends State<SignUpView> {
 
                 children: [
                   TextSpan(
-                    text: "Terms & Conditions",
+                    text: context.tr("terms_conditions"),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         AppRouter.push(TermConditionsView());
@@ -76,7 +76,7 @@ class _SignUpViewState extends State<SignUpView> {
                   ),
                   TextSpan(text: "  |  "),
                   TextSpan(
-                    text: "Privacy Policy",
+                    text: context.tr("privacy_policy"),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         AppRouter.push(PrivacyPolicyView());
@@ -88,7 +88,7 @@ class _SignUpViewState extends State<SignUpView> {
           ],
         ),
       ),
-      title: "Sign Up",
+      title: context.tr("sign_up"),
       childrens: [
         TextFormField(
           controller: emailTextController,
@@ -102,34 +102,34 @@ class _SignUpViewState extends State<SignUpView> {
               color: AppColors.secondaryColor,
             ),
 
-            labelText: "Email",
-            hintText: "Enter Email Address",
+            labelText: context.tr("email"),
+            hintText: context.tr("enter_email_address"),
           ),
         ),
         10.ph,
         GenericPasswordTextField(
           controller: passwordTextController,
-          label: "Password",
-          hint: "Enter Password",
+          label: context.tr("password"),
+          hint: context.tr("enter_password"),
         ),
         10.ph,
         GenericPasswordTextField(
           controller: confirmPasswordTextController,
-          label: "Confirm Password",
-          hint: "Enter Confirm Password",
+          label: context.tr("confirm_password"),
+          hint: context.tr("enter_password"),
         ),
 
         // 10.ph,
         20.ph,
         CustomButtonWidget(
-          title: "sign up",
+          title: context.tr("sign_up"),
           onPressed: () {
             AppRouter.push(OtpView(isSignup: true));
           },
         ),
         10.ph,
         CustomOutlineButtonWidget(
-          title: "Continue with Google",
+          title: context.tr("continue_with_google"),
           onPressed: () {
             AppRouter.pushAndRemoveUntil(NavigationView());
           },
@@ -142,7 +142,7 @@ class _SignUpViewState extends State<SignUpView> {
                 // color: Colors.red,
                 width: context.screenwidth * 0.45,
                 child: Text(
-                  "Continue with Google",
+                  context.tr("continue_with_google"),
                   style: context.textStyle.displayMedium!.copyWith(
                     fontSize: 16.sp,
                   ),
@@ -155,7 +155,7 @@ class _SignUpViewState extends State<SignUpView> {
         if (Platform.isIOS) ...[
           10.ph,
           CustomOutlineButtonWidget(
-            title: "Continue with Google",
+            title: context.tr("continue_with_apple"),
             onPressed: () {
               AppRouter.pushAndRemoveUntil(NavigationView());
             },
@@ -168,7 +168,7 @@ class _SignUpViewState extends State<SignUpView> {
                   // color: Colors.red,
                   width: context.screenwidth * 0.45,
                   child: Text(
-                    "Continue with Apple",
+                    context.tr("continue_with_apple"),
                     style: context.textStyle.displayMedium!.copyWith(
                       fontSize: 16.sp,
                     ),

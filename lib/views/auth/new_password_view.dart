@@ -23,7 +23,7 @@ class _NewPasswordViewState extends State<NewPasswordView> {
   @override
   Widget build(BuildContext context) {
     return AuthScreenTemplateWidget(
-      title: "Forgot Password",
+      title: context.tr("forgot_password"),
       onBackTap: (){
         AppRouter.customback(times: 2);
       },
@@ -31,21 +31,21 @@ class _NewPasswordViewState extends State<NewPasswordView> {
         GenericPasswordTextField(
           controller: passwordTextController,
 
-          label: "Password",
-          hint: "Enter Password",
+          label: context.tr("password"),
+          hint: context.tr("enter_password"),
         ),
         10.ph,
         GenericPasswordTextField(
           controller: confirmPasswordTextController,
 
-          label: "Confirm Password",
-          hint: "Enter Confirm Password",
+          label: context.tr("confirm_password"),
+          hint: context.tr("enter_password"),
         ),
 
         // 10.ph,
         20.ph,
         CustomButtonWidget(
-          title: "confirm password",
+          title: context.tr("confirm_password"),
           onPressed: () {
             AppRouter.customback(times: 3);
           },

@@ -28,7 +28,7 @@ class _HelpFeedbackViewState extends State<HelpFeedbackView> {
             Icon(Icons.check_circle, size: 80, color: Colors.teal),
             20.ph,
             Text(
-              "Thank You",
+              context.tr("thankyou"),
               style: context.textStyle.displayMedium!.copyWith(
                 fontSize: 18.sp,
                 color: AppColors.secondaryColor
@@ -36,14 +36,14 @@ class _HelpFeedbackViewState extends State<HelpFeedbackView> {
             ),
             12.ph,
             Text(
-              "Your feedback has been submitted successfully!",
+              context.tr("your_feedback_has_been_submitted_successfully"),
               textAlign: TextAlign.center,
               style: context.textStyle.bodyMedium!.copyWith(
                 color: const Color.fromARGB(255, 121, 121, 121)
               ),
             ),
             24.ph,
-            CustomButtonWidget(title: "back to home", onPressed: (){
+            CustomButtonWidget(title: context.tr("back_to_home"), onPressed: (){
               AppRouter.customback(times: 3);
             })
           ],
@@ -101,11 +101,11 @@ Future<void> _pickImage() async {
   Widget build(BuildContext context) {
     return CustomScreenTemplate(
       showBottomButton: true,
-      bottomButtonText: "submit",
+      bottomButtonText: context.tr("get_started"),
       onButtonTap: (){
         showThankYouDialog(context);
       },
-      title: "Help & Feedback", child: ListView(
+      title: context.tr("help_and_feedback"), child: ListView(
       padding: EdgeInsets.all(AppTheme.horizontalPadding),
       children: [
         TextFormField(
@@ -113,8 +113,8 @@ Future<void> _pickImage() async {
   FocusScope.of(context).unfocus();
 },
           decoration: InputDecoration(
-            labelText: "Subject",
-            hintText: "Enter Subject"
+            labelText: context.tr("subject"),
+            hintText: context.tr("subject")
           ),
         ),
         10.ph,
@@ -125,8 +125,8 @@ Future<void> _pickImage() async {
           maxLines: 6,
           minLines: 6,
           decoration: InputDecoration(
-            labelText: "Description",
-            hintText: "Type your message here...."
+            labelText: context.tr("description"),
+            hintText: context.tr("type_your_message_here")
           ),
         ),
         20.ph,
@@ -171,7 +171,7 @@ Future<void> _pickImage() async {
             mainAxisSize: MainAxisSize.min,
             children: [
               SvgPicture.asset(Assets.addPlusIcon),
-              Text("Add more", style: context.textStyle.bodySmall,)
+              Text(context.tr("add_more"), style: context.textStyle.bodySmall,)
             ],
           ),
         ),

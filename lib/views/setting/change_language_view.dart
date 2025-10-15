@@ -2,18 +2,26 @@ import 'package:push_price_manager/utils/extension.dart';
 
 import '../../export_all.dart';
 
-class ChangeLanguageView extends StatefulWidget {
+class ChangeLanguageView extends ConsumerStatefulWidget {
   const ChangeLanguageView({super.key});
 
   @override
-  State<ChangeLanguageView> createState() => _ChangeLanguageViewState();
+  ConsumerState<ChangeLanguageView> createState() => _ChangeLanguageViewState();
 }
 
-class _ChangeLanguageViewState extends State<ChangeLanguageView> {
+class _ChangeLanguageViewState extends ConsumerState<ChangeLanguageView> {
   String lang = "en";
+  
+  @override
+  void initState() {
+    super.initState();
+    // Get current language from provider
+    lang = SharedPreferenceManager.sharedInstance.getLangCode();
+  }
+  
   @override
   Widget build(BuildContext context) {
-    return CustomScreenTemplate(title: "Select Language", child: Container(
+    return CustomScreenTemplate(title: context.tr("select_language"), child: Container(
         width: double.infinity,
         height: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: AppTheme.horizontalPadding),
@@ -35,18 +43,20 @@ class _ChangeLanguageViewState extends State<ChangeLanguageView> {
             SelectLanguageWidget(
               title: "Spanish",
               icon: Assets.spainFlagIcon,
-              isSelect: lang == "sp",
+              isSelect: lang == "es",
               onTap: () {
                 setState(() {
-                  lang = "sp";
+                  lang = "es";
                 });
               },
             ),
             20.ph,
            CustomButtonWidget(
-                    title: "save",
+                    title: context.tr("save"),
                     onPressed: () {
-                     AppRouter.back();
+                      // Update language via provider
+                      ref.read(localeProvider.notifier).changeLanguage(lang);
+                      AppRouter.back();
                     },
                   )
           ],

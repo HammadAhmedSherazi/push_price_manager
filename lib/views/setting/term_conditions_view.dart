@@ -7,7 +7,7 @@ class TermConditionsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScreenTemplate(title: "Terms & Conditions", child: ListView(
+    return CustomScreenTemplate(title: context.tr("terms_conditions"), child: ListView(
       padding: EdgeInsets.all(AppTheme.horizontalPadding),
       children: [
         Text(AppConstant.content, style: context.textStyle.bodyMedium,)

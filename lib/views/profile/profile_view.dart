@@ -28,7 +28,7 @@ class _ProfileViewState extends State<ProfileView> {
            
             SizedBox(
               height:context.screenheight * 0.19 ,
-              child: CustomAppBarWidget(height: context.screenheight * 0.15, title: "Profile", children: [])),
+              child: CustomAppBarWidget(height: context.screenheight * 0.15, title: context.tr("profile"), children: [])),
             Positioned(
               top: 90.r,
               child: SizedBox(
@@ -63,38 +63,38 @@ class _ProfileViewState extends State<ProfileView> {
                     children: [
                       Row(
                         children: [
-                          Text("Personal Information", style: context.textStyle.displayMedium,)
+                          Text(context.tr("personal_information"), style: context.textStyle.displayMedium,)
                         ],
                       ),
                       10.ph,
                         ProfileTitleWidget(
-                          title: "Name",
+                          title: context.tr("name"),
                           value: user.username,
                         ),
                        ProfileTitleWidget(
-                          title: "Email Address",
+                          title: context.tr("email_address"),
                           value: user.email,
                         ),
                         ProfileTitleWidget(
-                          title: "Phone Number",
+                          title: context.tr("phone_number"),
                           value: user.phoneNumber,
                         ),
                         ProfileTitleWidget(
-                          title: AppConstant.userType == UserType.manager?"Staff ID" :"Employee ID",
+                          title: AppConstant.userType == UserType.manager? context.tr("staff_id") : context.tr("employee_id"),
                           value: user.staffId.toString(),
                         ),
                         if(AppConstant.userType == UserType.manager)...[
                             10.ph,
                          Row(
                         children: [
-                          Text("Assigned Stores", style: context.textStyle.displayMedium,)
+                          Text(context.tr("assigned_stores"), style: context.textStyle.displayMedium,)
                         ],
                       ),
                       10.ph,
                      for(var i = 0; i<stores.length; i++)...[
-                       ProfileTitleWidget(title: "Store Branch Code / Name", value: stores[i].storeName),
-                      ProfileTitleWidget(title: "Store Address", value: stores[i].storeLocation),
-                      ProfileTitleWidget(title: "Operational Hours", value: stores[i].storeOperationalHours),
+                       ProfileTitleWidget(title: context.tr("store_branch_code_name"), value: stores[i].storeName),
+                      ProfileTitleWidget(title: context.tr("store_address"), value: stores[i].storeLocation),
+                      ProfileTitleWidget(title: context.tr("operational_hours"), value: stores[i].storeOperationalHours),
                       
 
                      ]
@@ -102,9 +102,9 @@ class _ProfileViewState extends State<ProfileView> {
                                  
                         ],
                         if(AppConstant.userType == UserType.employee)...[
-                            ProfileTitleWidget(title: "Store Branch Code / Name", value: stores.first.storeName),
-                      ProfileTitleWidget(title: "Store Address", value: stores.first.storeLocation),
-                      ProfileTitleWidget(title: "Operational Hours", value: stores.first.storeOperationalHours),
+                            ProfileTitleWidget(title: context.tr("store_branch_code_name"), value: stores.first.storeName),
+                      ProfileTitleWidget(title: context.tr("store_address"), value: stores.first.storeLocation),
+                      ProfileTitleWidget(title: context.tr("operational_hours"), value: stores.first.storeOperationalHours),
                     
                     
                         ]

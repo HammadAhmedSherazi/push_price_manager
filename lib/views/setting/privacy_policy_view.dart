@@ -7,7 +7,7 @@ class PrivacyPolicyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScreenTemplate(title: "Privacy Policy", child: ListView(
+    return CustomScreenTemplate(title: context.tr("privacy_policy"), child: ListView(
       padding: EdgeInsets.all(AppTheme.horizontalPadding),
       children: [
         Text(AppConstant.content, style: context.textStyle.bodyMedium,)

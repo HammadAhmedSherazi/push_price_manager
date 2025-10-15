@@ -117,6 +117,7 @@ export './utils/assets.dart';
 export './utils/constant.dart';
 export './utils/router.dart';
 export './utils/theme.dart';
+export './utils/localization_service.dart';
 
 
 //DATA

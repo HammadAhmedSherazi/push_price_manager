@@ -38,7 +38,7 @@ class _CreateProfileViewState extends State<CreateProfileView> {
           AppRouter.pushAndRemoveUntil(NavigationView());
         }
       },
-      title: widget.isEdit!? "Edit Profile": "Create Profile", showBottomButton: true, bottomButtonText: widget.isEdit!?"save" :"continue", child: ListView(
+      title: widget.isEdit!? context.tr("edit_profile"): context.tr("create_profile"), showBottomButton: true, bottomButtonText: widget.isEdit!? context.tr("save") : context.tr("continue"), child: ListView(
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),
       padding: EdgeInsets.symmetric(
@@ -57,8 +57,8 @@ class _CreateProfileViewState extends State<CreateProfileView> {
  FocusScope.of(context).unfocus();
 },
           decoration: InputDecoration(
-            labelText: "Name",
-            hintText: "Enter Name"
+            labelText: context.tr("name"),
+            hintText: context.tr("name")
           ),
         ),
         10.ph,
@@ -69,8 +69,8 @@ class _CreateProfileViewState extends State<CreateProfileView> {
 },
           controller: emailTextController,
           decoration: InputDecoration(
-            labelText: "Email",
-            hintText: "Enter Email",
+            labelText: context.tr("email"),
+            hintText: context.tr("enter_email_address"),
             suffixIcon: Icon(Icons.check_circle_rounded, color: AppColors.secondaryColor,)
           ),
         ),
@@ -95,8 +95,8 @@ CustomPhoneTextfieldWidget(phoneNumberController: phoneTextController, initialCo
   AppRouter.closeKeyboard();
 },
           decoration: InputDecoration(
-            labelText: "Employee ID",
-            hintText: "Enter Employee ID"
+            labelText: context.tr("employee_id"),
+            hintText: context.tr("employee_id")
           ),
         ),
         if(AppConstant.userType == UserType.employee)...[
@@ -107,8 +107,8 @@ CustomPhoneTextfieldWidget(phoneNumberController: phoneTextController, initialCo
  AppRouter.closeKeyboard();
 },
           decoration: InputDecoration(
-            labelText: "Store Branch Code/ Name",
-            hintText: "Enter Store Branch Code/Name"
+            labelText: context.tr("store_branch_code_name"),
+            hintText: context.tr("store_branch_code_name")
           ),
         ),
         10.ph,
@@ -118,8 +118,8 @@ CustomPhoneTextfieldWidget(phoneNumberController: phoneTextController, initialCo
    AppRouter.closeKeyboard();
 },
           decoration: InputDecoration(
-            labelText: "Store Address",
-            hintText: "Enter Store Address"
+            labelText: context.tr("store_address"),
+            hintText: context.tr("store_address")
           ),
         ),
         10.ph,
@@ -129,8 +129,8 @@ CustomPhoneTextfieldWidget(phoneNumberController: phoneTextController, initialCo
   AppRouter.closeKeyboard();
 },
           decoration: InputDecoration(
-            labelText: "Operational Hours",
-            hintText: "Enter Operational Hours"
+            labelText: context.tr("operational_hours"),
+            hintText: context.tr("operational_hours")
           ),
         ),
         ]

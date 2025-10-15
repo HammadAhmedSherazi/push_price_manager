@@ -18,7 +18,6 @@ class _NavigationViewState extends State<NavigationView> {
 
   final ScrollController scrollController = ScrollController();
   final ScrollController drawerScrollController = ScrollController();
-  late final List<BottomDataModel> bottomNavItems ;
 
   @override
   void initState() {
@@ -32,17 +31,20 @@ class _NavigationViewState extends State<NavigationView> {
     //     setState(() => _isBottomBarVisible = true);
     //   }
     // });
-    bottomNavItems = AppConstant.userType == UserType.employee ? [
-    BottomDataModel(title: "Home", icon: Assets.home, child: EmployeeHomeView(scrollController: scrollController ,)),
-    BottomDataModel(title: "Listing Requests", icon: Assets.productRequestIcon, child: EmployeeListRequestView(scrollController: scrollController,)),
-    BottomDataModel(title: "Product Listing", icon: Assets.productListingIcon, child: PendingListingView(scrollController: scrollController,)),
-    BottomDataModel(title: "Profile", icon: Assets.profile, child: ProfileView()),
-  ] :[
-    BottomDataModel(title: "Home", icon: Assets.home, child: HomeView(scrollController: scrollController ,)),
-    BottomDataModel(title: "Pending Listings", icon: Assets.pendingListing, child: PendingListingView(scrollController: scrollController,)),
-    BottomDataModel(title: "Live Listing", icon: Assets.liveListing, child: LiveListingView(scrollController: scrollController,)),
-    BottomDataModel(title: "Profile", icon: Assets.profile, child: ProfileView()),
-  ];
+  }
+  
+  List<BottomDataModel> _getBottomNavItems(BuildContext context) {
+    return AppConstant.userType == UserType.employee ? [
+      BottomDataModel(title: context.tr("home"), icon: Assets.home, child: EmployeeHomeView(scrollController: scrollController ,)),
+      BottomDataModel(title: context.tr("listing_requests"), icon: Assets.productRequestIcon, child: EmployeeListRequestView(scrollController: scrollController,)),
+      BottomDataModel(title: context.tr("product_listing"), icon: Assets.productListingIcon, child: PendingListingView(scrollController: scrollController,)),
+      BottomDataModel(title: context.tr("profile"), icon: Assets.profile, child: ProfileView()),
+    ] :[
+      BottomDataModel(title: context.tr("home"), icon: Assets.home, child: HomeView(scrollController: scrollController ,)),
+      BottomDataModel(title: context.tr("pending_listings"), icon: Assets.pendingListing, child: PendingListingView(scrollController: scrollController,)),
+      BottomDataModel(title: context.tr("live_listings"), icon: Assets.liveListing, child: LiveListingView(scrollController: scrollController,)),
+      BottomDataModel(title: context.tr("profile"), icon: Assets.profile, child: ProfileView()),
+    ];
   }
 
   void showLogoutDialog(BuildContext context) {
@@ -58,10 +60,10 @@ class _NavigationViewState extends State<NavigationView> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Logout', style: context.textStyle.displayMedium!.copyWith(fontSize: 18.sp)),
+                Text(context.tr('logout'), style: context.textStyle.displayMedium!.copyWith(fontSize: 18.sp)),
                 10.ph,
                 Text(
-                  'Are you sure you want to logout?',
+                  context.tr('are_you_sure_you_want_to_logout'),
                   textAlign: TextAlign.center,
                   style: context.textStyle.bodyMedium!.copyWith(color: Colors.grey),
                 ),
@@ -71,7 +73,7 @@ class _NavigationViewState extends State<NavigationView> {
                   children: [
                     Expanded(
                       child: CustomOutlineButtonWidget(
-                        title: "cancel",
+                        title: context.tr("cancel"),
                         onPressed: () => AppRouter.back(),
                       ),
                     ),
@@ -79,7 +81,7 @@ class _NavigationViewState extends State<NavigationView> {
                       child: Consumer(
                         builder: (context, ref, child) {
                           return CustomButtonWidget(
-                            title: "logout",
+                            title: context.tr("logout"),
                             onPressed: () {
                               ref.read(authProvider.notifier).logout();
                             },
@@ -99,75 +101,78 @@ class _NavigationViewState extends State<NavigationView> {
 
  
 
+  List<MenuDataModel> _getMenuData(BuildContext context) {
+    return AppConstant.userType == UserType.employee ? [
+      MenuDataModel(title: context.tr("home"), icon: Assets.menuHomeIcon, onTap: () {
+        AppRouter.back();
+        setState(() {
+          selectIndex = 0;
+        });
+      }),
+      MenuDataModel(title: context.tr("listing_request"), icon: Assets.menuProductRequestIcon, onTap: () {
+        AppRouter.back();
+        setState(() {
+          selectIndex = 1;
+        });
+      }),
+      MenuDataModel(title: context.tr("product_listing"), icon: Assets.menuProductListIcon, onTap: () {
+        AppRouter.back();
+        setState(() {
+          selectIndex = 2;
+        });
+      }),
+      
+      MenuDataModel(title: context.tr("profile"), icon: Assets.menuProfileIcon, onTap: () {
+        AppRouter.back();
+        setState(() {
+          selectIndex = 3;
+        });
+      }),
+      MenuDataModel(title: context.tr("settings"), icon: Assets.menuSettingIcon, onTap: () => AppRouter.push(SettingView())),
+      MenuDataModel(title: context.tr("tutorial"), icon: Assets.menuTutorialIcon, onTap: () {
+        AppRouter.push(TutorialView(isOnboarding: false,));
+      }),
+      MenuDataModel(title: context.tr("help_and_feedback"), icon: Assets.menuHelpIcon, onTap: () => AppRouter.push(HelpFeedbackView())),
+    ]: [
+      MenuDataModel(title: context.tr("home"), icon: Assets.menuHomeIcon, onTap: () {
+        AppRouter.back();
+        setState(() {
+          selectIndex = 0;
+        });
+      }),
+      MenuDataModel(title: context.tr("pending_listings"), icon: Assets.menuPendingListingIcon, onTap: () {
+        AppRouter.back();
+        setState(() {
+          selectIndex = 1;
+        });
+      }),
+      MenuDataModel(title: context.tr("live_listings"), icon: Assets.menuOrderIcon, onTap: () {
+        AppRouter.back();
+        setState(() {
+          selectIndex = 2;
+        });
+      }),
+      //  MenuDataModel(title: "Analytics", icon: Assets.menuAnaylicIcon, onTap: () {
+      //   AppRouter.push(AnalyticsView());
+      // }),
+      MenuDataModel(title: context.tr("profile"), icon: Assets.menuProfileIcon, onTap: () {
+        AppRouter.back();
+        setState(() {
+          selectIndex = 3;
+        });
+      }),
+      MenuDataModel(title: context.tr("settings"), icon: Assets.menuSettingIcon, onTap: () => AppRouter.push(SettingView())),
+      MenuDataModel(title: context.tr("tutorial"), icon: Assets.menuTutorialIcon, onTap: () {
+        AppRouter.push(TutorialView());
+      }),
+      MenuDataModel(title: context.tr("help_and_feedback"), icon: Assets.menuHelpIcon, onTap: () => AppRouter.push(HelpFeedbackView())),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
-     final List<MenuDataModel> menuData = AppConstant.userType == UserType.employee ? [
-
-    MenuDataModel(title: "Home", icon: Assets.menuHomeIcon, onTap: () {
-      AppRouter.back();
-      setState(() {
-        selectIndex = 0;
-      });
-    }),
-    MenuDataModel(title: "Listing Request", icon: Assets.menuProductRequestIcon, onTap: () {
-      AppRouter.back();
-      setState(() {
-        selectIndex = 1;
-      });
-    }),
-     MenuDataModel(title: "Product Listing", icon: Assets.menuProductListIcon, onTap: () {
-      AppRouter.back();
-      setState(() {
-        selectIndex = 2;
-      });
-    }),
-    
-    MenuDataModel(title: "Profile", icon: Assets.menuProfileIcon, onTap: () {
-      AppRouter.back();
-      setState(() {
-        selectIndex = 3;
-      });
-    }),
-    MenuDataModel(title: "Settings", icon: Assets.menuSettingIcon, onTap: () => AppRouter.push(SettingView())),
-    MenuDataModel(title: "Tutorial", icon: Assets.menuTutorialIcon, onTap: () {
-      AppRouter.push(TutorialView(isOnboarding: false,));
-    }),
-    MenuDataModel(title: "Help & Feedback", icon: Assets.menuHelpIcon, onTap: () => AppRouter.push(HelpFeedbackView())),
-  ]: [
-
-    MenuDataModel(title: "Home", icon: Assets.menuHomeIcon, onTap: () {
-      AppRouter.back();
-      setState(() {
-        selectIndex = 0;
-      });
-    }),
-    MenuDataModel(title: "Pending Listings", icon: Assets.menuPendingListingIcon, onTap: () {
-      AppRouter.back();
-      setState(() {
-        selectIndex = 1;
-      });
-    }),
-     MenuDataModel(title: "Live Listings", icon: Assets.menuOrderIcon, onTap: () {
-      AppRouter.back();
-      setState(() {
-        selectIndex = 2;
-      });
-    }),
-    //  MenuDataModel(title: "Analytics", icon: Assets.menuAnaylicIcon, onTap: () {
-    //   AppRouter.push(AnalyticsView());
-    // }),
-    MenuDataModel(title: "Profile", icon: Assets.menuProfileIcon, onTap: () {
-      AppRouter.back();
-      setState(() {
-        selectIndex = 3;
-      });
-    }),
-    MenuDataModel(title: "Settings", icon: Assets.menuSettingIcon, onTap: () => AppRouter.push(SettingView())),
-    MenuDataModel(title: "Tutorial", icon: Assets.menuTutorialIcon, onTap: () {
-      AppRouter.push(TutorialView());
-    }),
-    MenuDataModel(title: "Help & Feedback", icon: Assets.menuHelpIcon, onTap: () => AppRouter.push(HelpFeedbackView())),
-  ];
+    final menuData = _getMenuData(context);
+    final bottomNavItems = _getBottomNavItems(context);
     return Scaffold(
       key: AppRouter.scaffoldkey,
       drawerEnableOpenDragGesture: false,
@@ -217,7 +222,7 @@ class _NavigationViewState extends State<NavigationView> {
                       children: [
                         const Icon(Icons.exit_to_app, color: Colors.white),
                         Text(
-                          "Logout",
+                          context.tr("logout"),
                           style: context.textStyle.headlineMedium!.copyWith(
                             fontSize: 16.sp,
                             color: Colors.white,

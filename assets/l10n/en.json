@@ -146,8 +146,20 @@
   "description": "Description",
   "type_your_message_here": "Type your message here....",
   "add_more": "Add more",
-  "your_feedback_has_been_submitted_successfully": "Your feedback has been submitted successfully!"
-
-
-
+  "your_feedback_has_been_submitted_successfully": "Your feedback has been submitted successfully!",
+  "personal_information": "Personal Information",
+  "email_address": "Email Address",
+  "assigned_stores": "Assigned Stores",
+  "store_branch_code_name": "Store Branch Code / Name",
+  "store_address": "Store Address",
+  "operational_hours": "Operational Hours",
+  "staff_id": "Staff ID",
+  "employee_id": "Employee ID",
+  "didnt_receive_otp": "Didn't receive the OTP?",
+  "resend": "Resend",
+  "listing_requests": "Listing Requests",
+  "pending_listings": "Pending Listings",
+  "live_listings": "Live Listings",
+  "listing_request": "Listing Request",
+  "product_listing": "Product Listing"
 }

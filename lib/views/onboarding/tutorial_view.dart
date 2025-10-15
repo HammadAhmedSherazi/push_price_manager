@@ -14,11 +14,11 @@ class _TutorialViewState extends State<TutorialView> {
   Widget build(BuildContext context) {
     return CustomScreenTemplate(
       showBottomButton: widget.isOnboarding,
-      bottomButtonText: "Next",
+      bottomButtonText: context.tr("next"),
       onButtonTap: (){
         AppRouter.push(LoginView());
       },
-      title: "Tutorial", child: Column(
+      title: context.tr("tutorial"), child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(

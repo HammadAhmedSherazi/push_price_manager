@@ -15,7 +15,7 @@ class NotificationView extends StatelessWidget {
       ),
     );
     return CustomScreenTemplate(
-      title: "Notifications",
+      title: context.tr("notifications"),
       child: ListView.separated(
         padding: EdgeInsets.all(AppTheme.horizontalPadding),
         itemBuilder: (context, index) {
