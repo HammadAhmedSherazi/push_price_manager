@@ -26,7 +26,7 @@ class AuthProvider  extends Notifier<AuthState> {
       
       // Add condition check
       if(response != null && !(response is Map && response.containsKey('detail'))){
-        Helper.showMessage( AppRouter.navKey.currentContext!,message: "Successfully Login!");
+        Helper.showMessage( AppRouter.navKey.currentContext!,message: AppRouter.navKey.currentContext!.tr("successfully_login"));
         
         state = state.copyWith(loginApiResponse: ApiResponse.completed(response['data']));
         final Map<String, dynamic>? user = response["user"];
@@ -44,7 +44,7 @@ class AuthProvider  extends Notifier<AuthState> {
         // Show error message if condition is false
         Helper.showMessage(
           AppRouter.navKey.currentContext!,
-          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Login failed. Please check your credentials and try again.",
+          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
         );
         state = state.copyWith(loginApiResponse: ApiResponse.error());
       }
@@ -92,7 +92,7 @@ class AuthProvider  extends Notifier<AuthState> {
         // Show error message if condition is false
         Helper.showMessage(
           AppRouter.navKey.currentContext!,
-          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to load stores. Please try again.",
+          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
         );
         state = state.copyWith(getStoresApiRes: ApiResponse.error());
       }

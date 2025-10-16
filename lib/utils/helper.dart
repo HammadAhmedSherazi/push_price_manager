@@ -101,13 +101,17 @@ static  String getTypeTitle(String type) {
 }
 static String setType(String type) {
   switch (type) {
+    case "Best By Products":
     case "best_by_products":
       return "BEST_BY_PRODUCTS";
+    case "Instant Sales":
     case "instant_sales":
       return "INSTANT_SALE";
     case "promotional_products":
+    case "Promotional Products":
       return "PROMOTIONAL_PRODUCTS";
     case "weighted_items":
+    case "Weighted Items":
       return "WEIGHTED_ITEMS";
     default:
       return "";

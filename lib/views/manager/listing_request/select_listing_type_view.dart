@@ -43,7 +43,7 @@ List<String> types = [
         }
       },
       showBottomButton: true,
-      title: "Listing Type",
+      title: context.tr("listing_type"),
       child: SizedBox(
         height: double.infinity,
         width: double.infinity,

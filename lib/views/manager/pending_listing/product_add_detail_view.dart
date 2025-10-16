@@ -7,11 +7,13 @@ class ProductAddDetailView extends StatefulWidget {
   final String title;
   final String type;
   final ListingModel data;
+  final bool? isLiveListing;
   const ProductAddDetailView({
     super.key,
     required this.title,
     required this.type,
     required this.data,
+    this.isLiveListing = false,
   });
 
   @override
@@ -26,10 +28,10 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
   late final TextEditingController productBestDateController;
   late final TextEditingController storeTitleController;
   final List<String> types = [
-  "best_by_products",
-  "instant_sales",
-  "weighted_items",
-  "promotional_products",
+    "best_by_products",
+    "instant_sales",
+    "weighted_items",
+    "promotional_products",
   ];
   String selectType = "";
   DateTime? bestByDate;
@@ -116,7 +118,7 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
   Widget build(BuildContext context) {
     return CustomScreenTemplate(
       showBottomButton: true,
-      bottomButtonText: context.tr("next"),
+
       customBottomWidget: Padding(
         padding: EdgeInsetsGeometry.symmetric(
           horizontal: AppTheme.horizontalPadding,
@@ -127,71 +129,97 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
               isLoad:
                   ref.watch(productProvider).updateApiRes.status ==
                   Status.loading,
-              title: "update",
+              title: widget.isLiveListing! ? context.tr("next") : context.tr("update"),
               onPressed: () {
                 // Manual validation for price controllers before form validation
-                if (selectType == Helper.getTypeTitle(Helper.setType(types[2])) && quantity > 0) {
+                if (selectType ==
+                        Helper.getTypeTitle(Helper.setType(types[2])) &&
+                    quantity > 0) {
                   // Check if we have the right number of controllers
                   if (priceControllers.length != quantity) {
                     Helper.showMessage(
                       context,
-                      message: "Please set the quantity first",
+                      message: context.tr('please_set_the_quantity_first'),
                     );
                     return;
                   }
-                  
+
                   // Validate each price controller
                   for (int i = 0; i < priceControllers.length; i++) {
                     final priceText = priceControllers[i]!.text;
                     if (priceText.isEmpty) {
                       Helper.showMessage(
                         context,
-                        message: "Price ${i + 1} is required",
+                        message: "${context.tr('price')} ${i + 1} ${context.tr('is_required')}",
                       );
                       return;
                     }
                     if (double.tryParse(priceText) == null) {
                       Helper.showMessage(
                         context,
-                        message: "Price ${i + 1} must be a valid number",
+                        message: "${context.tr('price')} ${i + 1} ${context.tr('must_be_a_valid_number')}",
                       );
                       return;
                     }
                     if (double.parse(priceText) <= 0) {
                       Helper.showMessage(
                         context,
-                        message: "Price ${i + 1} must be greater than 0",
+                        message: "${context.tr('price')} ${i + 1} ${context.tr('must_be_greater_than_0')}",
                       );
                       return;
                     }
                   }
                 }
-                
+
                 if (_formKey.currentState!.validate()) {
                   Map<String, dynamic> data = {
                     "listing_type": Helper.setType(selectType),
-                    "quantity" : quantity
+                    "quantity": quantity,
                   };
-                  if (selectType == Helper.getTypeTitle(Helper.setType(types[0])) || selectType == Helper.getTypeTitle(Helper.setType(types[2]))) {
+                  if (selectType ==
+                          Helper.getTypeTitle(Helper.setType(types[0])) ||
+                      selectType ==
+                          Helper.getTypeTitle(Helper.setType(types[2]))) {
                     if (bestByDate == null) {
                       Helper.showMessage(
                         context,
-                        message: "Please select a date",
+                        message: context.tr("please_select_a_date"),
                       );
                       return;
                     }
                     data["best_by_date"] = bestByDate!.toIso8601String();
                   }
-                  if (selectType == Helper.getTypeTitle(Helper.setType(types[2]))) {
+                  if (selectType ==
+                      Helper.getTypeTitle(Helper.setType(types[2]))) {
                     data['weighted_items_prices'] = List.generate(
                       priceControllers.length,
                       (index) => num.parse(priceControllers[index]!.text),
                     );
                   }
-                ref.read(productProvider.notifier).updateList(listingId: widget.data.listingId, input: data);
-
+                  if (widget.isLiveListing!) {
+                    ref.read(productProvider.notifier).setListItem(widget.data);
+                    AppRouter.push(
+                      AddDiscountView(
+                        data: widget.data,
+                        isLiveListing: widget.isLiveListing,
+                        isInstant:
+                            selectType ==
+                            Helper.getTypeTitle(Helper.setType(types[1])),
+                        isPromotionalDiscount:
+                            selectType ==
+                            Helper.getTypeTitle(Helper.setType(types[3])),
+                      ),
+                      settings: RouteSettings(arguments: data),
+                    );
+                  } else {
+                    ref
+                        .read(productProvider.notifier)
+                        .updateList(
+                          listingId: widget.data.listingId,
+                          input: data,
+                        );
+                  }
                 }
-
               },
             );
           },
@@ -285,8 +313,9 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                     onChanged: (value) {
                       if (value != null) {
                         setState(() {
-                          selectType = Helper.getTypeTitle(Helper.setType(value));
-                          if (selectType == Helper.getTypeTitle(Helper.setType(types[2]))) {
+                          selectType = value;
+                          if (selectType ==
+                              Helper.getTypeTitle(Helper.setType(types[2]))) {
                             // Clear existing controllers
                             if (priceControllers.isNotEmpty) {
                               priceControllers.clear();
@@ -312,12 +341,17 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                     placeholderText: selectType,
                     options: types.map((type) {
                       return CustomDropDownOption(
-                        value: type,
-                        displayOption: type,
+                        value: Helper.getTypeTitle(Helper.setType(type)),
+                        displayOption: Helper.getTypeTitle(
+                          Helper.setType(type),
+                        ),
                       );
                     }).toList(),
                   ),
-                  if (selectType == Helper.getTypeTitle(Helper.setType(types[0])) || selectType == Helper.getTypeTitle(Helper.setType(types[2])))
+                  if (selectType ==
+                          Helper.getTypeTitle(Helper.setType(types[0])) ||
+                      selectType ==
+                          Helper.getTypeTitle(Helper.setType(types[2])))
                     CustomDateSelectWidget(
                       label: "Date",
                       selectedDate: bestByDate,
@@ -331,7 +365,7 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                   Row(
                     children: [
                       Text(
-                        "Product Quantity",
+                        context.tr("product_quantity"),
                         style: context.textStyle.displayMedium,
                       ),
                     ],
@@ -373,7 +407,9 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                     initialQuantity: quantity,
                     onQuantityChanged: changeQuantity,
                   ),
-                  if (selectType == Helper.getTypeTitle(Helper.setType(types[2])) && quantity > 0) ...[
+                  if (selectType ==
+                          Helper.getTypeTitle(Helper.setType(types[2])) &&
+                      quantity > 0) ...[
                     ...List.generate(
                       priceControllers.length,
                       (index) => TextFormField(

@@ -40,7 +40,7 @@ class _SelectProductViewState extends State<SelectProductView> {
   @override
   Widget build(BuildContext context) {
     return CustomScreenTemplate(
-      title: "Select Product",
+      title: context.tr("select_product"),
       showBottomButton: true,
       onButtonTap: (){
         //  ref
@@ -49,9 +49,9 @@ class _SelectProductViewState extends State<SelectProductView> {
         AppRouter.customback(
                 times: widget.isInstant! ? 5 : 4
               );
-        AppRouter.push(SuccessListingRequestView(message: "Listing is Live!"));
+        AppRouter.push(SuccessListingRequestView(message: context.tr("listing_is_live")));
       },
-      bottomButtonText: "list now",
+      bottomButtonText: context.tr("list_now"),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -71,7 +71,7 @@ class _SelectProductViewState extends State<SelectProductView> {
               padding: EdgeInsets.symmetric(
                 horizontal: AppTheme.horizontalPadding,
               ),
-              child: Text("Selected", style: context.textStyle.displayMedium),
+              child: Text(context.tr( "selected"), style: context.textStyle.displayMedium),
             ),
             10.ph,
             SizedBox(
@@ -122,7 +122,7 @@ class _SelectProductViewState extends State<SelectProductView> {
             padding: EdgeInsets.symmetric(
               horizontal: AppTheme.horizontalPadding,
             ),
-            child: Text(searchTextEditController.text == ""? "Recent" : "Search Result", style: context.textStyle.displayMedium),
+            child: Text(searchTextEditController.text == ""? context.tr("recent") : context.tr("search_result"), style: context.textStyle.displayMedium),
           ),
           10.ph,
           Expanded(

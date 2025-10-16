@@ -68,7 +68,7 @@ class _ListingProductViewState extends State<ListingProductView> {
     return CustomScreenTemplate(
       showBottomButton: true,
 
-      bottomButtonText: "list now",
+      bottomButtonText: context.tr("list_now"),
       customBottomWidget: Padding(
         padding: EdgeInsets.symmetric(horizontal: AppTheme.horizontalPadding),
         child: Consumer(
@@ -77,12 +77,12 @@ class _ListingProductViewState extends State<ListingProductView> {
               isLoad:
                   ref.watch(productProvider).listNowApiResponse.status ==
                   Status.loading,
-              title: "list now",
+              title: context.tr("list_now"),
               onPressed: () {
                 if (quantity == 0) {
                   Helper.showMessage(
                     context,
-                    message: "Please add quantity of product",
+                    message: context.tr('please_add_quantity_of_product'),
                   );
                 } else {
                   if (dateTextController!.text.isEmpty &&
@@ -90,7 +90,7 @@ class _ListingProductViewState extends State<ListingProductView> {
                           widget.type == "Best By Products")) {
                     Helper.showMessage(
                       context,
-                      message: "Please select a date",
+                      message: context.tr('please_select_a_date'),
                     );
                     return;
                   }
@@ -151,7 +151,7 @@ class _ListingProductViewState extends State<ListingProductView> {
                           FocusScope.of(context).unfocus();
                         },
                         controller: dateTextController,
-                        decoration: InputDecoration(hintText: "Best By Date"),
+                        decoration: InputDecoration(hintText: context.tr("best_by_date")),
                         readOnly: true,
                         onTap: () async {
                           DateTime now = DateTime.now();
@@ -192,7 +192,7 @@ class _ListingProductViewState extends State<ListingProductView> {
                     //             ),
                     //           ),
                     Text(
-                      "Product Quantity",
+                      context.tr("product_quantity"),
                       style: context.textStyle.bodyMedium,
                     ),
                     QuantitySelector(
@@ -237,7 +237,7 @@ class _ListingProductViewState extends State<ListingProductView> {
                         FocusScope.of(context).unfocus();
                       },
                       controller: dateTextController,
-                      decoration: InputDecoration(hintText: "Best By Date"),
+                      decoration: InputDecoration(hintText: context.tr("best_by_date")),
                       readOnly: true,
                       onTap: () async {
                         DateTime now = DateTime.now();
@@ -277,7 +277,7 @@ class _ListingProductViewState extends State<ListingProductView> {
                   //               hintText: "Quantity"
                   //             ),
                   //           ),
-                  Text("Product Quantity", style: context.textStyle.bodyMedium),
+                  Text(context.tr("product_quantity"), style: context.textStyle.bodyMedium),
                   QuantitySelector(
                     onQuantityChanged: changeQuantity,
                     initialQuantity: quantity,

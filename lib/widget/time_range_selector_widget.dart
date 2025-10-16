@@ -76,13 +76,13 @@ class _TimeRangePickerDialogState extends State<TimeRangePickerDialog> {
         ElevatedButton(
           onPressed: () {
             if(startTime == null || endTime == null){
-              Helper.showMessage(context, message: "Please selete a time range");
+              Helper.showMessage(context, message: context.tr("please_select_a_time_range"));
               return;
             }
             if (startTime != null && !_isAfter(endTime!, startTime!)) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('End time must be after start time'),
+           SnackBar(
+            content: Text(context.tr("end_time_must_be_after_start_time")),
             backgroundColor: Colors.red,
           ),
         );

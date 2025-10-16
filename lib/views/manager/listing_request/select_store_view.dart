@@ -45,7 +45,7 @@ class _SelectStoreViewState extends ConsumerState<SelectStoreView> {
     final recentStores = providerVM.myStores ?? [];
     final selectedStores = providerVM.selectedStores ?? [];
     return CustomScreenTemplate(
-      title: "Select Store",
+      title: context.tr("select_store"),
       showBottomButton: true,
       customBottomWidget: Padding(
         padding: EdgeInsets.symmetric(horizontal: AppTheme.horizontalPadding),
@@ -57,7 +57,7 @@ class _SelectStoreViewState extends ConsumerState<SelectStoreView> {
               title: "send request",
               onPressed: () {
                 if (selectedStores.isEmpty) {
-                  Helper.showMessage(context, message: "Please select a store");
+                  Helper.showMessage(context, message: context.tr('please_select_a_store'));
                   return;
                 }
                 final route = ModalRoute.of(context);
@@ -111,7 +111,7 @@ class _SelectStoreViewState extends ConsumerState<SelectStoreView> {
               padding: EdgeInsets.symmetric(
                 horizontal: AppTheme.horizontalPadding,
               ),
-              child: Text("Selected", style: context.textStyle.displayMedium),
+              child: Text(context.tr( "selected"), style: context.textStyle.displayMedium),
             ),
             10.ph,
             SizedBox(
@@ -149,8 +149,8 @@ class _SelectStoreViewState extends ConsumerState<SelectStoreView> {
               ),
               child: Text(
                 searchTextEditController.text == ""
-                    ? "Recent"
-                    : "Search Result",
+                    ? context.tr("recent")
+                    : context.tr("search_result"),
                 style: context.textStyle.displayMedium,
               ),
             ),

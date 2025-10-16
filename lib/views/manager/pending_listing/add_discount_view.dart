@@ -7,11 +7,13 @@ class AddDiscountView extends ConsumerStatefulWidget {
   final bool? isPromotionalDiscount;
   final bool? isInstant;
   final ListingModel data;
+  final bool ? isLiveListing;
   const AddDiscountView({
     super.key,
     this.isPromotionalDiscount = false,
     this.isInstant = false,
     required this.data,
+    this.isLiveListing = false
   });
 
   @override
@@ -22,16 +24,18 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
   late final TextEditingController _currentDiscountEditTextController;
   late final TextEditingController _dialyDiscountEditTextController;
   List<String> titles = [
-    'Save Discount For Future Listings',
-    'Save Duration of Listing Start Date in Accordance with the Best By Date for future Listings',
-    'Resume Automatically For The Next Batch',
-  ];
+  'save_discount_for_future_listings',
+  'save_duration_with_best_by_date',
+  'resume_automatically_next_batch',
+];
 
   List<bool> values = [false, false, true];
   bool setDiscount = false;
   @override
   void initState() {
-    Future.microtask(() {
+   
+      Future.microtask(() {
+         if(!widget.isLiveListing!){
       ref
           .read(productProvider.notifier)
           .getSuggestion(
@@ -39,8 +43,14 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
             storeId: widget.data.storeId,
             item: widget.data,
           );
+         }else{
+          ref.read(productProvider.notifier).setGoLiveDate(widget.data.goLiveDate);
+          ref.read(productProvider.notifier).setListItem(widget.data);
+         }
      
     });
+    
+    
 
     _currentDiscountEditTextController = TextEditingController(
       text: widget.data.currentDiscount != 0.0 ? widget.data.currentDiscount.toString(): null
@@ -76,7 +86,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    // if(!setDiscount){
+    if(!widget.isLiveListing!){
     ref.listen(productProvider, (previous, next) {
     final newItem = next.listItem;
     final oldItem = previous!.listItem;
@@ -109,7 +119,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
     
    
   });
-  // }
+  }
     
     final data = ref.watch(productProvider.select((e)=>(e.listItem, e.getSuggestionApiRes)));
     final response = data.$2;
@@ -117,7 +127,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
 
     return Material(
       child: AsyncStateHandler(
-        status: response.status,
+        status: widget.isLiveListing!? Status.completed : response.status,
         dataList: [0],
         itemBuilder: null,
         onRetry: () {
@@ -137,24 +147,31 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
               horizontal: AppTheme.horizontalPadding,
             ),
             child: CustomButtonWidget(
-              title: context.tr("next"),
-              isLoad: widget.isInstant!
-                  ? response.status == Status.loading
+              title:widget.isLiveListing! ?context.tr(widget.isInstant!? "next" : context.tr("update")) : context.tr("next"),
+              isLoad: widget.isLiveListing! && !widget.isInstant!
+                  ? ref.watch(productProvider.select((e)=>e.updateApiRes)).status == Status.loading
                   : false,
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   Map<String, dynamic> data = {};
+                  if(widget.isLiveListing!){
+                      final route = ModalRoute.of(context);
+                  final args = route?.settings.arguments;
+                  if (args is Map<String, dynamic>) {
+                  data = Map<String, dynamic>.from(args);
+                }
+                }
                     if (widget.isPromotionalDiscount!) {
-                      data = {
+                      data.addAll({
                         "save_discount_for_future":
                             item!.saveDiscountForFuture,
                         "go_live_date":  item.goLiveDate!.toIso8601String(),
                         "listing_id": item.listingId,
                         "current_discount": double.parse(_currentDiscountEditTextController.text),
                         "daily_increasing_discount_percent": double.parse(_dialyDiscountEditTextController.text),
-                      };
+                      }) ;
                     } else {
-                      data = {
+                      data.addAll({
                         "save_discount_for_future":
                             item!.saveDiscountForFuture,
                         "save_duration_for_listing":
@@ -165,21 +182,27 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
                         "listing_id": item.listingId,
                         "current_discount": double.parse(_currentDiscountEditTextController.text),
                         "daily_increasing_discount_percent": double.parse(_dialyDiscountEditTextController.text),
-                      };
+                      });
                     }
                   if (widget.isInstant!) {
                     data['hourly_increasing_discount'] = double.parse(_dialyDiscountEditTextController.text);
                     data.remove("daily_increasing_discount_percent");
                     AppRouter.push(ListScheduleCalenderView(
-
+                      isLiveListing: widget.isLiveListing!,
                       data: data,
+                      listData: item,
 
                     ));
                   } else {
-                    
-                    ref
+                    if(widget.isLiveListing!){
+                      ref.read(productProvider.notifier).updateList(listingId: item.listingId, input: data, times: 3);
+                    }
+                    else{
+                      ref
                         .read(productProvider.notifier)
                         .setReview(input: data, times:  3);
+                    }
+                    
                   }
                 }
               },
@@ -206,7 +229,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
                   ],
                   validator: (value) => value?.validateCurrentDiscount(),
                   decoration: InputDecoration(
-                    hintText: "Current Discount",
+                    hintText: context.tr("current_discount"),
                     suffixIcon: Icon(
                       Icons.percent_sharp,
                       color: AppColors.secondaryColor,
@@ -227,7 +250,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
                   ],
                   validator: (value) => value?.validateCurrentDiscount(),
                   decoration: InputDecoration(
-                    hintText: widget.isInstant!?"Hourly Increasing Discoun" :  "Daily Increasing Discount",
+                    hintText: widget.isInstant!?context.tr("hourly_increasing_discount") :  context.tr("daily_increasing_discount"),
                     suffixIcon: Icon(
                       Icons.percent_sharp,
                       color: AppColors.secondaryColor,
@@ -243,7 +266,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
                     const Duration(days: 365),
                   ), // ✅ set a valid future limit
                   validator: (value) => value?.validateDate(),
-                  hintText: "Listing Start Date",
+                  hintText: context.tr('listing_start_date'),
                   onDateSelected: (date) {
                     // ✅ Safe state update after build
                     ref.read(productProvider.notifier).setGoLiveDate(date);
@@ -259,7 +282,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
                     children: [
                       Expanded(
                         child: Text(
-                          titles[index],
+                          context.tr(titles[index]),
                           style: context.textStyle.bodyMedium,
                         ),
                       ),

@@ -29,42 +29,42 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
  List<InfoDataModel> getInfoList(String selectedType) {
   if (selectedType ==  "Best By Products") {
     return [
-      InfoDataModel(title: "Discounted Price", description: "\$${listData.product?.discounted_price}"),
+      InfoDataModel(title: context.tr("discounted_price"), description: "\$${listData.product?.discounted_price}"),
 
-      InfoDataModel(title: "Listing Type", description: selectedType),
-      InfoDataModel(title: "Best By Date", description: Helper.selectDateFormat(listData.bestByDate)),
-      InfoDataModel(title: "Product Quantity", description: "${listData.quantity}"),
-      InfoDataModel(title: "Current Discount", description: "${listData.currentDiscount}%"),
+      InfoDataModel(title: context.tr("listing_type"), description: selectedType),
+      InfoDataModel(title: context.tr("best_by_date"), description: Helper.selectDateFormat(listData.bestByDate)),
+      InfoDataModel(title: context.tr("product_quantity"), description: "${listData.quantity}"),
+      InfoDataModel(title: context.tr("current_discount"), description: "${listData.currentDiscount}%"),
       InfoDataModel(title: "Daily Increasing Discount", description: "${listData.dailyIncreasingDiscountPercent}%"),
-      InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(listData.goLiveDate)),
+      InfoDataModel(title: context.tr("listing_start_date"), description: Helper.selectDateFormat(listData.goLiveDate)),
       
     ];
   } else if (selectedType == "Instant Sales") {
     return [
-      InfoDataModel(title: "Discounted Price", description: "\$${listData.product?.discounted_price}"),
-      InfoDataModel(title: "Listing Type", description: selectedType),
-      InfoDataModel(title: "Product Quantity", description: "${listData.quantity}"),
-      InfoDataModel(title: "Current Discount", description: "${listData.currentDiscount}%"),
-      InfoDataModel(title: "Hourly Increasing Discount", description: "${listData.hourlyIncreasingDiscountPercent}%"),
-      InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(listData.goLiveDate)), 
+      InfoDataModel(title: context.tr("discounted_price"), description: "\$${listData.product?.discounted_price}"),
+      InfoDataModel(title: context.tr("listing_type"), description: selectedType),
+      InfoDataModel(title: context.tr("product_quantity"), description: "${listData.quantity}"),
+      InfoDataModel(title: context.tr("current_discount"), description: "${listData.currentDiscount}%"),
+      InfoDataModel(title: context.tr("hourly_increasing_discount"), description: "${listData.hourlyIncreasingDiscountPercent}%"),
+      InfoDataModel(title: context.tr("listing_start_date"), description: Helper.selectDateFormat(listData.goLiveDate)), 
     ];
   } else if (selectedType == "Weighted Items") {
     return [
-      InfoDataModel(title: "Listing Type", description: selectedType),
-      InfoDataModel(title: "Best By Date", description: Helper.selectDateFormat(listData.bestByDate)),
-      InfoDataModel(title: "Product Quantity", description: "${listData.quantity}"),
+      InfoDataModel(title: context.tr("listing_type"), description: selectedType),
+      InfoDataModel(title: context.tr("best_by_date"), description: Helper.selectDateFormat(listData.bestByDate)),
+      InfoDataModel(title: context.tr("product_quantity"), description: "${listData.quantity}"),
      
       ...List.generate(listData.weightedItemsPrices!.length,(index)=>  InfoDataModel(title: "Price ${index + 1}", description: "\$${listData.weightedItemsPrices![index]}")),      
       InfoDataModel(title: "Average Price", description: "\$${listData.averagePrice}"),
-      InfoDataModel(title: "Current Discount", description: "${listData.currentDiscount}%"),
+      InfoDataModel(title: context.tr("current_discount"), description: "${listData.currentDiscount}%"),
      ];
   } else {
     return [
-      InfoDataModel(title: "Discounted Price", description: "\$${listData.product?.discounted_price}"),
-      InfoDataModel(title: "Listing Type", description: selectedType),
-      InfoDataModel(title: "Product Quantity", description: "${listData.quantity}"),
-      InfoDataModel(title: "Current Discount", description: "${listData.currentDiscount}%"),
-      InfoDataModel(title: "Listing Start Date", description: Helper.selectDateFormat(listData.goLiveDate)), 
+      InfoDataModel(title: context.tr("discounted_price"), description: "\$${listData.product?.discounted_price}"),
+      InfoDataModel(title: context.tr("listing_type"), description: selectedType),
+      InfoDataModel(title: context.tr("product_quantity"), description: "${listData.quantity}"),
+      InfoDataModel(title: context.tr("current_discount"), description: "${listData.currentDiscount}%"),
+      InfoDataModel(title: context.tr("listing_start_date"), description: Helper.selectDateFormat(listData.goLiveDate)), 
     ];
   }
 }
@@ -89,7 +89,7 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
                 final res = ref.watch(productProvider.select((e)=>e.updateApiRes)); 
                 return CustomButtonWidget(
                   isLoad: res.status == Status.loading,
-                  title: listData.status == "APPROVED" ? "PAUSE" : "RESUME", onPressed: (){
+                  title: listData.status == "APPROVED" ? context.tr("pause") : context.tr("resume"), onPressed: (){
                     ref.read(productProvider.notifier).pauseList(listingId: listData.listingId, status: listData.status == "APPROVED"? "PAUSED" : "APPROVED");
                   });
               }
@@ -97,66 +97,66 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
             
               
         
-              // CustomOutlineButtonWidget(title: "edit", onPressed: (){
+              CustomOutlineButtonWidget(title: context.tr("edit"), onPressed: (){
                 
-              //   AppRouter.push(ProductAddDetailView(title: "context.tr("product_listings_list_product")", type: Helper.getTypeTitle(listData.listingType),data: listData,));
+                AppRouter.push(ProductAddDetailView(title: context.tr("product_listings_list_product"), type: Helper.getTypeTitle(listData.listingType),data: listData,isLiveListing: true,), );
               
-              // }),
-  //             CustomButtonWidget(title: "delete", onPressed: (){
-  //               // void showLogoutDialog(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     barrierDismissible: true,
-  //     builder: (context) {
-  //       return Dialog(
-  //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-  //         backgroundColor: const Color(0xFFF2F7FA),
-  //         child: Padding(
-  //           padding: EdgeInsets.all(AppTheme.horizontalPadding),
-  //           child: Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             children: [
-  //               Text('Delete', style: context.textStyle.displayMedium!.copyWith(fontSize: 18.sp)),
-  //               10.ph,
-  //               Text(
-  //                 'Are you sure you want to delete?',
-  //                 textAlign: TextAlign.center,
-  //                 style: context.textStyle.bodyMedium!.copyWith(color: Colors.grey),
-  //               ),
-  //               30.ph,
-  //               Row(
-  //                 spacing: 20,
-  //                 children: [
-  //                   Expanded(
-  //                     child: CustomOutlineButtonWidget(
-  //                       title: "cancel",
-  //                       onPressed: () => AppRouter.back(),
-  //                     ),
-  //                   ),
-  //                   Expanded(
-  //                     child: Consumer(
-  //                       builder: (context, ref, child) {
-  //                         final response = ref.watch(productProvider.select((e)=>e.deleteApiRes));
-  //                         return CustomButtonWidget(
-  //                           title: "Yes",
-  //                           isLoad: response.status == Status.loading,
-  //                           onPressed: () {
-  //                             ref.read(productProvider.notifier).deleteList(listingId: widget.data.listingId);
-  //                           },
-  //                         );
-  //                       }
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // // }
-  //             }, color: Color(0xffB80303),)
+              }),
+              CustomButtonWidget(title: context.tr("delete"), onPressed: (){
+                // void showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          backgroundColor: const Color(0xFFF2F7FA),
+          child: Padding(
+            padding: EdgeInsets.all(AppTheme.horizontalPadding),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(context.tr("delete"), style: context.textStyle.displayMedium!.copyWith(fontSize: 18.sp)),
+                10.ph,
+                Text(
+                  'context.tr("are_you_sure_you_want_to_delete")',
+                  textAlign: TextAlign.center,
+                  style: context.textStyle.bodyMedium!.copyWith(color: Colors.grey),
+                ),
+                30.ph,
+                Row(
+                  spacing: 20,
+                  children: [
+                    Expanded(
+                      child: CustomOutlineButtonWidget(
+                        title: "cancel",
+                        onPressed: () => AppRouter.back(),
+                      ),
+                    ),
+                    Expanded(
+                      child: Consumer(
+                        builder: (context, ref, child) {
+                          final response = ref.watch(productProvider.select((e)=>e.deleteApiRes));
+                          return CustomButtonWidget(
+                            title: "Yes",
+                            isLoad: response.status == Status.loading,
+                            onPressed: () {
+                              ref.read(productProvider.notifier).deleteList(listingId: widget.data.listingId);
+                            },
+                          );
+                        }
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  // }
+              }, color: Color(0xffB80303),)
            
           ],
         ),
@@ -198,12 +198,12 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
                   ],
                 ),
                 10.ph,
-                ProductTitleWidget(title: "Category", value: "${listData.product?.category?.title}"),
+                ProductTitleWidget(title: context.tr("category"), value: "${listData.product?.category?.title}"),
                 ProductTitleWidget(
-                  title: "Store",
+                  title: context.tr("store"),
                   value: storeNames,
                 ),
-                ProductTitleWidget(title: "Regular Price", value: "\$${listData.product?.price}"),
+                ProductTitleWidget(title: context.tr("regular_price"), value: "\$${listData.product?.price}"),
 
                 ...List.generate(getInfoList(Helper.getTypeTitle(listData.listingType)).length, (index)=> ProductTitleWidget(
                   title: getInfoList(Helper.getTypeTitle(listData.listingType))[index].title,
@@ -213,7 +213,7 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
                   10.ph,
                   Row(
                     children: [
-                      Text("Listing Schedule Calender", style: context.textStyle.displayMedium,),
+                      Text(context.tr("listing_schedule_calendar"), style: context.textStyle.displayMedium,),
                     ],
                   ),
                   ...List.generate(listData.schedule!.length, (index) {

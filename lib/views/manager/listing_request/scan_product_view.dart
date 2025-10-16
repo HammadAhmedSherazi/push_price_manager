@@ -35,7 +35,7 @@ class ScanProductView extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Category", style: context.textStyle.bodyMedium!.copyWith(
+                    Text(context.tr("category"), style: context.textStyle.bodyMedium!.copyWith(
                       color: Colors.grey
                     ),),
                     Text("${data.category?.title}", style: context.textStyle.bodyMedium!,),
@@ -51,14 +51,14 @@ class ScanProductView extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Regular Price", style: context.textStyle.bodyMedium!.copyWith(
+                    Text(context.tr("regular_price"), style: context.textStyle.bodyMedium!.copyWith(
                       color: Colors.grey
                     ),),
                     Text("\$${data.price!.toStringAsFixed(2)}", style: context.textStyle.bodyMedium!,),
                   ],
                 ),
                 5.ph,
-                CustomButtonWidget(title: "select product", onPressed: (){
+                CustomButtonWidget(title: context.tr("select_product"), onPressed: (){
                   AppRouter.push(ListingProductDetailView(
                     data: ListingModel(product: data),
                   ));

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:push_price_manager/data/network/api_response.dart';
 import 'package:push_price_manager/export_all.dart';
@@ -139,7 +140,7 @@ class ProductProvider extends Notifier<ProductState> {
         // Show error message if condition is false
         Helper.showMessage(
           AppRouter.navKey.currentContext!,
-          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to get product data. Please try again.",
+          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
         );
         state = state.copyWith(getProductReponse: ApiResponse.error());
       }
@@ -184,7 +185,7 @@ class ProductProvider extends Notifier<ProductState> {
         // Show error message if condition is false
         Helper.showMessage(
           AppRouter.navKey.currentContext!,
-          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to create listing. Please try again.",
+          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
         );
         state = state.copyWith(listNowApiResponse: ApiResponse.error());
       }
@@ -253,7 +254,7 @@ class ProductProvider extends Notifier<ProductState> {
         if (skip == 0) {
           Helper.showMessage(
             AppRouter.navKey.currentContext!,
-            message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to load list request products. Please try again.",
+            message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
           );
         }
         state = state.copyWith(
@@ -331,7 +332,7 @@ class ProductProvider extends Notifier<ProductState> {
         if (skip == 0) {
           Helper.showMessage(
             AppRouter.navKey.currentContext!,
-            message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to load approved products. Please try again.",
+            message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
           );
         }
         state = state.copyWith(
@@ -408,7 +409,7 @@ class ProductProvider extends Notifier<ProductState> {
         if (skip == 0) {
           Helper.showMessage(
             AppRouter.navKey.currentContext!,
-            message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to load pending review list. Please try again.",
+            message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
           );
         }
         state = state.copyWith(
@@ -483,7 +484,7 @@ class ProductProvider extends Notifier<ProductState> {
         if (skip == 0) {
           Helper.showMessage(
             AppRouter.navKey.currentContext!,
-            message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to load live products. Please try again.",
+            message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
           );
         }
         state = state.copyWith(
@@ -575,12 +576,12 @@ class ProductProvider extends Notifier<ProductState> {
       if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(setReviewApiRes: ApiResponse.completed(response));
         AppRouter.customback(times: times);
-        AppRouter.push(SuccessListingRequestView(message: "Listing is Live!"));
+        AppRouter.push(SuccessListingRequestView(message: AppRouter.navKey.currentContext!.tr("listing_is_live")));
       } else {
         // Show error message if condition is false
         Helper.showMessage(
           AppRouter.navKey.currentContext!,
-          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to set review. Please try again.",
+          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
         );
         state = state.copyWith(setReviewApiRes: ApiResponse.error());
       }
@@ -660,7 +661,7 @@ class ProductProvider extends Notifier<ProductState> {
         // Show error message if condition is false
         Helper.showMessage(
           AppRouter.navKey.currentContext!,
-          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : "Failed to update list request. Please try again.",
+          message: (response is Map && response.containsKey('detail')) ? response['detail'] as String : AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
         );
         state = state.copyWith(listNowApiResponse: ApiResponse.error());
       }
@@ -689,14 +690,14 @@ class ProductProvider extends Notifier<ProductState> {
       if (response != null && !(response is Map && response.containsKey('detail'))) {
          Helper.showMessage(
         AppRouter.navKey.currentContext!,
-        message: "Successfully List Deleted",
+        message: AppRouter.navKey.currentContext!.tr("successfully_list_deleted"),
       );
         AppRouter.customback(times:2);
         state = state.copyWith(deleteApiRes: ApiResponse.completed(response));
       } else {
          Helper.showMessage(
         AppRouter.navKey.currentContext!,
-        message: "Successfully List Deleted",
+        message: AppRouter.navKey.currentContext!.tr("successfully_list_deleted"),
       );
         AppRouter.customback(times:2);
         state = state.copyWith(deleteApiRes: ApiResponse.completed(response));
@@ -721,8 +722,10 @@ class ProductProvider extends Notifier<ProductState> {
   FutureOr<void> updateList({
     required int listingId,
     required Map<String, dynamic> input,
+    int? times
   }) async {
     try {
+     
       state = state.copyWith(updateApiRes: ApiResponse.loading());
       final Map<String, dynamic>? response = await MyHttpClient.instance.put(
         AppConstant.userType == UserType.employee
@@ -733,20 +736,26 @@ class ProductProvider extends Notifier<ProductState> {
       
       // Add condition check
       if (response != null && !response.containsKey('detail')) {
-        ListingModel data = ListingModel.fromJson(response);
-        state = state.copyWith(updateApiRes: ApiResponse.completed(response),listItem: data);
+       
         // setListItem();
         
         if (AppConstant.userType == UserType.manager) {
-          AppRouter.customback(times: 1); 
+          AppRouter.customback(times: times?? 1); 
+          AppRouter.push(
+            SuccessListingRequestView(
+              message: AppRouter.navKey.currentContext!.tr("product_listing_edit_successful"),
+            ),
+          );
         } else {
           AppRouter.customback(times: 2);
           AppRouter.push(
             SuccessListingRequestView(
-              message: "Product Listing Edit Successful!",
+              message: AppRouter.navKey.currentContext!.tr("product_listing_edit_successful"),
             ),
           );
         }
+         ListingModel data = ListingModel.fromJson(response);
+        state = state.copyWith(updateApiRes: ApiResponse.completed(response),listItem: data);
       } else {
         // Show error message if condition is false
         Helper.showMessage(
@@ -775,7 +784,7 @@ class ProductProvider extends Notifier<ProductState> {
       if(response != null && !response.containsKey('detail')){
          ListingModel data = ListingModel.fromJson(response);
         state = state.copyWith(updateApiRes: ApiResponse.completed(response),listItem: data);
-        Helper.showMessage(AppRouter.navKey.currentContext!, message: "Successfully Update Status!");
+        Helper.showMessage(AppRouter.navKey.currentContext!, message: AppRouter.navKey.currentContext!.tr("successfully_update_status"));
       }
       else{
          Helper.showMessage(
@@ -792,5 +801,6 @@ class ProductProvider extends Notifier<ProductState> {
 
 final productProvider =
     NotifierProvider.autoDispose<ProductProvider, ProductState>(
+      
       ProductProvider.new,
     );

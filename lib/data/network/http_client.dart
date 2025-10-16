@@ -429,7 +429,7 @@ class MyHttpClient extends BaseApiServices {
       case 400:
         Helper.showMessage( AppRouter.navKey.currentContext!,message: 
           json.decode(response.body.toString())['detail']??
-              "Something went wrong!",
+              AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
         );
         throw BadRequestException(
           response.statusCode,
@@ -438,7 +438,7 @@ class MyHttpClient extends BaseApiServices {
       case 401:
         String msg =
             json.decode(response.body.toString())['detail'] ??
-            "Something went wrong!";
+            AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again");
         
         Helper.showMessage( AppRouter.navKey.currentContext!,message: msg);
         
@@ -454,13 +454,13 @@ class MyHttpClient extends BaseApiServices {
           SharedPreferenceManager.sharedInstance.clearAll();
 
           AppRouter.pushAndRemoveUntil(const LoginView());
-          Helper.showMessage( AppRouter.navKey.currentContext!,message: "Please login again!");
+          Helper.showMessage( AppRouter.navKey.currentContext!,message: AppRouter.navKey.currentContext!.tr("please_login_again"));
         }
         else {
           SharedPreferenceManager.sharedInstance.clearAll();
 
           AppRouter.pushAndRemoveUntil(const LoginView());
-          Helper.showMessage( AppRouter.navKey.currentContext!,message: "Please login again!");
+          Helper.showMessage( AppRouter.navKey.currentContext!,message: AppRouter.navKey.currentContext!.tr("please_login_again"));
         } 
         }
         
@@ -472,7 +472,7 @@ class MyHttpClient extends BaseApiServices {
         Helper.showMessage(
            AppRouter.navKey.currentContext!,message: 
           json.decode(response.body.toString())['detail'] ??
-              "Something went wrong!",
+              AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
         );
         throw UnauthorisedException(
           response.statusCode,
@@ -483,14 +483,14 @@ class MyHttpClient extends BaseApiServices {
         Helper.showMessage(
            AppRouter.navKey.currentContext!,message: 
           json.decode(response.body.toString())['detail'] ??
-              "Something went wrong!",
+              AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
         );
         if (json.decode(response.body.toString())['detail'] ==
             "User Not Found") {
           SharedPreferenceManager.sharedInstance.clearAll();
 
           AppRouter.pushAndRemoveUntil(const LoginView());
-          Helper.showMessage( AppRouter.navKey.currentContext!,message: "Please login again!");
+          Helper.showMessage( AppRouter.navKey.currentContext!,message: AppRouter.navKey.currentContext!.tr("please_login_again"));
         }
         throw RequestTimeOutException(
           response.statusCode,
@@ -500,7 +500,7 @@ class MyHttpClient extends BaseApiServices {
         Helper.showMessage(
            AppRouter.navKey.currentContext!,message: 
           json.decode(response.body.toString())['detail'] ??
-              "Something went wrong!",
+              AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
         );
         throw UnprocessableContent(
           response.statusCode,
@@ -509,7 +509,7 @@ class MyHttpClient extends BaseApiServices {
       case 423:
         Helper.showMessage( AppRouter.navKey.currentContext!,message: 
           json.decode(response.body.toString())['detail'] ??
-              "Something went wrong!",
+              AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
         );
         throw UnauthorisedException(
           response.statusCode,
@@ -520,17 +520,17 @@ class MyHttpClient extends BaseApiServices {
         Helper.showMessage(
           AppRouter.navKey.currentContext!,message: 
           json.decode( response.body.toString())['detail'] ??
-              "Something went wrong!",
+              AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
         );
         throw ServerException(response.statusCode, "Server Error");
       default:
-        Helper.showMessage( AppRouter.navKey.currentContext!,message: "Something went wrong!");
+        Helper.showMessage( AppRouter.navKey.currentContext!,message: AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"));
         throw FetchDataException(response.statusCode, response.body.toString());
     }
   }
 
   SocketConnectionError _socketError() {
-    Helper.showMessage( AppRouter.navKey.currentContext!,message: "No Internet Connection");
+    Helper.showMessage( AppRouter.navKey.currentContext!,message: AppRouter.navKey.currentContext!.tr("no_internet_connection"));
     return SocketConnectionError(
       800,
       json.encode({"message": "No Internet Connection"}),

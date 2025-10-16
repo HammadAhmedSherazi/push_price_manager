@@ -4,7 +4,9 @@ import '../../../export_all.dart';
 
 class ListScheduleCalenderView extends StatefulWidget {
   final Map<String, dynamic> data;
-  const ListScheduleCalenderView({super.key, required this.data});
+  final bool isLiveListing;
+  final ListingModel listData;
+  const ListScheduleCalenderView({super.key, required this.data, required this.isLiveListing, required this.listData });
 
   @override
   State<ListScheduleCalenderView> createState() =>
@@ -25,11 +27,28 @@ class _ListScheduleCalenderViewState extends State<ListScheduleCalenderView> {
   late List<CalenderDataModel> calendarList;
   @override
   void initState() {
-    calendarList = weekDays
+    if(widget.isLiveListing && widget.listData.schedule!.isNotEmpty){
+      calendarList = weekDays.map((day) {
+    final schedule = widget.listData.schedule!.firstWhere(
+      (item) => item.day == day.toLowerCase(),
+      orElse: () => CalenderDataModel(day: day, startTime: null, endTime: null, isSelect: false),
+    );
+    return CalenderDataModel(
+      day: day,
+      startTime: schedule.startTime,
+      endTime: schedule.endTime,
+      isSelect: schedule.startTime != null && schedule.endTime != null
+    );
+  }).toList();
+    }
+    else{
+      calendarList = weekDays
         .map(
           (day) => CalenderDataModel(day: day, startTime: null, endTime: null),
         )
         .toList();
+    }
+    
     super.initState();
   }
 
@@ -44,7 +63,7 @@ class _ListScheduleCalenderViewState extends State<ListScheduleCalenderView> {
     final result = await showDialog<Map<String, TimeOfDay?>>(
       context: context,
       builder: (context) =>
-          const TimeRangePickerDialog(title: 'Set Working Hours'),
+           TimeRangePickerDialog(title: 'Set Timing', initialStart: calendarList[index].startTime, initialEnd:calendarList[index].endTime ,),
     );
 
     if (result != null) {
@@ -63,19 +82,22 @@ class _ListScheduleCalenderViewState extends State<ListScheduleCalenderView> {
   Widget build(BuildContext context) {
     return CustomScreenTemplate(
       showBottomButton: true,
-      bottomButtonText: context.tr("next"),
+      
       customBottomWidget: Padding(
         padding: EdgeInsets.symmetric(horizontal: AppTheme.horizontalPadding),
         child: Consumer(
           builder: (context, ref, child) {
             final isLoad =
-                ref
+              widget.isLiveListing? ref
+                    .watch(productProvider.select((e) => e.updateApiRes))
+                    .status ==
+                Status.loading: ref
                     .watch(productProvider.select((e) => e.setReviewApiRes))
                     .status ==
-                Status.loading;
+                Status.loading  ;
             return CustomButtonWidget(
               isLoad: isLoad,
-              title: "list now",
+              title:widget.isLiveListing?context.tr("update"): context.tr("list_now"),
               onPressed: () {
                 final list = calendarList.where((e) => e.isSelect).toList();
                 if (list.isNotEmpty) {
@@ -95,13 +117,19 @@ class _ListScheduleCalenderViewState extends State<ListScheduleCalenderView> {
                       item.day.toLowerCase(): item.toJson(),
                   };
                   data["weekly_schedule"] = jsonOutput;
-                  ref
+                  if(widget.isLiveListing){
+                    ref.read(productProvider.notifier).updateList(listingId: widget.listData.listingId, input: data, times: 2);
+                  }
+                  else{
+                    ref
                       .read(productProvider.notifier)
                       .setReview(input: data, times: 4);
+                  }
+                  
                 } else {
                   Helper.showMessage(
                     context,
-                    message: "Please select any day of schedule",
+                    message: context.tr('please_select_any_day_of_schedule'),
                   );
                 }
               },
@@ -112,7 +140,7 @@ class _ListScheduleCalenderViewState extends State<ListScheduleCalenderView> {
       onButtonTap: () {
         // AppRouter.push(SelectProductView(isInstant: true,));
       },
-      title: "Listing Schedule Calender",
+      title: context.tr("listing_schedule_calendar"),
       child: Padding(
         padding: EdgeInsets.all(AppTheme.horizontalPadding),
         child: SingleChildScrollView(
@@ -122,7 +150,7 @@ class _ListScheduleCalenderViewState extends State<ListScheduleCalenderView> {
               Row(
                 children: [
                   Text(
-                    "Listing Schedule Calender",
+                    context.tr("listing_schedule_calendar"),
                     style: context.textStyle.displayMedium,
                   ),
                 ],

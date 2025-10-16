@@ -98,16 +98,16 @@ class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailV
                 ),
                 10.ph,
                  if(listItem.product!.stores!.isNotEmpty || listItem.product!.store!.storeName.isNotEmpty || (listItem.listingType != "" && listItem.store.storeName.isNotEmpty)  )...[ ProductTitleWidget(
-                  title: "Store",
+                  title: context.tr("store"),
                   value:listItem.listingType != "" ?listItem.store.storeName :storeNames,
                 ),],
-                ProductTitleWidget(title: "Category", value: "${widget.data.product?.category?.title}"),
+                ProductTitleWidget(title: context.tr("category"), value: "${widget.data.product?.category?.title}"),
                 
-                ProductTitleWidget(title: "Regular Price", value: "\$${widget.data.product?.price!.toStringAsFixed(2)}"),
+                ProductTitleWidget(title: context.tr("regular_price"), value: "\$${widget.data.product?.price!.toStringAsFixed(2)}"),
 
                 if(listItem.listingType != "")...[
                   ProductTitleWidget(
-                  title: "Listing Type",
+                  title: context.tr("listing_type"),
                   value: Helper.getTypeTitle(listItem.listingType),
                 ),
                 ],

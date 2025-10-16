@@ -55,7 +55,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
             if (AppConstant.userType == UserType.employee &&
                 widget.data.status == "PENDING_MANAGER_REVIEW")
               CustomButtonWidget(
-                title: "edit",
+                title: context.tr("edit"),
                 onPressed: () {
                   AppRouter.push(
                     ProductAddDetailView(
@@ -69,7 +69,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
             if (AppConstant.userType == UserType.manager &&
                 widget.data.status == "PENDING_MANAGER_REVIEW")
               CustomOutlineButtonWidget(
-                title: "edit",
+                title: context.tr("edit"),
                 onPressed: () {
                 
                   AppRouter.push(
@@ -83,7 +83,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
               ),
             if (widget.data.status == "PENDING_MANAGER_REVIEW")
               CustomButtonWidget(
-                title: "delete",
+                title: context.tr("delete"),
                 onPressed: () {
                   showDialog(
                     context: context,
@@ -106,7 +106,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                               ),
                               10.ph,
                               Text(
-                                'Are you sure you want to delete?',
+                                'context.tr("are_you_sure_you_want_to_delete")',
                                 textAlign: TextAlign.center,
                                 style: context.textStyle.bodyMedium!.copyWith(
                                   color: Colors.grey,
@@ -204,11 +204,11 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                 ),
                 10.ph,
                 ProductTitleWidget(
-                  title: "Category",
+                  title: context.tr("category"),
                   value: "${listItem.product?.category?.title}",
                 ),
                 ProductTitleWidget(
-                  title: "Store",
+                  title: context.tr("store"),
                   value: storeNames,
                 ),
                 // ProductTitleWidget(
@@ -216,18 +216,18 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                 //   value: "${data.product?.description}",
                 // ),
                 ProductTitleWidget(
-                  title: "Regular Price",
+                  title: context.tr("regular_price"),
                   value: "\$${listItem.product?.price?.toStringAsFixed(2)}",
                 ),
-                ProductTitleWidget(title: "Listing Type", value: Helper.getTypeTitle(listItem.listingType)),
+                ProductTitleWidget(title: context.tr("listing_type"), value: Helper.getTypeTitle(listItem.listingType)),
                 if (type.toLowerCase().contains("best") ||
                     type.toLowerCase().contains("weighted"))
                   ProductTitleWidget(
-                    title: "Best by Date",
+                    title: context.tr("best_by_date"),
                     value: Helper.selectDateFormat(listItem.bestByDate),
                   ),
                 ProductTitleWidget(
-                  title: "Product Quantity",
+                  title: context.tr("product_quantity"),
                   value: "${listItem.quantity}",
                 ),
                 if (type == "Weighted Items" &&
