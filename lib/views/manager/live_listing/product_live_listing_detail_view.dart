@@ -119,7 +119,7 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
                 Text(context.tr("delete"), style: context.textStyle.displayMedium!.copyWith(fontSize: 18.sp)),
                 10.ph,
                 Text(
-                  'context.tr("are_you_sure_you_want_to_delete")',
+                  context.tr("are_you_sure_you_want_to_delete"),
                   textAlign: TextAlign.center,
                   style: context.textStyle.bodyMedium!.copyWith(color: Colors.grey),
                 ),
@@ -225,7 +225,7 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
                   10.ph,
                   Row(
                     children: [
-                      Expanded(child: Text("Save Discount For Future Listings")),
+                      Expanded(child: Text(context.tr('save_discount_for_future_listings'))),
                       Icon(Icons.check_box_rounded, color: AppColors.secondaryColor,)
                     ],
                   )

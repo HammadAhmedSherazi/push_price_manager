@@ -106,7 +106,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                               ),
                               10.ph,
                               Text(
-                                'context.tr("are_you_sure_you_want_to_delete")',
+                                context.tr("are_you_sure_you_want_to_delete"),
                                 textAlign: TextAlign.center,
                                 style: context.textStyle.bodyMedium!.copyWith(
                                   color: Colors.grey,
