@@ -23,7 +23,7 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
   
     final categories =
         ref.watch(authProvider.select((e) => e.categories)) ?? [];
-   
+   final response = ref.watch(authProvider.select((e)=> e.getCategoriesApiResponse));
     showModalBottomSheet(
       context: context,
       showDragHandle: true,
@@ -48,58 +48,28 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
                 ),
               ),
 
-              SizedBox(
-                height: 85.r,
-                child: GridView.builder(
-                  padding: EdgeInsets.zero,
-                  scrollDirection: Axis.horizontal,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1, // Only 1 row vertically
-                    mainAxisSpacing: 2.r,
-                    crossAxisSpacing: 5.r,
-                    childAspectRatio: 1.2, // Keep boxes square
-                  ),
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    final category = categories[index];
-                    final isSelect = category.id == selectCategoryId;
-                    return GestureDetector(
-                      onTap: (){
-                        setState(() {
-                          if(isSelect){
-                            selectCategoryId = -1;
-                          }
-                          else{
-                          selectCategoryId = category.id!;
-
-                          }
-                        });
-                      },
-                      child: Column(
-                        // spacing: 10,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CircleAvatar(
-                            radius: 30.r,
-                            backgroundColor:isSelect  ? null : AppColors.primaryAppBarColor ,
-                            child: DisplayNetworkImage(
-                              width: 30.r,
-                              height: 30.r,
-                              imageUrl: category.icon,
-                            ),
-                          ),
-                          Text(
-                            category.title,
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            style: context.textStyle.bodyMedium,
-                          ),
-                        ],
-                      ),
-                    );
+              CategoryDisplayGenericWidget(
+                  response: response,
+                  selectedCategoryId: selectCategoryId,
+                  categories: categories,
+                  onScrollFun: () {
+                    final skip = ref.watch(authProvider.select((e)=>e.categoriesSkip)) ?? 0;
+                    if(skip > 0){
+                      ref.read(authProvider.notifier).getCategories(limit: 5, skip: skip);
+                    }
+                    
                   },
+                  onTap: (category) {
+                    setState((){
+                      selectCategoryId = selectCategoryId == category.id ? -1 : category.id!; 
+                    });
+                  },
+                  onRetryFun: () {
+                    ref.read(authProvider.notifier).getCategories(limit: 10, skip: 0);
+                  },
+
                 ),
-              ),
+             
              ],
           ),
         )

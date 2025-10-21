@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:push_price_manager/utils/extension.dart';
+import 'package:push_price_manager/widget/store_display_generic_widget.dart';
 
 import '../../../export_all.dart';
 
@@ -26,10 +27,12 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
   int selectCategoryId = -1;
   int selectStoreId = -1;
   void _showCategoriesModal(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(authProvider.select((e) => (e.categories, e.myStores)));
+    final data = ref.watch(authProvider.select((e) => (e.categories, e.myStores, e.getCategoriesApiResponse, e.getStoresApiRes)));
     final categories =
         data.$1 ?? [];
     final stores = data.$2 ?? [];
+    final response1 =  data.$3;
+    final response2 = data.$4;
     showModalBottomSheet(
       context: context,
       showDragHandle: true,
@@ -54,58 +57,28 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                 ),
               ),
 
-              SizedBox(
-                height: 85.r,
-                child: GridView.builder(
-                  padding: EdgeInsets.zero,
-                  scrollDirection: Axis.horizontal,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1, // Only 1 row vertically
-                    mainAxisSpacing: 2.r,
-                    crossAxisSpacing: 5.r,
-                    childAspectRatio: 1.2, // Keep boxes square
-                  ),
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    final category = categories[index];
-                    final isSelect = category.id == selectCategoryId;
-                    return GestureDetector(
-                      onTap: (){
-                        setState(() {
-                          if(isSelect){
-                            selectCategoryId = -1;
-                          }
-                          else{
-                          selectCategoryId = category.id!;
-
-                          }
-                        });
-                      },
-                      child: Column(
-                        // spacing: 10,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CircleAvatar(
-                            radius: 30.r,
-                            backgroundColor:isSelect  ? null : AppColors.primaryAppBarColor ,
-                            child: DisplayNetworkImage(
-                              width: 30.r,
-                              height: 30.r,
-                              imageUrl: category.icon,
-                            ),
-                          ),
-                          Text(
-                            category.title,
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            style: context.textStyle.bodyMedium,
-                          ),
-                        ],
-                      ),
-                    );
+               CategoryDisplayGenericWidget(
+                  response: response1,
+                  selectedCategoryId: selectCategoryId,
+                  categories: categories,
+                  onScrollFun: () {
+                    final skip = ref.watch(authProvider.select((e)=>e.categoriesSkip)) ?? 0;
+                    if(skip > 0){
+                      ref.read(authProvider.notifier).getCategories(limit: 5, skip: skip);
+                    }
+                    
                   },
+                  onTap: (category) {
+                    setState((){
+                      selectCategoryId = selectCategoryId == category.id ? -1 : category.id!; 
+                    });
+                  },
+                  onRetryFun: () {
+                    ref.read(authProvider.notifier).getCategories(limit: 10, skip: 0);
+                  },
+
                 ),
-              ),
+             
               if(AppConstant.userType == UserType.manager)...[
                  10.ph,
               Text(
@@ -115,54 +88,13 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                 ),
               ),
 
-              SizedBox(
-                height: 85.r,
-                child: GridView.builder(
-                  padding: EdgeInsets.zero,
-                  scrollDirection: Axis.horizontal,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1, // Only 1 row vertically
-                    mainAxisSpacing: 2.r,
-                    crossAxisSpacing: 5.r,
-                    childAspectRatio: 1.2, // Keep boxes square
-                  ),
-                  itemCount: stores.length,
-                  itemBuilder: (context, index) {
-                    final store = stores[index];
-                    final isSelect = store.storeId == selectStoreId;
-                    return GestureDetector(
-                      onTap: (){
-                        setState(() {
-                          if(isSelect){
-                            selectStoreId = -1;
-                          }
-                          else{
-                            selectStoreId = store.storeId;
-                          }
-                        });
-                      },
-                      child: Column(
-                        // spacing: 10,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CircleAvatar(
-                            radius: 30.r,
-                            backgroundColor: isSelect ? null : AppColors.primaryAppBarColor ,
-                            child: Image.asset(Assets.store, width: 40, height: 40,),
-                          ),
-                          Text(
-                            store.storeName,
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            style: context.textStyle.bodyMedium,
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-           
+             StoreDisplayGenericWidget(response: response2, selectedStoreId: selectStoreId, stores: stores, onTap: (store){
+              setState((){
+                selectStoreId = store.storeId == selectStoreId ? -1: store.storeId;
+              });
+             }, onRetryFun: (){
+              ref.read(authProvider.notifier).getMyStores();
+             })
               ],
               ],
           ),
