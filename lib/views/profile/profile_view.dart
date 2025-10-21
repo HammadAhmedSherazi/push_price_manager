@@ -93,8 +93,8 @@ class _ProfileViewState extends State<ProfileView> {
                       10.ph,
                      for(var i = 0; i<stores.length; i++)...[
                        ProfileTitleWidget(title: context.tr("store_branch_code_name"), value: stores[i].storeName),
-                      ProfileTitleWidget(title: context.tr("store_address"), value: stores[i].storeLocation),
-                      ProfileTitleWidget(title: context.tr("operational_hours"), value: stores[i].storeOperationalHours),
+                      ProfileTitleWidget(title: context.tr("store_address"), value: stores[i].storeLocation, showOutline: false,),
+                      ProfileTitleWidget(title: context.tr("operational_hours"), value: stores[i].storeOperationalHours, showOutline: false,),
                       
 
                      ]
@@ -132,10 +132,12 @@ class _ProfileViewState extends State<ProfileView> {
 class ProfileTitleWidget extends StatelessWidget {
   final String title;
   final String value;
+  final bool showOutline;
   const ProfileTitleWidget({
     super.key,
     required this.title,
-    required this.value
+    required this.value,
+    this.showOutline = true
   });
 
   @override
@@ -146,15 +148,16 @@ class ProfileTitleWidget extends StatelessWidget {
         bottom: 10.r
       ),
       padding: EdgeInsets.only(
-        bottom: 10.r
+        bottom: 10.r,
+        left: !showOutline ? 10.r: 0.0
       ),
-      decoration: BoxDecoration(
+      decoration: showOutline? BoxDecoration(
         border: Border(
           bottom: BorderSide(
             color: AppColors.borderColor
           )
         )
-      ),
+      ) : null,
       child: Row(
         children: [
           Text(title, style: context.textStyle.bodyMedium,),

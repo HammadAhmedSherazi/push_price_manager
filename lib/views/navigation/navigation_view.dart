@@ -3,17 +3,14 @@ import 'package:push_price_manager/utils/extension.dart';
 
 import '../../export_all.dart';
 
-class NavigationView extends StatefulWidget {
+class NavigationView extends ConsumerStatefulWidget {
   const NavigationView({super.key});
 
   @override
-  State<NavigationView> createState() => _NavigationViewState();
+  ConsumerState<NavigationView> createState() => _NavigationViewState();
 }
 
-class _NavigationViewState extends State<NavigationView> {
- 
-
-  int selectIndex = 0;
+class _NavigationViewState extends ConsumerState<NavigationView> {
   // bool _isBottomBarVisible = true;
 
   final ScrollController scrollController = ScrollController();
@@ -105,28 +102,20 @@ class _NavigationViewState extends State<NavigationView> {
     return AppConstant.userType == UserType.employee ? [
       MenuDataModel(title: context.tr("home"), icon: Assets.menuHomeIcon, onTap: () {
         AppRouter.back();
-        setState(() {
-          selectIndex = 0;
-        });
+        ref.read(navigationProvider.notifier).setIndex(0);
       }),
       MenuDataModel(title: context.tr("listing_request"), icon: Assets.menuProductRequestIcon, onTap: () {
         AppRouter.back();
-        setState(() {
-          selectIndex = 1;
-        });
+        ref.read(navigationProvider.notifier).setIndex(1);
       }),
       MenuDataModel(title: context.tr("product_listing"), icon: Assets.menuProductListIcon, onTap: () {
         AppRouter.back();
-        setState(() {
-          selectIndex = 2;
-        });
+        ref.read(navigationProvider.notifier).setIndex(2);
       }),
-      
+
       MenuDataModel(title: context.tr("profile"), icon: Assets.menuProfileIcon, onTap: () {
         AppRouter.back();
-        setState(() {
-          selectIndex = 3;
-        });
+        ref.read(navigationProvider.notifier).setIndex(3);
       }),
       MenuDataModel(title: context.tr("settings"), icon: Assets.menuSettingIcon, onTap: () => AppRouter.push(SettingView())),
       MenuDataModel(title: context.tr("tutorial"), icon: Assets.menuTutorialIcon, onTap: () {
@@ -136,30 +125,22 @@ class _NavigationViewState extends State<NavigationView> {
     ]: [
       MenuDataModel(title: context.tr("home"), icon: Assets.menuHomeIcon, onTap: () {
         AppRouter.back();
-        setState(() {
-          selectIndex = 0;
-        });
+        ref.read(navigationProvider.notifier).setIndex(0);
       }),
       MenuDataModel(title: context.tr("pending_listings"), icon: Assets.menuPendingListingIcon, onTap: () {
         AppRouter.back();
-        setState(() {
-          selectIndex = 1;
-        });
+        ref.read(navigationProvider.notifier).setIndex(1);
       }),
       MenuDataModel(title: context.tr("live_listings"), icon: Assets.menuOrderIcon, onTap: () {
         AppRouter.back();
-        setState(() {
-          selectIndex = 2;
-        });
+        ref.read(navigationProvider.notifier).setIndex(2);
       }),
       //  MenuDataModel(title: "Analytics", icon: Assets.menuAnaylicIcon, onTap: () {
       //   AppRouter.push(AnalyticsView());
       // }),
       MenuDataModel(title: context.tr("profile"), icon: Assets.menuProfileIcon, onTap: () {
         AppRouter.back();
-        setState(() {
-          selectIndex = 3;
-        });
+        ref.read(navigationProvider.notifier).setIndex(3);
       }),
       MenuDataModel(title: context.tr("settings"), icon: Assets.menuSettingIcon, onTap: () => AppRouter.push(SettingView())),
       MenuDataModel(title: context.tr("tutorial"), icon: Assets.menuTutorialIcon, onTap: () {
@@ -238,7 +219,7 @@ class _NavigationViewState extends State<NavigationView> {
                   50.ph,
                   Consumer(
                     builder: (context, ref, child) {
-                      
+
                       final user = ref.watch(authProvider.select((e)=>e.staffInfo))!;
                       return Center(
                         child: Column(
@@ -288,15 +269,25 @@ class _NavigationViewState extends State<NavigationView> {
           ),
         ),
       ),
-      body: bottomNavItems[selectIndex].child,
-      
-      bottomNavigationBar:CustomBottomNavBarWidget(
-          items: bottomNavItems,
-          currentIndex: selectIndex,
-          onTap: (index) {
-            setState(() => selectIndex = index);
-          },
-        )
+      body: Consumer(
+        builder: (context, ref, child) {
+          final selectedIndex = ref.watch(navigationProvider);
+          return bottomNavItems[selectedIndex].child;
+        },
+      ),
+
+      bottomNavigationBar: Consumer(
+        builder: (context, ref, child) {
+          final selectedIndex = ref.watch(navigationProvider);
+          return CustomBottomNavBarWidget(
+            items: bottomNavItems,
+            currentIndex: selectedIndex,
+            onTap: (index) {
+              ref.read(navigationProvider.notifier).setIndex(index);
+            },
+          );
+        },
+      )
       //  AnimatedSlide(
       //   offset: _isBottomBarVisible ? Offset.zero : const Offset(0, 100),
       //   duration: const Duration(milliseconds: 2000),

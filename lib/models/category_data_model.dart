@@ -2,18 +2,27 @@ class CategoryDataModel {
   final int? id;
   final String title;
   final String icon;
+  final int? chainId;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   const CategoryDataModel({
     required this.title,
     required this.icon,
     this.id,
+    this.chainId,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory CategoryDataModel.fromJson(Map<String, dynamic> json) {
     return CategoryDataModel(
-      id: json['category_id'] ?? json['id'], // handles both API formats
+      id: json['category_id'] ?? json['id'],
       title: json['category_name'] ?? json['title'] ?? '',
       icon: json['category_image_link'] ?? json['icon'] ?? '',
+      chainId: json['chain_id'],
+      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
+      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
     );
   }
 
@@ -22,6 +31,9 @@ class CategoryDataModel {
       'category_id': id,
       'category_name': title,
       'category_image_link': icon,
+      if (chainId != null) 'chain_id': chainId,
+      if (createdAt != null) 'created_at': createdAt!.toIso8601String(),
+      if (updatedAt != null) 'updated_at': updatedAt!.toIso8601String(),
     };
   }
 
@@ -29,14 +41,20 @@ class CategoryDataModel {
     int? id,
     String? title,
     String? icon,
+    int? chainId,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return CategoryDataModel(
       id: id ?? this.id,
       title: title ?? this.title,
       icon: icon ?? this.icon,
+      chainId: chainId ?? this.chainId,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
   @override
-  String toString() => 'CategoryDataModel(id: $id, title: $title, icon: $icon)';
+  String toString() => 'CategoryDataModel(id: $id, title: $title, icon: $icon, chainId: $chainId, createdAt: $createdAt, updatedAt: $updatedAt)';
 }

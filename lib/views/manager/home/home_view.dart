@@ -11,6 +11,7 @@ class HomeView extends ConsumerStatefulWidget {
 }
 
 class _HomeViewConsumerState extends ConsumerState<HomeView> {
+
   @override
   void initState() {
     Future.microtask(() {
@@ -21,6 +22,7 @@ class _HomeViewConsumerState extends ConsumerState<HomeView> {
           .read(productProvider.notifier)
           .getLiveListProducts(limit: 10, skip: 0);
       ref.read(authProvider.notifier).getMyStores();
+      ref.read(authProvider.notifier).getCategories(limit: 10, skip: 0);
     });
     super.initState();
   }
@@ -130,14 +132,15 @@ class PendingListingSection extends ConsumerWidget {
                 visualDensity: VisualDensity(horizontal: -4.0, vertical: -4.0),
               ),
               onPressed: () {
-                AppRouter.push(
-                  SeeAllProductView(title: context.tr("pending_listings")),
-                  fun: () {
-                    ref
-                        .read(productProvider.notifier)
-                        .getPendingReviewList(limit: 10, skip: 0);
-                  },
-                );
+                // AppRouter.push(
+                //   SeeAllProductView(title: context.tr("pending_listings")),
+                //   fun: () {
+                //     ref
+                //         .read(productProvider.notifier)
+                //         .getPendingReviewList(limit: 10, skip: 0);
+                //   },
+                // );
+                ref.read(navigationProvider.notifier).setIndex(1);
               },
               child: Text(
                 context.tr("see_all"),
@@ -213,22 +216,23 @@ class LiveListingSection extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    AppRouter.push(
-                      SeeAllProductView(
-                        title: context.tr("live_listings"),
+                    // AppRouter.push(
+                    //   SeeAllProductView(
+                    //     title: context.tr("live_listings"),
 
-                        //           , onTap: (){
-                        //            AppRouter.push(ProductLiveListingDetailView(
-                        //   type: "Best By Products",
-                        //  ));
-                        //         }
-                      ),
-                      fun: () {
-                        ref
-                            .read(productProvider.notifier)
-                            .getLiveListProducts(limit: 10, skip: 0);
-                      },
-                    );
+                    //     //           , onTap: (){
+                    //     //            AppRouter.push(ProductLiveListingDetailView(
+                    //     //   type: "Best By Products",
+                    //     //  ));
+                    //     //         }
+                    //   ),
+                    //   fun: () {
+                    //     ref
+                    //         .read(productProvider.notifier)
+                    //         .getLiveListProducts(limit: 10, skip: 0);
+                    //   },
+                    // );
+                    ref.read(navigationProvider.notifier).setIndex(2);
                   },
                   child: Text(
                     context.tr("see_all"),

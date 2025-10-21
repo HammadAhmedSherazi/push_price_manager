@@ -108,6 +108,7 @@ export './models/staff_data_model.dart';
 //PROVIDERS
 export './providers/auth_provider/auth_provider.dart';
 export './providers/product_provider/product_provider.dart';
+export './providers/navigation_provider/navigation_provider.dart';
 
 
 //UTILS

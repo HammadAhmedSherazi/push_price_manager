@@ -11,7 +11,7 @@ class UserFavoriteView extends StatelessWidget {
          Padding(
            padding: EdgeInsets.all(AppTheme.horizontalPadding ),
            child: CustomSearchBarWidget(
-            hintText: context.tr("hinted_search_text"),
+            hintText: context.tr("search_product"),
             suffixIcon: SvgPicture.asset(Assets.filterIcon),
             onTapOutside: (v){
                FocusScope.of(context).unfocus();

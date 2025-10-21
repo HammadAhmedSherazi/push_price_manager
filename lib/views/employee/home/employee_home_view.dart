@@ -11,12 +11,14 @@ class EmployeeHomeView extends ConsumerStatefulWidget {
 }
 
 class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
+
   @override
   void initState() {
     Future.microtask(() {
       ref.read(productProvider.notifier).getListApprovedProducts(limit: 10, skip: 0);
       ref.read(productProvider.notifier).getListRequestProducts(limit: 10, skip: 0);
       ref.read(authProvider.notifier).getMyStores();
+      ref.read(authProvider.notifier).getCategories(limit: 10, skip: 0);
     });
     super.initState();
   }
@@ -83,7 +85,7 @@ class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
         onRefresh: ()async{
           ref.read(productProvider.notifier).getListApprovedProducts(limit: 10, skip: 0);
       ref.read(productProvider.notifier).getListRequestProducts(limit: 10, skip: 0);
-    
+
 
         },
         child: ListView(
@@ -118,22 +120,23 @@ class ListingRequestSection extends ConsumerWidget {
                 visualDensity: VisualDensity(horizontal: -4.0, vertical: -4.0),
               ),
               onPressed: () {
-                AppRouter.push(
-                  SeeAllProductView(
-                    title: 'listing_request',
+                // AppRouter.push(
+                //   SeeAllProductView(
+                //     title: 'listing_request',
                    
-                    // ,onTap: (){
+                //     // ,onTap: (){
 
-                    //           AppRouter.push(
-                    //            ListingProductDetailView(isRequest: true, type: setType(-1),));
-                    //         },
-                  ),
-                  fun: (){
-                     ref
-                  .read(productProvider.notifier)
-                  .getListRequestProducts(limit: 10, skip: 0);
-                  }
-                );
+                //     //           AppRouter.push(
+                //     //            ListingProductDetailView(isRequest: true, type: setType(-1),));
+                //     //         },
+                //   ),
+                //   fun: (){
+                //      ref
+                //   .read(productProvider.notifier)
+                //   .getListRequestProducts(limit: 10, skip: 0);
+                //   }
+                // );
+                ref.read(navigationProvider.notifier).setIndex(1);
               },
               child: Text(
                  context.tr("see_all"),
@@ -204,24 +207,25 @@ class ProductListingSection extends ConsumerWidget {
                 visualDensity: VisualDensity(horizontal: -4.0, vertical: -4.0),
               ),
               onPressed: () {
-                AppRouter.push(
-                  SeeAllProductView(
-                    title:  "product_listing",
+                // AppRouter.push(
+                //   SeeAllProductView(
+                //     title:  "product_listing",
                    
-                    // , onTap: (){
-                    //           AppRouter.push(PendingProductDetailView(
-                    //   type: "Best By Products",
-                    // ));
-                    //           // AppRouter.push(
-                    //           // ListingProductDetailView());
-                    //         },
-                  ),
-                  fun: (){
-                    ref
-                  .read(productProvider.notifier)
-                  .getListApprovedProducts(limit: 10, skip: 0);
-                  }
-                );
+                //     // , onTap: (){
+                //     //           AppRouter.push(PendingProductDetailView(
+                //     //   type: "Best By Products",
+                //     // ));
+                //     //           // AppRouter.push(
+                //     //           // ListingProductDetailView());
+                //     //         },
+                //   ),
+                //   fun: (){
+                //     ref
+                //   .read(productProvider.notifier)
+                //   .getListApprovedProducts(limit: 10, skip: 0);
+                //   }
+                // );
+                ref.read(navigationProvider.notifier).setIndex(2);
               },
               child: Text(
               context.tr("see_all"),

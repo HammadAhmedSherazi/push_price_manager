@@ -59,6 +59,9 @@ class ProductDataModel {
     String? description,
     String? image,
     num? price,
+    num? discounted_price
+    
+    
   }) {
     return ProductDataModel(
       title: title ?? this.title,
@@ -107,6 +110,7 @@ class ProductSelectionDataModel extends ProductDataModel {
     String? image,
     num? price,
     bool? isSelect,
+    num? discounted_price
   }) {
     return ProductSelectionDataModel(
       title: title ?? this.title,
@@ -114,6 +118,7 @@ class ProductSelectionDataModel extends ProductDataModel {
       image: image ?? this.image,
       price: price ?? this.price,
       isSelect: isSelect ?? this.isSelect,
+      
     );
   }
 }
@@ -162,6 +167,7 @@ class ProductPurchasingDataModel extends ProductDataModel {
     num? price,
     int? quantity,
     num? discountAmount,
+    num? discounted_price
   }) {
     return ProductPurchasingDataModel(
       title: title ?? this.title,

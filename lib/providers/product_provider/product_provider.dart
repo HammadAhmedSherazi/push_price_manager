@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:push_price_manager/data/network/api_response.dart';
 import 'package:push_price_manager/export_all.dart';
@@ -51,8 +50,9 @@ class ProductProvider extends Notifier<ProductState> {
         listItem: state.listItem!.copyWith(saveDiscountForListing: chk),
       );
     } else {
+
       state = state.copyWith(
-        listItem: state.listItem!.copyWith(autoApplyForNextBatch: chk),
+        listItem: state.listItem!.copyWith(autoApplyForNextBatch: chk, saveDiscountForFuture: chk? true: null, saveDiscountForListing: chk ? true : null ),
       );
     }
   }
@@ -62,6 +62,7 @@ class ProductProvider extends Notifier<ProductState> {
     required int skip ,
     String? searchText,
   }) async {
+    if (!ref.mounted) return;
     if (skip == 0 && state.products!.isNotEmpty) {
       state = state.copyWith(products: [], skip: 0);
     }
@@ -92,6 +93,8 @@ class ProductProvider extends Notifier<ProductState> {
         params: params,
       );
 
+      if (!ref.mounted) return;
+
       if (response != null) {
         List temp = response ?? [];
         final List<ProductDataModel> list = List.from(
@@ -112,6 +115,7 @@ class ProductProvider extends Notifier<ProductState> {
         );
       }
     } catch (e) {
+      if (!ref.mounted) return;
       state = state.copyWith(
         productApiResponse: skip == 0
             ? ApiResponse.error()
@@ -121,13 +125,15 @@ class ProductProvider extends Notifier<ProductState> {
   }
 
   FutureOr<void> getProductData(String code) async {
+    if (!ref.mounted) return;
     try {
       state = state.copyWith(getProductReponse: ApiResponse.loading());
       final response = await MyHttpClient.instance.get(
         "${ApiEndpoints.getProductDetailByBarCode}$code",
       );
+      if (!ref.mounted) return;
       AppRouter.back();
-      
+
       // Add condition check
       if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(
@@ -145,6 +151,7 @@ class ProductProvider extends Notifier<ProductState> {
         state = state.copyWith(getProductReponse: ApiResponse.error());
       }
     } catch (e) {
+      if (!ref.mounted) return;
       AppRouter.back();
       // Show error message for exceptions
       Helper.showMessage(
@@ -159,6 +166,7 @@ class ProductProvider extends Notifier<ProductState> {
     required Map<String, dynamic> input,
     required int popTime,
   }) async {
+    if (!ref.mounted) return;
     try {
       state = state.copyWith(listNowApiResponse: ApiResponse.loading());
       final response = await MyHttpClient.instance.post(
@@ -167,7 +175,8 @@ class ProductProvider extends Notifier<ProductState> {
             : ApiEndpoints.managerCreate,
         input,
       );
-      
+      if (!ref.mounted) return;
+
       // Add condition check
       if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(
@@ -190,6 +199,7 @@ class ProductProvider extends Notifier<ProductState> {
         state = state.copyWith(listNowApiResponse: ApiResponse.error());
       }
     } catch (e) {
+      if (!ref.mounted) return;
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
@@ -205,6 +215,7 @@ class ProductProvider extends Notifier<ProductState> {
     String? type,
     String? searchText,
   }) async {
+    if (!ref.mounted) return;
     try {
       if (skip == 0 && state.listRequestproducts!.isNotEmpty) {
         state = state.copyWith(listRequestproducts: []);
@@ -230,7 +241,8 @@ class ProductProvider extends Notifier<ProductState> {
         ApiEndpoints.myListings,
         params: params,
       );
-      
+      if (!ref.mounted) return;
+
       // Add condition check
       if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(
@@ -264,6 +276,7 @@ class ProductProvider extends Notifier<ProductState> {
         );
       }
     } catch (e) {
+      if (!ref.mounted) return;
       // Show error message for exceptions
       if (skip == 0) {
         Helper.showMessage(
@@ -285,6 +298,7 @@ class ProductProvider extends Notifier<ProductState> {
     String? type,
     String? searchText,
   }) async {
+    if (!ref.mounted) return;
     try {
       if (skip == 0 && state.listApprovedproducts!.isNotEmpty) {
         state = state.copyWith(listApprovedproducts: []);
@@ -309,7 +323,8 @@ class ProductProvider extends Notifier<ProductState> {
         ApiEndpoints.myListings,
         params: params,
       );
-      
+      if (!ref.mounted) return;
+
       // Add condition check
       if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(
@@ -342,6 +357,7 @@ class ProductProvider extends Notifier<ProductState> {
         );
       }
     } catch (e) {
+      if (!ref.mounted) return;
       // Show error message for exceptions
       if (skip == 0) {
         Helper.showMessage(
@@ -363,6 +379,7 @@ class ProductProvider extends Notifier<ProductState> {
     String? searchText,
     String? type,
   }) async {
+    if (!ref.mounted) return;
     try {
       if (skip == 0 &&
           state.pendingReviewList != null &&
@@ -386,7 +403,8 @@ class ProductProvider extends Notifier<ProductState> {
         ApiEndpoints.pendingReview,
         params: params,
       );
-      
+      if (!ref.mounted) return;
+
       // Add condition check
       if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(
@@ -419,6 +437,7 @@ class ProductProvider extends Notifier<ProductState> {
         );
       }
     } catch (e) {
+      if (!ref.mounted) return;
       // Show error message for exceptions
       if (skip == 0) {
         Helper.showMessage(
@@ -440,6 +459,7 @@ class ProductProvider extends Notifier<ProductState> {
     String? searchText,
     String? type,
   }) async {
+    if (!ref.mounted) return;
     try {
       if (skip == 0 && state.listLiveProducts!.isNotEmpty) {
         state = state.copyWith(listLiveProducts: []);
@@ -461,7 +481,8 @@ class ProductProvider extends Notifier<ProductState> {
         ApiEndpoints.liveList,
         params: params,
       );
-      
+      if (!ref.mounted) return;
+
       // Add condition check
       if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(
@@ -494,6 +515,7 @@ class ProductProvider extends Notifier<ProductState> {
         );
       }
     } catch (e) {
+      if (!ref.mounted) return;
       // Show error message for exceptions
       if (skip == 0) {
         Helper.showMessage(
@@ -514,6 +536,7 @@ class ProductProvider extends Notifier<ProductState> {
     required int storeId,
     required ListingModel item,
   }) async {
+    if (!ref.mounted) return;
     try {
       state = state.copyWith(
         getSuggestionApiRes: ApiResponse.loading(),
@@ -523,7 +546,8 @@ class ProductProvider extends Notifier<ProductState> {
         ApiEndpoints.suggestionsDiscount(productId),
         params: {"store_id": storeId},
       );
-      
+      if (!ref.mounted) return;
+
       // Add condition check
       if (response != null ) {
         final ListingModel item = state.listItem!.copyWith(
@@ -535,7 +559,7 @@ class ProductProvider extends Notifier<ProductState> {
           saveDiscountForListing: response['save_discount_for_listing'],
           hourlyIncreasingDiscountPercent: response['hourly_increasing_discount'],
           goLiveDate: DateTime.tryParse(response['go_live_date'])
-          
+
         );
 
         state = state.copyWith(
@@ -551,6 +575,7 @@ class ProductProvider extends Notifier<ProductState> {
         state = state.copyWith(getSuggestionApiRes: ApiResponse.completed(""));
       }
     } catch (e) {
+      if (!ref.mounted) return;
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
@@ -564,14 +589,16 @@ class ProductProvider extends Notifier<ProductState> {
     required Map<String, dynamic> input,
     required int times,
   }) async {
-    
+    if (!ref.mounted) return;
+
     try {
       state = state.copyWith(setReviewApiRes: ApiResponse.loading());
       final response = await MyHttpClient.instance.post(
         ApiEndpoints.review,
         input,
       );
-      
+      if (!ref.mounted) return;
+
       // Add condition check
       if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(setReviewApiRes: ApiResponse.completed(response));
@@ -586,6 +613,7 @@ class ProductProvider extends Notifier<ProductState> {
         state = state.copyWith(setReviewApiRes: ApiResponse.error());
       }
     } catch (e) {
+      if (!ref.mounted) return;
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
@@ -637,13 +665,15 @@ class ProductProvider extends Notifier<ProductState> {
     required int id,
     required int popTime,
   }) async {
+    if (!ref.mounted) return;
     try {
       state = state.copyWith(listNowApiResponse: ApiResponse.loading());
       final response = await MyHttpClient.instance.put(
         ApiEndpoints.updateEmployeeListRequest(id),
         input,
       );
-      
+      if (!ref.mounted) return;
+
       // Add condition check
       if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(
@@ -666,6 +696,7 @@ class ProductProvider extends Notifier<ProductState> {
         state = state.copyWith(listNowApiResponse: ApiResponse.error());
       }
     } catch (e) {
+      if (!ref.mounted) return;
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
@@ -676,6 +707,7 @@ class ProductProvider extends Notifier<ProductState> {
   }
 
   FutureOr<void> deleteList({required int listingId}) async {
+    if (!ref.mounted) return;
     try {
       state = state.copyWith(deleteApiRes: ApiResponse.loading());
       final response = await MyHttpClient.instance.delete(
@@ -685,7 +717,8 @@ class ProductProvider extends Notifier<ProductState> {
         null,
         isJsonEncode: false,
       );
-      
+      if (!ref.mounted) return;
+
       // Add condition check
       if (response != null && !(response is Map && response.containsKey('detail'))) {
          Helper.showMessage(
@@ -709,6 +742,7 @@ class ProductProvider extends Notifier<ProductState> {
         // state = state.copyWith(deleteApiRes: ApiResponse.error());
       }
     } catch (e) {
+      if (!ref.mounted) return;
       // Show error message for exceptions
       AppRouter.back();
       Helper.showMessage(
@@ -724,8 +758,9 @@ class ProductProvider extends Notifier<ProductState> {
     required Map<String, dynamic> input,
     int? times
   }) async {
+    if (!ref.mounted) return;
     try {
-     
+
       state = state.copyWith(updateApiRes: ApiResponse.loading());
       final Map<String, dynamic>? response = await MyHttpClient.instance.put(
         AppConstant.userType == UserType.employee
@@ -733,14 +768,15 @@ class ProductProvider extends Notifier<ProductState> {
             : "${ApiEndpoints.listings}manager/$listingId",
         input,
       );
-      
+      if (!ref.mounted) return;
+
       // Add condition check
       if (response != null && !response.containsKey('detail')) {
-       
+
         // setListItem();
-        
+
         if (AppConstant.userType == UserType.manager) {
-          AppRouter.customback(times: times?? 1); 
+          AppRouter.customback(times: times?? 1);
           AppRouter.push(
             SuccessListingRequestView(
               message: AppRouter.navKey.currentContext!.tr("product_listing_edit_successful"),
@@ -765,6 +801,7 @@ class ProductProvider extends Notifier<ProductState> {
         state = state.copyWith(updateApiRes: ApiResponse.error());
       }
     } catch (e) {
+      if (!ref.mounted) return;
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
@@ -775,11 +812,13 @@ class ProductProvider extends Notifier<ProductState> {
   }
 
   FutureOr<void> pauseList({required int listingId, required String status})async{
+    if (!ref.mounted) return;
     try {
       state = state.copyWith(updateApiRes: ApiResponse.loading());
       final response = await MyHttpClient.instance.patch(ApiEndpoints.updateStatus(listingId), {
         "status" : status
       });
+      if (!ref.mounted) return;
 
       if(response != null && !response.containsKey('detail')){
          ListingModel data = ListingModel.fromJson(response);
@@ -794,6 +833,7 @@ class ProductProvider extends Notifier<ProductState> {
         state = state.copyWith(updateApiRes: ApiResponse.error());
       }
     } catch (e) {
+      if (!ref.mounted) return;
       state = state.copyWith(updateApiRes: ApiResponse.error());
     }
   }

@@ -70,10 +70,20 @@ class _ListScheduleCalenderViewState extends State<ListScheduleCalenderView> {
       final start = result['start'];
       final end = result['end'];
       setState(() {
+        // Update the selected day
         calendarList[index] = calendarList[index].copyWith(
           startTime: start,
           endTime: end,
         );
+        // Fill all empty time slots with the same start and end times
+        for (int i = 0; i < calendarList.length; i++) {
+          if (calendarList[i].startTime == null) {
+            calendarList[i] = calendarList[i].copyWith(
+              startTime: start,
+              endTime: end,
+            );
+          }
+        }
       });
     }
   }

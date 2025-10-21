@@ -53,16 +53,16 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
     
 
     _currentDiscountEditTextController = TextEditingController(
-      text: widget.data.currentDiscount != 0.0 ? widget.data.currentDiscount.toString(): null
+      text: widget.data.currentDiscount != 0.0 && widget.data.saveDiscountForFuture ? widget.data.currentDiscount.toString(): null
     );
     if(widget.isInstant!){
       _dialyDiscountEditTextController = TextEditingController(
-      text: widget.data.hourlyIncreasingDiscountPercent != 0.0 ? widget.data.hourlyIncreasingDiscountPercent.toString() : null
+      text: widget.data.hourlyIncreasingDiscountPercent != 0.0 && widget.data.saveDiscountForFuture ? widget.data.hourlyIncreasingDiscountPercent.toString() : null
     );
     }
     else{
         _dialyDiscountEditTextController = TextEditingController(
-      text: widget.data.dailyIncreasingDiscountPercent != 0.0 ? widget.data.dailyIncreasingDiscountPercent.toString() : null
+      text: widget.data.dailyIncreasingDiscountPercent != 0.0 && widget.data.saveDiscountForListing ? widget.data.dailyIncreasingDiscountPercent.toString() : null
     );
     }
     
@@ -91,15 +91,15 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
     final newItem = next.listItem;
     final oldItem = previous!.listItem;
     if(newItem != null && oldItem != null){
-      if(newItem.currentDiscount != oldItem.currentDiscount){
+      if(newItem.currentDiscount != oldItem.currentDiscount && newItem.saveDiscountForFuture){
       _currentDiscountEditTextController.text = newItem.currentDiscount != 0.0?
           newItem.currentDiscount.toStringAsFixed(2) : "";
     }
-    if(newItem.dailyIncreasingDiscountPercent != oldItem.dailyIncreasingDiscountPercent){
+    if(newItem.dailyIncreasingDiscountPercent != oldItem.dailyIncreasingDiscountPercent && newItem.saveDiscountForFuture){
       _dialyDiscountEditTextController.text = newItem.dailyIncreasingDiscountPercent != 0.0 ?
           newItem.dailyIncreasingDiscountPercent.toStringAsFixed(2) : "";
     }
-    if(oldItem.goLiveDate == null || oldItem.goLiveDate != newItem.goLiveDate){
+    if((oldItem.goLiveDate == null || oldItem.goLiveDate != newItem.goLiveDate) && newItem.saveDiscountForListing){
       ref.read(productProvider.notifier).setGoLiveDate(newItem.goLiveDate);
     }
     if(oldItem.autoApplyForNextBatch != newItem.autoApplyForNextBatch){
@@ -111,7 +111,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
     if(oldItem.saveDiscountForListing != newItem.saveDiscountForListing){
       values[1] = newItem.saveDiscountForListing;
     }
-    if(widget.isInstant! && oldItem.hourlyIncreasingDiscountPercent != newItem.hourlyIncreasingDiscountPercent){
+    if(widget.isInstant! && oldItem.hourlyIncreasingDiscountPercent != newItem.hourlyIncreasingDiscountPercent && newItem.saveDiscountForFuture){
       _dialyDiscountEditTextController.text = newItem.hourlyIncreasingDiscountPercent != 0.0 ?
           newItem.hourlyIncreasingDiscountPercent.toStringAsFixed(2) : "";
     }
@@ -147,10 +147,10 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
               horizontal: AppTheme.horizontalPadding,
             ),
             child: CustomButtonWidget(
-              title:widget.isLiveListing! ?context.tr(widget.isInstant!? "next" : context.tr("update")) : context.tr("next"),
+              title:widget.isLiveListing! ?context.tr(widget.isInstant!? "next" : "update") : context.tr( widget.isInstant!?"next" : "list_now"),
               isLoad: widget.isLiveListing! && !widget.isInstant!
                   ? ref.watch(productProvider.select((e)=>e.updateApiRes)).status == Status.loading
-                  : false,
+                  : ref.watch(productProvider.select((e)=>e.setReviewApiRes)).status == Status.loading,
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   Map<String, dynamic> data = {};

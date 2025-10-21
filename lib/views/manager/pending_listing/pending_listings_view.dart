@@ -23,6 +23,55 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
   "promotional_products",
   ];
   int selectIndex = -1;
+
+  void _showCategoriesModal(BuildContext context, WidgetRef ref) {
+    final categories = ref.watch(authProvider.select((e) => e.categories)) ?? [];
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.all(AppTheme.horizontalPadding),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(context.tr("categories"), style: context.textStyle.displayMedium),
+              20.ph,
+              SizedBox(
+                height: 200.h,
+                child: GridView.builder(
+                  scrollDirection: Axis.horizontal,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 5,
+                    crossAxisSpacing: 10.r,
+                    mainAxisSpacing: 10.r,
+                  ),
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    final category = categories[index];
+                    return Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 25.r,
+                          backgroundImage: NetworkImage(category.icon),
+                        ),
+                        5.ph,
+                        Text(
+                          category.title,
+                          style: context.textStyle.bodySmall,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -69,6 +118,12 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
         );
     }
   }
+  void selectChip(int index){
+     setState(() {
+                    selectIndex = index == selectIndex ? -1: index;
+                  });
+                  fetchProduct(skip:0);
+  }
 
   @override
   void dispose() {
@@ -111,10 +166,7 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  selectIndex = i;
-                                });
-                                fetchProduct(skip: 0);
+                               selectChip(i);
                               },
                               child: Container(
                                 // margin: EdgeInsets.only(bottom: 8),
@@ -149,10 +201,7 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                             Expanded(
                               child: GestureDetector(
                                 onTap: () {
-                                  setState(() {
-                                    selectIndex = i + 1;
-                                  });
-                                  fetchProduct(skip: 0);
+                                  selectChip(i+1);
                                 },
                                 child: Container(
                                   // margin: EdgeInsets.only(bottom: 8),
@@ -204,8 +253,11 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                 horizontal: AppTheme.horizontalPadding,
               ),
               child: CustomSearchBarWidget(
-                hintText: context.tr("hinted_search_text"),
-                suffixIcon: SvgPicture.asset(Assets.filterIcon),
+                hintText: context.tr("search_product"),
+                suffixIcon: GestureDetector(
+                  onTap: () => _showCategoriesModal(context, ref),
+                  child: SvgPicture.asset(Assets.filterIcon),
+                ),
                 onChanged: (text) {
                   if (_searchDebounce?.isActive ?? false) {
                     _searchDebounce!.cancel();

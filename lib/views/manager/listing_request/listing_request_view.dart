@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:push_price_manager/utils/extension.dart';
+
 import '../../../export_all.dart';
 
 class ListingRequestView extends ConsumerStatefulWidget {
@@ -14,6 +16,54 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
   late ScrollController _scrollController;
 
   Timer? _searchDebounce;
+
+  void _showCategoriesModal(BuildContext context, WidgetRef ref) {
+    final categories = ref.watch(authProvider.select((e) => e.categories)) ?? [];
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.all(AppTheme.horizontalPadding),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(context.tr("categories"), style: context.textStyle.displayMedium),
+              20.ph,
+              SizedBox(
+                height: 200.h,
+                child: GridView.builder(
+                  scrollDirection: Axis.horizontal,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 5,
+                    crossAxisSpacing: 10.r,
+                    mainAxisSpacing: 10.r,
+                  ),
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    final category = categories[index];
+                    return Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 25.r,
+                          backgroundImage: NetworkImage(category.icon),
+                        ),
+                        5.ph,
+                        Text(
+                          category.title,
+                          style: context.textStyle.bodySmall,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
   @override
   void initState() {
     super.initState();
@@ -53,9 +103,29 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
     return CustomScreenTemplate(
       showBottomButton: true,
       bottomButtonText: context.tr("scan"),
-      onButtonTap: () {
-        AppRouter.push(ScanView());
-      },
+      onButtonTap: ()async{
+                  final providerVM = ref.watch(productProvider);
+                  String? res = await SimpleBarcodeScanner.scanBarcode(
+                      context,
+                      cameraFace: CameraFace.front,
+                      barcodeAppBar:  BarcodeAppBar(
+                        appBarTitle: "${context.tr("scan")} ${context.tr("barcode")}",
+                        centerTitle: false,
+                        enableBackButton: true,
+                        backButtonIcon: Icon(Icons.arrow_back_ios),
+                      ),
+                      isShowFlashIcon: true,
+                      delayMillis: 100,
+                      
+                   
+                    );
+                   
+                    if(providerVM.getProductReponse.status != Status.loading && res != null){
+                      if(!context.mounted) return;
+                                Helper.showFullScreenLoader(context);
+                                ref.read(productProvider.notifier).getProductData(res);
+                              }
+                },
       title: AppConstant.userType == UserType.employee
           ? context.tr("search_from_database")
           : context.tr("listing_request_select_product"),
@@ -91,8 +161,11 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
                 onTapOutside: (v) {
                   FocusScope.of(context).unfocus();
                 },
-                hintText: context.tr("hinted_search_text"),
-                suffixIcon: SvgPicture.asset(Assets.filterIcon),
+                hintText: context.tr("search_product"),
+                suffixIcon: GestureDetector(
+                  onTap: () => _showCategoriesModal(context, ref),
+                  child: SvgPicture.asset(Assets.filterIcon),
+                ),
               ),
             ),
             Consumer(
@@ -141,7 +214,7 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
     //     title: AppConstant.userType == UserType.employee? context.tr("search_from_database"): "context.tr("listing_request_select_product")",
     //     children: [
     // CustomSearchBarWidget(
-    //   hintText: context.tr("hinted_search_text"),
+    //   hintText: context.tr("search_product"),
     //   suffixIcon: SvgPicture.asset(Assets.filterIcon),
     // ),
     //     ],

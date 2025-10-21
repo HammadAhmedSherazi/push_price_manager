@@ -2,6 +2,7 @@ class ApiEndpoints {
   static const String adminStaff = "admin/staff/";
   static const String login = "${adminStaff}login";
   static const String getProducts = "admin/products/";
+  static const String getCatrgories = "${getProducts}categories";
   static const String getEmployeeDataBaseProducts = "${getProducts}employee-product-database";
   static const String getManagerDataBaseProducts = "${getProducts}manager-product-database";
   static const String getProductDetailByBarCode = "${getProducts}barcode/";

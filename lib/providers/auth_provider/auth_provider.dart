@@ -11,23 +11,28 @@ class AuthProvider  extends Notifier<AuthState> {
     return AuthState(
       loginApiResponse: ApiResponse.undertermined(),
       getStoresApiRes: ApiResponse.undertermined(),
+      getCategoriesApiResponse: ApiResponse.undertermined(),
       myStores: [],
-      selectedStores: []
+      selectedStores: [],
+      categories: [],
+      categoriesSkip: 0,
     );
   }
 
   FutureOr<void> login({required String email, required String password})async{
+    if (!ref.mounted) return;
     try {
       state = state.copyWith(loginApiResponse: ApiResponse.loading());
       final response = await MyHttpClient.instance.post(ApiEndpoints.login, {
   "email": email,
   "password": password
 }, isToken: false);
-      
+      if (!ref.mounted) return;
+
       // Add condition check
       if(response != null && !(response is Map && response.containsKey('detail'))){
         Helper.showMessage( AppRouter.navKey.currentContext!,message: AppRouter.navKey.currentContext!.tr("successfully_login"));
-        
+
         state = state.copyWith(loginApiResponse: ApiResponse.completed(response['data']));
         final Map<String, dynamic>? user = response["user"];
         if(user != null){
@@ -38,7 +43,7 @@ class AuthProvider  extends Notifier<AuthState> {
         SharedPreferenceManager.sharedInstance.storeToken(response['access_token'] ?? "");
         SharedPreferenceManager.sharedInstance.storeRefreshToken(response['refresh_access_token'] ?? "");
         AppRouter.pushAndRemoveUntil(NavigationView());
-        
+
       }
       else{
         // Show error message if condition is false
@@ -49,6 +54,7 @@ class AuthProvider  extends Notifier<AuthState> {
         state = state.copyWith(loginApiResponse: ApiResponse.error());
       }
     } catch (e) {
+      if (!ref.mounted) return;
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
@@ -59,20 +65,24 @@ class AuthProvider  extends Notifier<AuthState> {
   }
 
   FutureOr<void> logout()async{
-    
+    if (!ref.mounted) return;
+
     try {
       SharedPreferenceManager.sharedInstance.clearAll();
-    
+
       AppRouter.pushAndRemoveUntil(LoginView());
     } catch (e) {
+      if (!ref.mounted) return;
       throw Exception(e);
     }
   }
   FutureOr<void> getMyStores({String? searchText}) async {
+    if (!ref.mounted) return;
     try {
       state = state.copyWith(getStoresApiRes: ApiResponse.loading());
       final response = await MyHttpClient.instance.get(ApiEndpoints.getMyStore);
-      
+      if (!ref.mounted) return;
+
       // Add condition check
       if (response != null && !(response is Map && response.containsKey('detail'))) {
         state = state.copyWith(
@@ -97,6 +107,7 @@ class AuthProvider  extends Notifier<AuthState> {
         state = state.copyWith(getStoresApiRes: ApiResponse.error());
       }
     } catch (e) {
+      if (!ref.mounted) return;
       // Show error message for exceptions
       Helper.showMessage(
         AppRouter.navKey.currentContext!,
@@ -139,19 +150,70 @@ class AuthProvider  extends Notifier<AuthState> {
   }
 
   void userSet() {
-    
+
     Map<String, dynamic> userJson =
         jsonDecode(SharedPreferenceManager.sharedInstance.getUserData()!);
 
    state = state.copyWith(userData: UserDataModel.fromJson(userJson));
-    
-   
+
+
   }
 
+  FutureOr<void> getCategories({
+    required int limit,
+    required int skip,
+    String? searchText,
+  }) async {
+    if (!ref.mounted) return;
+    if (skip == 0 && state.categories!.isNotEmpty) {
+      state = state.copyWith(categories: [], categoriesSkip: 0);
+    }
+    Map<String, dynamic> params = {'limit': limit, 'skip': skip};
+    if (searchText != null) {
+      params['search'] = searchText;
+    }
 
+    try {
+      state = state.copyWith(
+        getCategoriesApiResponse: skip == 0
+            ? ApiResponse.loading()
+            : ApiResponse.loadingMore(),
+      );
+      final response = await MyHttpClient.instance.get(
+        ApiEndpoints.getCatrgories,
+        params: params,
+      );
 
+      if (!ref.mounted) return;
 
-  
+      if (response != null) {
+        List temp = response ?? [];
+        final List<CategoryDataModel> list = List.from(
+          temp.map((e) => CategoryDataModel.fromJson(e)),
+        );
+        state = state.copyWith(
+          getCategoriesApiResponse: ApiResponse.completed(response),
+          categories: skip == 0 && state.categories!.isEmpty
+              ? list
+              : [...state.categories!, ...list],
+          categoriesSkip: list.length >= limit ? skip + limit : 0,
+        );
+      } else {
+        state = state.copyWith(
+          getCategoriesApiResponse: skip == 0
+              ? ApiResponse.error()
+              : ApiResponse.undertermined(),
+        );
+      }
+    } catch (e) {
+      if (!ref.mounted) return;
+      state = state.copyWith(
+        getCategoriesApiResponse: skip == 0
+            ? ApiResponse.error()
+            : ApiResponse.undertermined(),
+      );
+    }
+  }
 }
 final authProvider = NotifierProvider<AuthProvider, AuthState>(
   AuthProvider.new,
