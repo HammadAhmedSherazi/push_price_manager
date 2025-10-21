@@ -18,58 +18,161 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
   Timer? _searchDebounce;
   List<String> types = [
     "best_by_products",
-  "instant_sales",
-  "weighted_items",
-  "promotional_products",
+    "instant_sales",
+    "weighted_items",
+    "promotional_products",
   ];
   int selectIndex = -1;
-
+  int selectCategoryId = -1;
+  int selectStoreId = -1;
   void _showCategoriesModal(BuildContext context, WidgetRef ref) {
-    final categories = ref.watch(authProvider.select((e) => e.categories)) ?? [];
+    final data = ref.watch(authProvider.select((e) => (e.categories, e.myStores)));
+    final categories =
+        data.$1 ?? [];
+    final stores = data.$2 ?? [];
     showModalBottomSheet(
       context: context,
+      showDragHandle: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
       builder: (context) {
-        return Container(
-          padding: EdgeInsets.all(AppTheme.horizontalPadding),
+        return StatefulBuilder(builder: (context, setState)=>Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppTheme.horizontalPadding
+          ),
+
           child: Column(
+            spacing: 20,
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(context.tr("categories"), style: context.textStyle.displayMedium),
-              20.ph,
+              Text(
+                context.tr("categories"),
+                style: context.textStyle.displayMedium!.copyWith(
+                  fontSize: 18.sp,
+                ),
+              ),
+
               SizedBox(
-                height: 200.h,
+                height: 85.r,
                 child: GridView.builder(
+                  padding: EdgeInsets.zero,
                   scrollDirection: Axis.horizontal,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 5,
-                    crossAxisSpacing: 10.r,
-                    mainAxisSpacing: 10.r,
+                    crossAxisCount: 1, // Only 1 row vertically
+                    mainAxisSpacing: 2.r,
+                    crossAxisSpacing: 5.r,
+                    childAspectRatio: 1.2, // Keep boxes square
                   ),
                   itemCount: categories.length,
                   itemBuilder: (context, index) {
                     final category = categories[index];
-                    return Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 25.r,
-                          backgroundImage: NetworkImage(category.icon),
-                        ),
-                        5.ph,
-                        Text(
-                          category.title,
-                          style: context.textStyle.bodySmall,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+                    final isSelect = category.id == selectCategoryId;
+                    return GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          if(isSelect){
+                            selectCategoryId = -1;
+                          }
+                          else{
+                          selectCategoryId = category.id!;
+
+                          }
+                        });
+                      },
+                      child: Column(
+                        // spacing: 10,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CircleAvatar(
+                            radius: 30.r,
+                            backgroundColor:isSelect  ? null : AppColors.primaryAppBarColor ,
+                            child: DisplayNetworkImage(
+                              width: 30.r,
+                              height: 30.r,
+                              imageUrl: category.icon,
+                            ),
+                          ),
+                          Text(
+                            category.title,
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            style: context.textStyle.bodyMedium,
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),
               ),
-            ],
+              if(AppConstant.userType == UserType.manager)...[
+                 10.ph,
+              Text(
+                context.tr("select_store"),
+                style: context.textStyle.displayMedium!.copyWith(
+                  fontSize: 18.sp,
+                ),
+              ),
+
+              SizedBox(
+                height: 85.r,
+                child: GridView.builder(
+                  padding: EdgeInsets.zero,
+                  scrollDirection: Axis.horizontal,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1, // Only 1 row vertically
+                    mainAxisSpacing: 2.r,
+                    crossAxisSpacing: 5.r,
+                    childAspectRatio: 1.2, // Keep boxes square
+                  ),
+                  itemCount: stores.length,
+                  itemBuilder: (context, index) {
+                    final store = stores[index];
+                    final isSelect = store.storeId == selectStoreId;
+                    return GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          if(isSelect){
+                            selectStoreId = -1;
+                          }
+                          else{
+                            selectStoreId = store.storeId;
+                          }
+                        });
+                      },
+                      child: Column(
+                        // spacing: 10,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CircleAvatar(
+                            radius: 30.r,
+                            backgroundColor: isSelect ? null : AppColors.primaryAppBarColor ,
+                            child: Image.asset(Assets.store, width: 40, height: 40,),
+                          ),
+                          Text(
+                            store.storeName,
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            style: context.textStyle.bodyMedium,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+           
+              ],
+              ],
           ),
-        );
-      },
-    );
+        )
+     ); },
+    ).then((c){
+      
+        fetchProduct(skip: 0);
+      
+    });
   }
 
   @override
@@ -97,32 +200,34 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
         : _searchTextEditController.text;
     if (AppConstant.userType == UserType.employee) {
       ref
-        .read(productProvider.notifier)
-        .getListApprovedProducts(
-          limit: 10,
-          type: selectIndex == -1? null: Helper.setType(types[selectIndex]),
-          searchText: text ?? txt,
-          skip: skip
-          
-        );
-    }
-    else{
+          .read(productProvider.notifier)
+          .getListApprovedProducts(
+            limit: 10,
+            type: selectIndex == -1 ? null : Helper.setType(types[selectIndex]),
+            searchText: text ?? txt,
+            skip: skip,
+            categoryId: selectCategoryId == -1 ? null : selectCategoryId ,
+            
+          );
+    } else {
       ref
-        .read(productProvider.notifier)
-        .getPendingReviewList(
-          limit: 10,
-          type: selectIndex == -1? null: Helper.setType(types[selectIndex]),
-          searchText: text ?? txt,
-          skip: skip
-          
-        );
+          .read(productProvider.notifier)
+          .getPendingReviewList(
+            limit: 10,
+            type: selectIndex == -1 ? null : Helper.setType(types[selectIndex]),
+            searchText: text ?? txt,
+            skip: skip,
+            storeId: selectStoreId == -1 ? null : selectStoreId,
+            categoryId: selectCategoryId == -1? null : selectCategoryId
+          );
     }
   }
-  void selectChip(int index){
-     setState(() {
-                    selectIndex = index == selectIndex ? -1: index;
-                  });
-                  fetchProduct(skip:0);
+
+  void selectChip(int index) {
+    setState(() {
+      selectIndex = index == selectIndex ? -1 : index;
+    });
+    fetchProduct(skip: 0);
   }
 
   @override
@@ -133,9 +238,20 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
 
   @override
   Widget build(BuildContext context) {
-    final data = ref.watch(productProvider.select((e)=>(e.productListingApiResponse, e.pendingReviewApiRes, e.listApprovedproducts, e.pendingReviewList)));
-    final response = AppConstant.userType == UserType.employee? data.$1 : data.$2;
-    final list = AppConstant.userType == UserType.employee? data.$3: data.$4;
+    final data = ref.watch(
+      productProvider.select(
+        (e) => (
+          e.productListingApiResponse,
+          e.pendingReviewApiRes,
+          e.listApprovedproducts,
+          e.pendingReviewList,
+        ),
+      ),
+    );
+    final response = AppConstant.userType == UserType.employee
+        ? data.$1
+        : data.$2;
+    final list = AppConstant.userType == UserType.employee ? data.$3 : data.$4;
     return Scaffold(
       appBar: CustomAppBarWidget(
         height: context.screenheight * 0.22,
@@ -166,7 +282,7 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                               selectChip(i);
+                                selectChip(i);
                               },
                               child: Container(
                                 // margin: EdgeInsets.only(bottom: 8),
@@ -201,7 +317,7 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                             Expanded(
                               child: GestureDetector(
                                 onTap: () {
-                                  selectChip(i+1);
+                                  selectChip(i + 1);
                                 },
                                 child: Container(
                                   // margin: EdgeInsets.only(bottom: 8),
@@ -239,11 +355,10 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
               ),
             ),
           ),
-        
         ],
       ),
       body: RefreshIndicator.adaptive(
-        onRefresh: ()async {
+        onRefresh: () async {
           fetchProduct(skip: 0);
         },
         child: Column(
@@ -262,15 +377,17 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                   if (_searchDebounce?.isActive ?? false) {
                     _searchDebounce!.cancel();
                   }
-        
-                  _searchDebounce = Timer(const Duration(milliseconds: 500), () {
-                    if (text.length >= 3) {
-                      fetchProduct(text: text, skip: 0);
-                    }
-                    else{
-                      fetchProduct(skip: 0);
-                    }
-                  });
+
+                  _searchDebounce = Timer(
+                    const Duration(milliseconds: 500),
+                    () {
+                      if (text.length >= 3) {
+                        fetchProduct(text: text, skip: 0);
+                      } else {
+                        fetchProduct(skip: 0);
+                      }
+                    },
+                  );
                 },
                 onTapOutside: (v) {
                   FocusScope.of(context).unfocus();
@@ -289,21 +406,18 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                   AppTheme.horizontalPadding,
                 ).copyWith(bottom: 100.r),
                 itemBuilder: (context, index) {
-                  final item =list[index];
+                  final item = list[index];
                   return ProductDisplayWidget(
-                  onTap: () {
-                    AppRouter.push(
-                      PendingProductDetailView(
-                        
-                        data: item,
-                      ),
-                      fun: (){
-                        fetchProduct(skip: 0);
-                      }
-                    );
-                  },
-                  data: item.product!,
-                );
+                    onTap: () {
+                      AppRouter.push(
+                        PendingProductDetailView(data: item),
+                        fun: () {
+                          fetchProduct(skip: 0);
+                        },
+                      );
+                    },
+                    data: item.product!,
+                  );
                 },
               ),
             ),

@@ -17,53 +17,101 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
 
   Timer? _searchDebounce;
 
+   int selectCategoryId = -1;
+
   void _showCategoriesModal(BuildContext context, WidgetRef ref) {
-    final categories = ref.watch(authProvider.select((e) => e.categories)) ?? [];
+  
+    final categories =
+        ref.watch(authProvider.select((e) => e.categories)) ?? [];
+   
     showModalBottomSheet(
       context: context,
+      showDragHandle: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
       builder: (context) {
-        return Container(
-          padding: EdgeInsets.all(AppTheme.horizontalPadding),
+        return StatefulBuilder(builder: (context, setState)=>Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppTheme.horizontalPadding
+          ),
+
           child: Column(
+            spacing: 20,
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(context.tr("categories"), style: context.textStyle.displayMedium),
-              20.ph,
+              Text(
+                context.tr("categories"),
+                style: context.textStyle.displayMedium!.copyWith(
+                  fontSize: 18.sp,
+                ),
+              ),
+
               SizedBox(
-                height: 200.h,
+                height: 85.r,
                 child: GridView.builder(
+                  padding: EdgeInsets.zero,
                   scrollDirection: Axis.horizontal,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 5,
-                    crossAxisSpacing: 10.r,
-                    mainAxisSpacing: 10.r,
+                    crossAxisCount: 1, // Only 1 row vertically
+                    mainAxisSpacing: 2.r,
+                    crossAxisSpacing: 5.r,
+                    childAspectRatio: 1.2, // Keep boxes square
                   ),
                   itemCount: categories.length,
                   itemBuilder: (context, index) {
                     final category = categories[index];
-                    return Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 25.r,
-                          backgroundImage: NetworkImage(category.icon),
-                        ),
-                        5.ph,
-                        Text(
-                          category.title,
-                          style: context.textStyle.bodySmall,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+                    final isSelect = category.id == selectCategoryId;
+                    return GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          if(isSelect){
+                            selectCategoryId = -1;
+                          }
+                          else{
+                          selectCategoryId = category.id!;
+
+                          }
+                        });
+                      },
+                      child: Column(
+                        // spacing: 10,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CircleAvatar(
+                            radius: 30.r,
+                            backgroundColor:isSelect  ? null : AppColors.primaryAppBarColor ,
+                            child: DisplayNetworkImage(
+                              width: 30.r,
+                              height: 30.r,
+                              imageUrl: category.icon,
+                            ),
+                          ),
+                          Text(
+                            category.title,
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            style: context.textStyle.bodyMedium,
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),
               ),
-            ],
+             ],
           ),
-        );
-      },
-    );
+        )
+     ); },
+    ).then((c){
+      
+        fetchProduct(skip: 0);
+      
+    });
   }
+
+
   @override
   void initState() {
     super.initState();
@@ -89,7 +137,7 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
     final String? text = _searchTextEditController.text.isEmpty ? null :  _searchTextEditController.text;
     ref
                 .read(productProvider.notifier)
-                .getProductfromDatabase(limit: 10, skip: skip, searchText: searchText ?? text);
+                .getProductfromDatabase(limit: 10, skip: skip, searchText: searchText ?? text, categoryId: selectCategoryId == -1? null : selectCategoryId);
   }
 
   @override

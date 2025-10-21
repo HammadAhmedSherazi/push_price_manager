@@ -141,7 +141,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
         },
         customSuccessWidget: CustomScreenTemplate(
           showBottomButton: true,
-          bottomButtonText: context.tr("next"),
+          
           customBottomWidget: Padding(
             padding: EdgeInsetsGeometry.symmetric(
               horizontal: AppTheme.horizontalPadding,

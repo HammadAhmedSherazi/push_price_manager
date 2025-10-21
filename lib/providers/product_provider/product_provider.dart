@@ -61,6 +61,7 @@ class ProductProvider extends Notifier<ProductState> {
     required int limit,
     required int skip ,
     String? searchText,
+    int? categoryId,
   }) async {
     if (!ref.mounted) return;
     if (skip == 0 && state.products!.isNotEmpty) {
@@ -76,9 +77,9 @@ class ProductProvider extends Notifier<ProductState> {
     // if(maxPrice != null){
     //   params['max_price'] = maxPrice;
     // }
-    // if(categoryId != null){
-    //   params['category_id'] = categoryId;
-    // }
+    if(categoryId != null){
+      params['category_id'] = categoryId;
+    }
 
     try {
       state = state.copyWith(
@@ -214,6 +215,7 @@ class ProductProvider extends Notifier<ProductState> {
     required int skip ,
     String? type,
     String? searchText,
+    int? categoryId,
   }) async {
     if (!ref.mounted) return;
     try {
@@ -235,6 +237,9 @@ class ProductProvider extends Notifier<ProductState> {
       }
       if (searchText != null) {
         params["search"] = searchText;
+      }
+      if(categoryId != null){
+        params["category_id"] = categoryId;
       }
 
       final response = await MyHttpClient.instance.get(
@@ -297,6 +302,8 @@ class ProductProvider extends Notifier<ProductState> {
     required int skip ,
     String? type,
     String? searchText,
+    int? categoryId,
+    
   }) async {
     if (!ref.mounted) return;
     try {
@@ -319,6 +326,10 @@ class ProductProvider extends Notifier<ProductState> {
       if (searchText != null) {
         params["search"] = searchText;
       }
+      if(categoryId != null){
+        params["category_id"] = categoryId;
+      }
+      
       final response = await MyHttpClient.instance.get(
         ApiEndpoints.myListings,
         params: params,
@@ -378,6 +389,8 @@ class ProductProvider extends Notifier<ProductState> {
     required int skip ,
     String? searchText,
     String? type,
+    int? storeId,
+    int? categoryId,
   }) async {
     if (!ref.mounted) return;
     try {
@@ -398,6 +411,12 @@ class ProductProvider extends Notifier<ProductState> {
       }
       if (searchText != null) {
         params["search"] = searchText;
+      }
+      if(storeId != null){
+        params["store_id"] = storeId;
+      }
+      if(categoryId != null){
+        params["category_id"] = categoryId;
       }
       final response = await MyHttpClient.instance.get(
         ApiEndpoints.pendingReview,
@@ -458,6 +477,8 @@ class ProductProvider extends Notifier<ProductState> {
     required int skip ,
     String? searchText,
     String? type,
+    int? storeId,
+    int? categoryId,
   }) async {
     if (!ref.mounted) return;
     try {
@@ -476,6 +497,12 @@ class ProductProvider extends Notifier<ProductState> {
       }
       if (searchText != null) {
         params["search"] = searchText;
+      }
+       if(storeId != null){
+        params["store_id"] = storeId;
+      }
+      if(categoryId != null){
+        params["category_id"] = categoryId;
       }
       final response = await MyHttpClient.instance.get(
         ApiEndpoints.liveList,

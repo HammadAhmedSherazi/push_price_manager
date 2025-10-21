@@ -1,0 +1,4 @@
+- [x] Add _showCategoriesModal method to _LiveListingViewState in lib/views/manager/live_listing/live_listing_view.dart
+- [x] Add _showCategoriesModal method to _PendingListingViewState in lib/views/manager/pending_listing/pending_listings_view.dart
+- [x] Make filter icon tappable in CustomSearchBarWidget in live_listing_view.dart
+- [x] Make filter icon tappable in CustomSearchBarWidget in pending_listings_view.dart

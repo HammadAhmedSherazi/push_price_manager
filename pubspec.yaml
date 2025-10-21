@@ -50,7 +50,7 @@ dependencies:
   simple_barcode_scanner: ^0.3.0
 
   intl: any
-  flutter_localizations: any
+  # flutter_localizations: any
   http: any
   http_parser: any
 dev_dependencies:
