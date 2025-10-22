@@ -67,7 +67,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                 },
               ),
             if (AppConstant.userType == UserType.manager &&
-                widget.data.status == "PENDING_MANAGER_REVIEW")
+                widget.data.status == "PENDING_MANAGER_REVIEW" || widget.data.status == "PENDING_MANAGER_DISCOUNT")
               CustomOutlineButtonWidget(
                 title: context.tr("edit"),
                 onPressed: () {
