@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppRouter {
   static GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
@@ -20,8 +21,10 @@ class AppRouter {
   focusScope.unfocus();
 }
 static closeKeyboard (){
+    FocusManager.instance.primaryFocus?.unfocus();
+  SystemChannels.textInput.invokeMethod('TextInput.hide');
   // if(Focus.of(navKey.currentContext!).hasFocus){
-   FocusScope.of(navKey.currentContext!).unfocus();
+  //  FocusScope.of(scaffoldkey.currentState!.context).unfocus();
 
     // }
 }
