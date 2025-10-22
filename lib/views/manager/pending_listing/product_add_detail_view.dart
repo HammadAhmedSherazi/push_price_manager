@@ -309,7 +309,7 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                     ),
                     readOnly: true,
                   ),
-                  if(widget.data.initiatorType == "EMPLOYEE")
+                  if(widget.data.status != "PENDING_MANAGER_REVIEW" && AppConstant.userType != UserType.employee)
                   CustomDropDown(
                     onChanged: (value) {
                       if (value != null) {
@@ -350,7 +350,7 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                     }).toList(),
                   ),
                   
-                  if(widget.data.initiatorType == "MANAGER")
+                  if(widget.data.status == "PENDING_MANAGER_REVIEW" && AppConstant.userType == UserType.employee)
                    TextFormField(
                     controller: TextEditingController(text: selectType),
                     onTapOutside: (event) {

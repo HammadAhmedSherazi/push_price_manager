@@ -5,7 +5,7 @@ class CategoryDataModel {
   final int? chainId;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-
+  final bool isSelect;
   const CategoryDataModel({
     required this.title,
     required this.icon,
@@ -13,6 +13,7 @@ class CategoryDataModel {
     this.chainId,
     this.createdAt,
     this.updatedAt,
+    this.isSelect = false
   });
 
   factory CategoryDataModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +24,7 @@ class CategoryDataModel {
       chainId: json['chain_id'],
       createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
       updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
+      isSelect: false
     );
   }
 
@@ -44,6 +46,7 @@ class CategoryDataModel {
     int? chainId,
     DateTime? createdAt,
     DateTime? updatedAt,
+    bool? isSelect
   }) {
     return CategoryDataModel(
       id: id ?? this.id,
@@ -52,6 +55,7 @@ class CategoryDataModel {
       chainId: chainId ?? this.chainId,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      isSelect: isSelect ?? this.isSelect
     );
   }
 

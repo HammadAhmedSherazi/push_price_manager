@@ -44,6 +44,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                   AppRouter.push(
                     AddDiscountView(
                       isInstant: type == "Instant Sales",
+                      isPromotionalDiscount: type == "Promotional Products",
                       data: widget.data,
                     ),
                     fun: (){
@@ -53,7 +54,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                 },
               ),
             if (AppConstant.userType == UserType.employee &&
-                widget.data.status == "PENDING_MANAGER_REVIEW")
+                widget.data.status == "PENDING_MANAGER_REVIEW" || widget.data.status == "PENDING_MANAGER_DISCOUNT")
               CustomButtonWidget(
                 title: context.tr("edit"),
                 onPressed: () {

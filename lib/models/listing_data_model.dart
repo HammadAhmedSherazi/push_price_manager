@@ -104,7 +104,7 @@ ListingModel.fromJson(Map<String, dynamic> json)
               (json['weighted_items_prices'] as List).map((e) => e.toDouble()))
           : [],
       saveDiscountForFuture = json['save_discount_for_future'] ?? false,
-      saveDiscountForListing = json['save_discount_for_listing'] ?? false,
+      saveDiscountForListing = json['save_duration_for_listing'] ?? false,
       dontResumeAutomatically = json['dont_resume_automatically'] ?? false,
       resumeAutomatically = json['resume_automatically'] ?? false,
       storeId = json['store_id'] ?? 0,

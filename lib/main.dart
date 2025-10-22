@@ -19,7 +19,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentLocale = ref.watch(localeProvider);
-    
+    final prefs = SharedPreferenceManager.sharedInstance;
     //Set the fit size (Find your UI design, look at the dimensions of the device screen and fill it in,unit in dp)
     return ScreenUtilInit(
       designSize: const Size(360, 690),
@@ -67,7 +67,7 @@ class MyApp extends ConsumerWidget {
         );
       },
       useInheritedMediaQuery: true,
-      child: OnboardingView(),
+      child: prefs.getStartedCheck()?LoginView() :OnboardingView(),
     );
   }
 }

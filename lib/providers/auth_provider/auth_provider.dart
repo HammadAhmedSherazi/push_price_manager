@@ -116,7 +116,7 @@ class AuthProvider  extends Notifier<AuthState> {
       state = state.copyWith(getStoresApiRes: ApiResponse.error());
     }
   }
-    void addSelectStore(int index) {
+  void addSelectStore(int index) {
     final stores = List<StoreSelectDataModel>.from(state.myStores ?? []);
     final selectedStores = List<StoreSelectDataModel>.from(
       state.selectedStores ?? [],
@@ -141,6 +141,7 @@ class AuthProvider  extends Notifier<AuthState> {
 
     state = state.copyWith(myStores: stores, selectedStores: selectedStores);
   }
+  
 
  
   void savedUserData(Map<String, dynamic> userMap) {

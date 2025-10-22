@@ -202,9 +202,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
                       "current_discount": double.parse(
                         _currentDiscountEditTextController.text,
                       ),
-                      "daily_increasing_discount_percent": double.parse(
-                        _dialyDiscountEditTextController.text,
-                      ),
+                     
                     });
                   } else {
                     data.addAll({
@@ -367,7 +365,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
                           }
                               ref
                                 .read(productProvider.notifier)
-                                .setCheckBox(v!, index);
+                                .setCheckBox(v!, index, widget.isInstant!);
                         },
                         activeColor: AppColors.secondaryColor,
                       ),

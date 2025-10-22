@@ -127,13 +127,9 @@ SlideTransition(position: _imageOffset, child: FadeTransition(opacity: _opacity,
              Spacer(),
             CustomButtonWidget(title: context.tr("get_started"), onPressed: (){
               final prefs = SharedPreferenceManager.sharedInstance;
-              if(prefs.getStartedCheck()){
-                AppRouter.pushAndRemoveUntil(LoginView());
-              }
-              else{
-                prefs.storeGetStarted(true);
-                AppRouter.pushReplacement(SelectLanguageView());
-              }
+               prefs.storeGetStarted(true);
+              AppRouter.pushReplacement(SelectLanguageView());
+              
               
             })
 

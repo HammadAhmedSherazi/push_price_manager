@@ -40,19 +40,19 @@ class ProductProvider extends Notifier<ProductState> {
     state = state.copyWith(listItem: item);
   }
 
-  void setCheckBox(bool chk, int index) {
+  void setCheckBox(bool chk, int index, bool instantSale) {
     if (index == 0) {
       state = state.copyWith(
         listItem: state.listItem!.copyWith(saveDiscountForFuture: chk),
       );
     } else if (index == 1) {
       state = state.copyWith(
-        listItem: state.listItem!.copyWith(saveDiscountForListing: chk),
+        listItem: instantSale?state.listItem!.copyWith(dontResumeAutomatically: chk) :  state.listItem!.copyWith(saveDiscountForListing: chk),
       );
     } else {
 
       state = state.copyWith(
-        listItem: state.listItem!.copyWith(autoApplyForNextBatch: chk, saveDiscountForFuture: chk? true: null, saveDiscountForListing: chk ? true : null ),
+        listItem: instantSale? state.listItem!.copyWith(resumeAutomatically: chk, saveDiscountForFuture: chk? true: null, dontResumeAutomatically: chk ? true : null ) :state.listItem!.copyWith(autoApplyForNextBatch: chk, saveDiscountForFuture: chk? true: null, saveDiscountForListing: chk ? true : null ),
       );
     }
   }
