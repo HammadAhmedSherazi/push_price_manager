@@ -81,7 +81,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                   );
                 },
               ),
-            if (widget.data.status == "PENDING_MANAGER_REVIEW")
+            if (widget.data.status == "PENDING_MANAGER_REVIEW" || widget.data.status == "PENDING_MANAGER_DISCOUNT")
               CustomButtonWidget(
                 title: context.tr("delete"),
                 onPressed: () {

@@ -309,6 +309,7 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                     ),
                     readOnly: true,
                   ),
+                  if(widget.data.initiatorType == "EMPLOYEE")
                   CustomDropDown(
                     onChanged: (value) {
                       if (value != null) {
@@ -347,6 +348,18 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                         ),
                       );
                     }).toList(),
+                  ),
+                  
+                  if(widget.data.initiatorType == "MANAGER")
+                   TextFormField(
+                    controller: TextEditingController(text: selectType),
+                    onTapOutside: (event) {
+                      FocusScope.of(context).unfocus();
+                    },
+                    decoration: InputDecoration(
+                      hintText: "Product Price (Pre-filled)",
+                    ),
+                    readOnly: true,
                   ),
                   if (selectType ==
                           Helper.getTypeTitle(Helper.setType(types[0])) ||

@@ -14,6 +14,7 @@ class SharedPreferenceManager {
   final String email = 'email';
   final String pass = 'pass';
   final String rememberMe = 'rememberMe';
+  final String getStarted = 'get_started';
   
 
 
@@ -38,7 +39,7 @@ class SharedPreferenceManager {
   setRemberMe(bool chk)=> instance.setBool(rememberMe, chk);
   storeEmail(String text)=> instance.setString(email,text);
   storePass(String text)=> instance.setString(pass,text);
-
+  storeGetStarted(bool chk)=> instance.setBool(getStarted,chk);
 
 
 
@@ -51,6 +52,7 @@ class SharedPreferenceManager {
   String? getToken() => instance.getString(tokenKey);
   String? getRefreshToken() => instance.getString(refreshTokenKey);
   bool? getRemberMe()=> instance.getBool(rememberMe);
+  bool getStartedCheck()=> instance.getBool(getStarted) ?? false;
 
   String? getSavedEmail() => instance.getString(email);
   String? getSavedPassword() => instance.getString(pass);

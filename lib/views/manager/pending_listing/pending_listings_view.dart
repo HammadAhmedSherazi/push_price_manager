@@ -191,7 +191,8 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
         radius: 0.0,
         title: AppConstant.userType == UserType.employee
             ? context.tr("product_listings_select_product")
-            : "Pending Listing - Select Product",
+            : context.tr("pending_listings_select_product")
+           ,
         children: [
           15.ph,
           Expanded(

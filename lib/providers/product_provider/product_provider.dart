@@ -47,12 +47,12 @@ class ProductProvider extends Notifier<ProductState> {
       );
     } else if (index == 1) {
       state = state.copyWith(
-        listItem: state.listItem!.copyWith(saveDiscountForListing: chk),
+        listItem: state.listItem!.listingType  == "INSTANT_SALE" ? state.listItem!.copyWith(saveDiscountForListing: chk) : state.listItem!.copyWith(dontResumeAutomatically: chk),
       );
     } else {
 
       state = state.copyWith(
-        listItem: state.listItem!.copyWith(autoApplyForNextBatch: chk, saveDiscountForFuture: chk? true: null, saveDiscountForListing: chk ? true : null ),
+        listItem:state.listItem!.listingType  == "INSTANT_SALE" ? state.listItem!.copyWith(autoApplyForNextBatch: chk, saveDiscountForFuture: chk? true: null, saveDiscountForListing: chk ? true : null ) : state.listItem!.copyWith(resumeAutomatically: chk , saveDiscountForFuture: chk? true: null, dontResumeAutomatically: chk?true : null),
       );
     }
   }

@@ -180,6 +180,9 @@
   "go_home": "Ir al inicio",
   "save_discount_for_future_listings": "Guardar descuento para futuras publicaciones",
   "save_duration_with_best_by_date": "Guardar la duración de la fecha de inicio de la publicación de acuerdo con la fecha de vencimiento para futuras publicaciones",
+  "do_not_resume_automatically": "No reanudar automáticamente todos los días sin actualizar la cantidad",
+  "resume_automatically": "Reanudar automáticamente todos los días sin actualizar la cantidad",
+
   "resume_automatically_next_batch": "Reanudar automáticamente para el siguiente lote",
   "current_discount": "Descuento actual",
   "hourly_increasing_discount": "Descuento creciente por hora",

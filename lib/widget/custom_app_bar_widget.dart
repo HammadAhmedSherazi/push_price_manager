@@ -44,6 +44,7 @@ class CustomAppBarWidget extends StatelessWidget implements PreferredSize {
                       children: [
                         GestureDetector(
                           onTap: (){
+                            AppRouter.closeKeyboard();
                             AppRouter.scaffoldkey.currentState!.openDrawer();
                           },
                           child: CircleAvatar(

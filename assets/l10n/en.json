@@ -180,6 +180,9 @@
   "go_home": "Go Home",
  "save_discount_for_future_listings": "Save Discount For Future Listings",
   "save_duration_with_best_by_date": "Save Duration of Listing Start Date in Accordance with the Best By Date for future Listings",
+  "do_not_resume_automatically": "Do Not Resume Automatically Everyday Without Updating Quantity",
+  "resume_automatically": "Resume Automatically Everyday Without Updating Quantity",
+
   "resume_automatically_next_batch": "Resume Automatically For The Next Batch",
   "current_discount": "Current Discount",
   "hourly_increasing_discount": "Hourly Increasing Discount",

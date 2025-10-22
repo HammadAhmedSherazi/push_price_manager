@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppRouter {
   static GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
-   static  GlobalKey<ScaffoldState> scaffoldkey = GlobalKey();
+  static  GlobalKey<ScaffoldState> scaffoldkey = GlobalKey();
 
   static void back() {
     Navigator.of(navKey.currentContext!).pop();
@@ -20,7 +20,10 @@ class AppRouter {
   focusScope.unfocus();
 }
 static closeKeyboard (){
+  // if(Focus.of(navKey.currentContext!).hasFocus){
    FocusScope.of(navKey.currentContext!).unfocus();
+
+    // }
 }
   static push(page, {Function()? fun,RouteSettings? settings} ) async {
     await Navigator.push(

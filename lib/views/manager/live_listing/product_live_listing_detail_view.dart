@@ -57,6 +57,8 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
       ...List.generate(listData.weightedItemsPrices!.length,(index)=>  InfoDataModel(title: "Price ${index + 1}", description: "\$${listData.weightedItemsPrices![index]}")),      
       InfoDataModel(title: "Average Price", description: "\$${listData.averagePrice}"),
       InfoDataModel(title: context.tr("current_discount"), description: "${listData.currentDiscount}%"),
+      InfoDataModel(title: context.tr("listing_start_date"), description: Helper.selectDateFormat(listData.goLiveDate)), 
+
      ];
   } else {
     return [

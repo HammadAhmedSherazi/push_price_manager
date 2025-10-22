@@ -14,7 +14,7 @@ class ScanProductView extends StatelessWidget {
           Expanded(
             child: Align(
               alignment: Alignment.center,
-              child: SvgPicture.asset(Assets.barCodeScanIcon)),
+              child: DisplayNetworkImage(imageUrl: data.image, width: 100.r,height: 100.r,)),
           ),
           Container(
             width: double.infinity,

@@ -23,6 +23,8 @@ class ListingModel {
   final List<double>? weightedItemsPrices;
   final bool saveDiscountForFuture;
   final bool saveDiscountForListing;
+  final bool dontResumeAutomatically;
+  final bool resumeAutomatically;
   final int storeId;
   final bool autoApplyForNextBatch;
   final Manager manager;
@@ -61,7 +63,9 @@ class ListingModel {
     this.employee,
     this.saveDiscountForListing = false,
     this.stores = const [],
-    this.schedule = const[]
+    this.schedule = const[],
+    this.dontResumeAutomatically = false,
+    this.resumeAutomatically = false
 
   });
 
@@ -101,6 +105,8 @@ ListingModel.fromJson(Map<String, dynamic> json)
           : [],
       saveDiscountForFuture = json['save_discount_for_future'] ?? false,
       saveDiscountForListing = json['save_discount_for_listing'] ?? false,
+      dontResumeAutomatically = json['dont_resume_automatically'] ?? false,
+      resumeAutomatically = json['resume_automatically'] ?? false,
       storeId = json['store_id'] ?? 0,
       autoApplyForNextBatch = json['auto_apply_for_next_batch'] ?? false,
       manager = json['manager'] != null
@@ -183,6 +189,8 @@ ListingModel.fromJson(Map<String, dynamic> json)
   List<double>? weightedItemsPrices,
   bool? saveDiscountForFuture,
   bool? saveDiscountForListing,
+  bool? dontResumeAutomatically,
+  bool? resumeAutomatically,
   int? storeId,
   bool? autoApplyForNextBatch,
   Manager? manager,
@@ -223,7 +231,9 @@ ListingModel.fromJson(Map<String, dynamic> json)
     product: product ?? this.product,
     employee: employee ?? this.employee,
     schedule: schedule ?? this.schedule,
-    stores: stores ?? this.stores, // ✅ Now handled
+    stores: stores ?? this.stores,
+    dontResumeAutomatically: dontResumeAutomatically ?? this.dontResumeAutomatically,
+    resumeAutomatically: resumeAutomatically ?? this.resumeAutomatically // ✅ Now handled
   );
 }
 
