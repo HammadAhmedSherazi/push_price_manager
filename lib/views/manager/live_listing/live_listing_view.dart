@@ -25,8 +25,8 @@ class _LiveListingViewState extends ConsumerState<LiveListingView> {
   ];
   int selectIndex = -1;
 
-int selectCategoryId = -1;
-int selectStoreId = -1;
+List<int> selectCategoryIds = [];
+List<int> selectStoreIds = [];
   void _showCategoriesModal(BuildContext context, WidgetRef ref) {
     final data = ref.watch(authProvider.select((e) => (e.categories, e.myStores, e.getCategoriesApiResponse, e.getStoresApiRes)));
     final categories =
@@ -60,18 +60,22 @@ int selectStoreId = -1;
 
                CategoryDisplayGenericWidget(
                   response: response1,
-                  selectedCategoryId: selectCategoryId,
+                  selectedCategoryIds: selectCategoryIds,
                   categories: categories,
                   onScrollFun: () {
                     final skip = ref.watch(authProvider.select((e)=>e.categoriesSkip)) ?? 0;
                     if(skip > 0){
                       ref.read(authProvider.notifier).getCategories(limit: 5, skip: skip);
                     }
-                    
+
                   },
                   onTap: (category) {
                     setState((){
-                      selectCategoryId = selectCategoryId == category.id ? -1 : category.id!; 
+                      if (selectCategoryIds.contains(category.id)) {
+                        selectCategoryIds.remove(category.id);
+                      } else {
+                        selectCategoryIds.add(category.id!);
+                      }
                     });
                   },
                   onRetryFun: () {
@@ -88,9 +92,13 @@ int selectStoreId = -1;
                 ),
               ),
 
-             StoreDisplayGenericWidget(response: response2, selectedStoreId: selectStoreId, stores: stores, onTap: (store){
+             StoreDisplayGenericWidget(response: response2, selectedStoreIds: selectStoreIds, stores: stores, onTap: (store){
               setState((){
-                selectStoreId = store.storeId == selectStoreId ? -1: store.storeId;
+                if (selectStoreIds.contains(store.storeId)) {
+                  selectStoreIds.remove(store.storeId);
+                } else {
+                  selectStoreIds.add(store.storeId);
+                }
               });
              }, onRetryFun: (){
               ref.read(authProvider.notifier).getMyStores();
@@ -136,8 +144,8 @@ int selectStoreId = -1;
           type: selectIndex == -1? null: Helper.setType(types[selectIndex]),
           searchText: text ?? txt,
           skip: skip,
-          storeId: selectStoreId == -1? null : selectStoreId,
-          categoryId: selectCategoryId == -1? null : selectCategoryId
+          storeId: selectStoreIds.isEmpty ? null : selectStoreIds,
+          categoryId: selectCategoryIds.isEmpty ? null : selectCategoryIds
           
         );
   }

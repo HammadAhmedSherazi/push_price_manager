@@ -1,4 +1,4 @@
-import 'dart:async';
+  import 'dart:async';
 
 import 'package:push_price_manager/data/network/api_response.dart';
 import 'package:push_price_manager/export_all.dart';
@@ -61,7 +61,7 @@ class ProductProvider extends Notifier<ProductState> {
     required int limit,
     required int skip ,
     String? searchText,
-    int? categoryId,
+    List<int>? categoryId,
   }) async {
     if (!ref.mounted) return;
     if (skip == 0 && state.products!.isNotEmpty) {
@@ -77,8 +77,8 @@ class ProductProvider extends Notifier<ProductState> {
     // if(maxPrice != null){
     //   params['max_price'] = maxPrice;
     // }
-    if(categoryId != null){
-      params['category_id'] = categoryId;
+    if(categoryId != null && categoryId.isNotEmpty){
+      params["category_id"] = categoryId;
     }
 
     try {
@@ -215,7 +215,7 @@ class ProductProvider extends Notifier<ProductState> {
     required int skip ,
     String? type,
     String? searchText,
-    int? categoryId,
+    List<int>? categoryId,
   }) async {
     if (!ref.mounted) return;
     try {
@@ -238,7 +238,7 @@ class ProductProvider extends Notifier<ProductState> {
       if (searchText != null) {
         params["search"] = searchText;
       }
-      if(categoryId != null){
+      if(categoryId != null && categoryId.isNotEmpty){
         params["category_id"] = categoryId;
       }
 
@@ -302,8 +302,8 @@ class ProductProvider extends Notifier<ProductState> {
     required int skip ,
     String? type,
     String? searchText,
-    int? categoryId,
-    
+    List<int>? categoryId,
+
   }) async {
     if (!ref.mounted) return;
     try {
@@ -326,10 +326,10 @@ class ProductProvider extends Notifier<ProductState> {
       if (searchText != null) {
         params["search"] = searchText;
       }
-      if(categoryId != null){
+      if(categoryId != null && categoryId.isNotEmpty){
         params["category_id"] = categoryId;
       }
-      
+
       final response = await MyHttpClient.instance.get(
         ApiEndpoints.myListings,
         params: params,
@@ -389,8 +389,8 @@ class ProductProvider extends Notifier<ProductState> {
     required int skip ,
     String? searchText,
     String? type,
-    int? storeId,
-    int? categoryId,
+    List<int>? storeId,
+    List<int>? categoryId,
   }) async {
     if (!ref.mounted) return;
     try {
@@ -412,10 +412,10 @@ class ProductProvider extends Notifier<ProductState> {
       if (searchText != null) {
         params["search"] = searchText;
       }
-      if(storeId != null){
+      if(storeId != null && storeId.isNotEmpty){
         params["store_id"] = storeId;
       }
-      if(categoryId != null){
+      if(categoryId != null && categoryId.isNotEmpty){
         params["category_id"] = categoryId;
       }
       final response = await MyHttpClient.instance.get(
@@ -477,8 +477,8 @@ class ProductProvider extends Notifier<ProductState> {
     required int skip ,
     String? searchText,
     String? type,
-    int? storeId,
-    int? categoryId,
+    List<int>? storeId,
+    List<int>? categoryId,
   }) async {
     if (!ref.mounted) return;
     try {
@@ -498,10 +498,10 @@ class ProductProvider extends Notifier<ProductState> {
       if (searchText != null) {
         params["search"] = searchText;
       }
-       if(storeId != null){
+       if(storeId != null && storeId.isNotEmpty){
         params["store_id"] = storeId;
       }
-      if(categoryId != null){
+      if(categoryId != null && categoryId.isNotEmpty){
         params["category_id"] = categoryId;
       }
       final response = await MyHttpClient.instance.get(

@@ -26,7 +26,7 @@ class _EmployeeListRequestViewState
   ];
   int selectIndex = -1;
 
-  int selectCategoryId = -1;
+  List<int> selectCategoryIds = [];
 
   void _showCategoriesModal(BuildContext context, WidgetRef ref) {
     final categories =
@@ -62,18 +62,22 @@ class _EmployeeListRequestViewState
 
                  CategoryDisplayGenericWidget(
                   response: response,
-                  selectedCategoryId: selectCategoryId,
+                  selectedCategoryIds: selectCategoryIds,
                   categories: categories,
                   onScrollFun: () {
                     final skip = ref.watch(authProvider.select((e)=>e.categoriesSkip)) ?? 0;
                     if(skip > 0){
                       ref.read(authProvider.notifier).getCategories(limit: 5, skip: skip);
                     }
-                    
+
                   },
                   onTap: (category) {
                     setState((){
-                      selectCategoryId = selectCategoryId == category.id ? -1 : category.id!; 
+                      if (selectCategoryIds.contains(category.id)) {
+                        selectCategoryIds.remove(category.id);
+                      } else {
+                        selectCategoryIds.add(category.id!);
+                      }
                     });
                   },
                   onRetryFun: () {
@@ -124,7 +128,7 @@ class _EmployeeListRequestViewState
           type: selectIndex == -1 ? null : Helper.setType(types[selectIndex]),
           searchText: text ?? txt,
           skip: skip,
-          categoryId: selectCategoryId == -1 ? null : selectCategoryId,
+          categoryId: selectCategoryIds.isEmpty ? null : selectCategoryIds,
         );
   }
 

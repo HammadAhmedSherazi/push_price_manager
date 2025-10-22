@@ -1,10 +1,11 @@
 import 'package:push_price_manager/utils/extension.dart';
+
 import '../data/network/api_response.dart';
 import '../export_all.dart';
 
 class StoreDisplayGenericWidget extends StatefulWidget {
   final ApiResponse response;
-  final int selectedStoreId;
+  final List<int> selectedStoreIds;
   final List<StoreDataModel> stores;
   final Function(StoreDataModel store) onTap;
   final VoidCallback onRetryFun;
@@ -13,7 +14,7 @@ class StoreDisplayGenericWidget extends StatefulWidget {
   const StoreDisplayGenericWidget({
     super.key,
     required this.response,
-    required this.selectedStoreId,
+    required this.selectedStoreIds,
     required this.stores,
     required this.onTap,
     required this.onRetryFun,
@@ -70,7 +71,7 @@ class _StoreDisplayGenericWidgetState extends State<StoreDisplayGenericWidget> {
           itemCount: widget.stores.length,
           itemBuilder: (context, index) {
             final store = widget.stores[index];
-            final isSelected = store.storeId == widget.selectedStoreId;
+            final isSelected = widget.selectedStoreIds.contains(store.storeId);
       
             return GestureDetector(
               onTap: () => widget.onTap(store),

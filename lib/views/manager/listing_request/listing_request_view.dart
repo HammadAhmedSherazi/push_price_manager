@@ -17,7 +17,7 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
 
   Timer? _searchDebounce;
 
-   int selectCategoryId = -1;
+   List<int> selectCategoryIds = [];
 
   void _showCategoriesModal(BuildContext context, WidgetRef ref) {
   
@@ -50,18 +50,22 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
 
               CategoryDisplayGenericWidget(
                   response: response,
-                  selectedCategoryId: selectCategoryId,
+                  selectedCategoryIds: selectCategoryIds,
                   categories: categories,
                   onScrollFun: () {
                     final skip = ref.watch(authProvider.select((e)=>e.categoriesSkip)) ?? 0;
                     if(skip > 0){
                       ref.read(authProvider.notifier).getCategories(limit: 5, skip: skip);
                     }
-                    
+
                   },
                   onTap: (category) {
                     setState((){
-                      selectCategoryId = selectCategoryId == category.id ? -1 : category.id!; 
+                      if (selectCategoryIds.contains(category.id)) {
+                        selectCategoryIds.remove(category.id);
+                      } else {
+                        selectCategoryIds.add(category.id!);
+                      }
                     });
                   },
                   onRetryFun: () {
@@ -107,7 +111,7 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
     final String? text = _searchTextEditController.text.isEmpty ? null :  _searchTextEditController.text;
     ref
                 .read(productProvider.notifier)
-                .getProductfromDatabase(limit: 10, skip: skip, searchText: searchText ?? text, categoryId: selectCategoryId == -1? null : selectCategoryId);
+                .getProductfromDatabase(limit: 10, skip: skip, searchText: searchText ?? text, categoryId: selectCategoryIds.isEmpty ? null : selectCategoryIds);
   }
 
   @override

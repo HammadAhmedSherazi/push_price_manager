@@ -5,7 +5,7 @@ import '../export_all.dart';
 
 class CategoryDisplayGenericWidget extends StatefulWidget {
   final ApiResponse response;
-  final int selectedCategoryId;
+  final List<int>? selectedCategoryIds;
   final List<CategoryDataModel> categories;
   final Function(CategoryDataModel category) onTap;
   final VoidCallback onRetryFun;
@@ -14,7 +14,7 @@ class CategoryDisplayGenericWidget extends StatefulWidget {
   const CategoryDisplayGenericWidget({
     super.key,
     required this.response,
-    required this.selectedCategoryId,
+    required this.selectedCategoryIds,
     required this.categories,
     required this.onTap,
     required this.onRetryFun,
@@ -73,7 +73,7 @@ class _CategoryDisplayGenericWidgetState
           itemCount: widget.response.status == Status.loadingMore ? widget.categories.length + 1: widget.categories.length,
           itemBuilder: (context, index) {
             final category = widget.categories[index];
-            final isSelected = category.id == widget.selectedCategoryId;
+            final isSelected = widget.selectedCategoryIds?.contains(category.id) ?? false;
       
             return widget.response.status == Status.loadingMore && widget.categories.length == index ? CustomLoadingWidget(): GestureDetector(
               onTap: () => widget.onTap(category),

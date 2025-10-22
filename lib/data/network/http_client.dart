@@ -393,17 +393,36 @@ class MyHttpClient extends BaseApiServices {
   }
 
   // Query Parameters
-  String queryParameters(Map<String, dynamic>? params) {
-    if (params != null) {
-      final jsonString = Uri(
-        queryParameters: params.map(
-          (key, value) => MapEntry(key, value.toString()),
-        ),
-      );
-      return '?${jsonString.query}';
+  // String queryParameters(Map<String, dynamic>? params) {
+  //   if (params != null) {
+  //     final jsonString = Uri(
+  //       queryParameters: params.map(
+  //         (key, value) => MapEntry(key, value.toString()),
+  //       ),
+  //     );
+  //     return '?${jsonString.query}';
+  //   }
+  //   return '';
+  // }
+  String queryParameters(Map<String, dynamic> params) {
+  final query = <String>[];
+
+  params.forEach((key, value) {
+    if (value == null) return;
+
+    if (value is List) {
+      // Repeated keys for list values
+      for (var v in value) {
+        query.add('${Uri.encodeQueryComponent(key)}=${Uri.encodeQueryComponent(v.toString())}');
+      }
+    } else {
+      // Normal single key=value
+      query.add('${Uri.encodeQueryComponent(key)}=${Uri.encodeQueryComponent(value.toString())}');
     }
-    return '';
-  }
+  });
+
+  return query.isEmpty ? '' : '?${query.join('&')}';
+}
 
   dynamic returnResponse(http.Response response) {
     if (kDebugMode) {
