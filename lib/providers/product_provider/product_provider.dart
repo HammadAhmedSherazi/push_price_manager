@@ -583,7 +583,7 @@ class ProductProvider extends Notifier<ProductState> {
           currentDiscount: response['current_discount'],
           saveDiscountForFuture: response['save_discount_for_future'],
           autoApplyForNextBatch: response['auto_apply_for_next_batch'],
-          saveDiscountForListing: response['save_discount_for_listing'],
+          saveDiscountForListing: response['save_duration_for_listing'],
           dontResumeAutomatically: response['dont_resume_automatically'],
           resumeAutomatically: response['resume_automatically'],
           hourlyIncreasingDiscountPercent: response['hourly_increasing_discount'],

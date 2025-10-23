@@ -159,7 +159,7 @@ ListingModel.fromJson(Map<String, dynamic> json)
         'listing_id': listingId,
         'weighted_items_prices': weightedItemsPrices,
         'save_discount_for_future': saveDiscountForFuture,
-        'save_discount_for_listing': saveDiscountForListing,
+        'save_duration_for_listing': saveDiscountForListing,
         'store_id': storeId,
         'auto_apply_for_next_batch': autoApplyForNextBatch,
         'manager': manager.toJson(),
