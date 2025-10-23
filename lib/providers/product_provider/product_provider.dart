@@ -587,7 +587,7 @@ class ProductProvider extends Notifier<ProductState> {
           dontResumeAutomatically: response['dont_resume_automatically'],
           resumeAutomatically: response['resume_automatically'],
           hourlyIncreasingDiscountPercent: response['hourly_increasing_discount'],
-          goLiveDate: state.listItem!.saveDiscountForListing? DateTime.tryParse(response['go_live_date']) : null
+          goLiveDate: (response['save_duration_for_listing'] ?? false)? DateTime.tryParse(response['go_live_date']) : null
 
         );
 

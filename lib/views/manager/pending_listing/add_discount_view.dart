@@ -76,7 +76,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
       _dialyDiscountEditTextController = TextEditingController(
         text:
             widget.data.dailyIncreasingDiscountPercent != 0.0 &&
-                widget.data.saveDiscountForListing
+                widget.data.saveDiscountForFuture
             ? widget.data.dailyIncreasingDiscountPercent.toString()
             : null,
       );
