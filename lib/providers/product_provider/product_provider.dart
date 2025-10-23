@@ -47,12 +47,12 @@ class ProductProvider extends Notifier<ProductState> {
       );
     } else if (index == 1) {
       state = state.copyWith(
-        listItem: instantSale?state.listItem!.copyWith(dontResumeAutomatically: chk) :  state.listItem!.copyWith(saveDiscountForListing: chk),
+        listItem: instantSale?state.listItem!.copyWith(dontResumeAutomatically: chk, resumeAutomatically: state.listItem!.resumeAutomatically? false: null ) :  state.listItem!.copyWith(saveDiscountForListing: chk),
       );
     } else {
 
       state = state.copyWith(
-        listItem: instantSale? state.listItem!.copyWith(resumeAutomatically: chk, saveDiscountForFuture: chk? true: null, dontResumeAutomatically: chk ? true : null ) :state.listItem!.copyWith(autoApplyForNextBatch: chk, saveDiscountForFuture: chk? true: null, saveDiscountForListing: chk ? true : null ),
+        listItem: instantSale? state.listItem!.copyWith(resumeAutomatically: chk, saveDiscountForFuture: chk? true: null, dontResumeAutomatically: state.listItem!.dontResumeAutomatically? false : null ) :state.listItem!.copyWith(autoApplyForNextBatch: chk, saveDiscountForFuture: chk? true: null, saveDiscountForListing: chk ? true : null ),
       );
     }
   }
@@ -584,8 +584,10 @@ class ProductProvider extends Notifier<ProductState> {
           saveDiscountForFuture: response['save_discount_for_future'],
           autoApplyForNextBatch: response['auto_apply_for_next_batch'],
           saveDiscountForListing: response['save_discount_for_listing'],
+          dontResumeAutomatically: response['dont_resume_automatically'],
+          resumeAutomatically: response['resume_automatically'],
           hourlyIncreasingDiscountPercent: response['hourly_increasing_discount'],
-          goLiveDate: DateTime.tryParse(response['go_live_date'])
+          goLiveDate: state.listItem!.saveDiscountForListing? DateTime.tryParse(response['go_live_date']) : null
 
         );
 

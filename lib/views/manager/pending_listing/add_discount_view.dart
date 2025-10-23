@@ -43,9 +43,12 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
               item: widget.data,
             );
       } else {
-        ref
+        if(widget.data.saveDiscountForListing){
+          ref
             .read(productProvider.notifier)
             .setGoLiveDate(widget.data.goLiveDate);
+        }
+        
         ref.read(productProvider.notifier).setListItem(widget.data);
       }
     });
