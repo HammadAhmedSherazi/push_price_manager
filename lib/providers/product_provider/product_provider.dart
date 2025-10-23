@@ -52,7 +52,7 @@ class ProductProvider extends Notifier<ProductState> {
     } else {
 
       state = state.copyWith(
-        listItem: instantSale? state.listItem!.copyWith(resumeAutomatically: chk, saveDiscountForFuture: chk? true: null, dontResumeAutomatically: state.listItem!.dontResumeAutomatically? false : null ) :state.listItem!.copyWith(autoApplyForNextBatch: chk, saveDiscountForFuture: chk? true: null, saveDiscountForListing: chk ? true : null ),
+        listItem: instantSale? state.listItem!.copyWith(resumeAutomatically: chk,  dontResumeAutomatically: state.listItem!.dontResumeAutomatically? false : null ) :state.listItem!.copyWith(autoApplyForNextBatch: chk, saveDiscountForFuture: chk? true: null, saveDiscountForListing: chk ? true : null ),
       );
     }
   }

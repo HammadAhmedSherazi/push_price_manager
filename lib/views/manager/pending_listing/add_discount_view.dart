@@ -360,9 +360,8 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
                             ? item.resumeAutomatically
                             : item.autoApplyForNextBatch,
                         onChanged: (v) {
-                          if ((item.autoApplyForNextBatch ||
-                                  (widget.isInstant! &&
-                                      item.resumeAutomatically)) &&
+                          if (item.autoApplyForNextBatch && !widget.isInstant!
+                                  &&
                               index != 2) {
                             return;
                           }
