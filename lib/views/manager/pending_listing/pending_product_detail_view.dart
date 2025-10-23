@@ -54,7 +54,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                 },
               ),
             if (AppConstant.userType == UserType.employee &&
-                widget.data.status == "PENDING_MANAGER_REVIEW" || widget.data.status == "PENDING_MANAGER_DISCOUNT")
+               ( widget.data.status == "PENDING_MANAGER_REVIEW" || widget.data.status == "PENDING_MANAGER_DISCOUNT"))
               CustomButtonWidget(
                 title: context.tr("edit"),
                 onPressed: () {
@@ -68,7 +68,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                 },
               ),
             if (AppConstant.userType == UserType.manager &&
-                widget.data.status == "PENDING_MANAGER_REVIEW" || widget.data.status == "PENDING_MANAGER_DISCOUNT")
+                (widget.data.status == "PENDING_MANAGER_REVIEW" || widget.data.status == "PENDING_MANAGER_DISCOUNT"))
               CustomOutlineButtonWidget(
                 title: context.tr("edit"),
                 onPressed: () {

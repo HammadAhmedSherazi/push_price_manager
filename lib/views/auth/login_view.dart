@@ -11,7 +11,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  late final TextEditingController emailTextController;
+  late final TextEditingController userNameTextController;
   late final TextEditingController passwordTextController;
 
   @override
@@ -21,11 +21,11 @@ class _LoginViewState extends State<LoginView> {
     rememberMeCheck = sharedPref.getRemberMe() ?? false;
     sharedPref.clearAll();
     if(rememberMeCheck){
-      emailTextController = TextEditingController(text: sharedPref.getSavedEmail());
+      userNameTextController = TextEditingController(text: sharedPref.getSavedEmail());
       passwordTextController = TextEditingController(text: sharedPref.getSavedPassword());
     }
     else{
-       emailTextController = TextEditingController();
+       userNameTextController = TextEditingController();
        passwordTextController = TextEditingController();
     }
     super.initState();
@@ -99,9 +99,9 @@ class _LoginViewState extends State<LoginView> {
         
         childrens: [
           TextFormField(
-            controller: emailTextController,
+            controller: userNameTextController,
             keyboardType: TextInputType.emailAddress,
-            validator: (value) => value?.validateEmail(),
+            validator: (value) => value?.validateUsername(),
             onTapOutside: (event) {
         FocusScope.of(context).unfocus();
       },
@@ -111,8 +111,8 @@ class _LoginViewState extends State<LoginView> {
                 color: AppColors.secondaryColor,
               ),
       
-              labelText: context.tr("email"),
-              hintText: context.tr("enter_email_address"),
+              labelText: context.tr("username"),
+              hintText: context.tr("enter_username"),
             ),
           ),
           10.ph,
@@ -158,14 +158,14 @@ class _LoginViewState extends State<LoginView> {
                   final prefs = SharedPreferenceManager.sharedInstance;
                   if(rememberMeCheck){
                     
-                    prefs.storeEmail(emailTextController.text);
+                    prefs.storeEmail(userNameTextController.text);
                     prefs.storePass(passwordTextController.text);
                   }
                   else{
                     prefs.clearKey(prefs.email);
                     prefs.clearKey(prefs.pass);
                   }
-                  ref.read(authProvider.notifier).login(email: emailTextController.text.trim(), password: passwordTextController.text.trim());
+                  ref.read(authProvider.notifier).login(email: userNameTextController.text.trim(), password: passwordTextController.text.trim());
                 }
               });
             }

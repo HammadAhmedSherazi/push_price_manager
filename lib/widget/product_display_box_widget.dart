@@ -30,7 +30,7 @@ class ProductDisplayBoxWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(data.title, style: context.textStyle.displaySmall,),
+            Expanded(child: Text(data.title, style: context.textStyle.displaySmall, maxLines: 1,)),
           ],
         ),
         Row(

@@ -24,7 +24,7 @@ class AuthProvider  extends Notifier<AuthState> {
     try {
       state = state.copyWith(loginApiResponse: ApiResponse.loading());
       final response = await MyHttpClient.instance.post(ApiEndpoints.login, {
-  "email": email,
+  "username": email,
   "password": password
 }, isToken: false);
       if (!ref.mounted) return;
