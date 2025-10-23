@@ -32,7 +32,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
   // List<bool> values = [false, false, true];
   bool setDiscount = false;
   @override
-  void initState() {
+void initState() {
     Future.microtask(() {
       if (!widget.isLiveListing!) {
         ref
@@ -56,7 +56,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
     _currentDiscountEditTextController = TextEditingController(
       text:
           widget.data.currentDiscount != 0.0 &&
-              widget.data.saveDiscountForFuture
+             ( widget.data.saveDiscountForFuture || widget.isLiveListing!)
           ? widget.data.currentDiscount.toString()
           : null,
     );
@@ -64,7 +64,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
       _dialyDiscountEditTextController = TextEditingController(
         text:
             widget.data.hourlyIncreasingDiscountPercent != 0.0 &&
-                widget.data.saveDiscountForFuture
+                ( widget.data.saveDiscountForFuture || widget.isLiveListing!)
             ? widget.data.hourlyIncreasingDiscountPercent.toString()
             : null,
       );
@@ -76,7 +76,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
       _dialyDiscountEditTextController = TextEditingController(
         text:
             widget.data.dailyIncreasingDiscountPercent != 0.0 &&
-                widget.data.saveDiscountForFuture
+                ( widget.data.saveDiscountForFuture || widget.isLiveListing!)
             ? widget.data.dailyIncreasingDiscountPercent.toString()
             : null,
       );
@@ -89,7 +89,6 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
 
     super.initState();
   }
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
