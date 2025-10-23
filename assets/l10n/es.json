@@ -231,7 +231,9 @@
   "successfully_update_status": "¡Estado actualizado con éxito!",
   "successfully_login": "¡Inicio de sesión exitoso!",
   "please_login_again": "¡Por favor, inicie sesión nuevamente!",
-  "no_internet_connection": "Sin conexión a Internet"
+  "no_internet_connection": "Sin conexión a Internet",
+   "username": "Nombre de usuario",
+  "enter_username": "Ingrese el nombre de usuario"
 
 
 
