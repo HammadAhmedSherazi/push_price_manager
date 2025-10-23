@@ -1,7 +1,8 @@
 
 
-import '../export_all.dart';
 import 'package:intl/intl.dart';
+
+import '../export_all.dart';
 
 extension Spacing on num {
   SizedBox get ph => SizedBox(height: toDouble().h);
@@ -45,34 +46,34 @@ extension StringValidation on String {
 
   /// ✅ Username must be at least 3 characters & alphabets only
   String? validateUsername() {
-    if (trim().isEmpty) return 'Username is required';
-    if (trim().length < 3) return 'Username must be at least 3 characters';
+    if (trim().isEmpty) return AppRouter.navKey.currentContext!.tr('username_is_required');
+    if (trim().length < 3) return AppRouter.navKey.currentContext!.tr('username_must_be_at_least_3_characters');
     final regex = RegExp(r'^[A-Za-z\s]+$');
     if (!regex.hasMatch(trim())) {
-      return 'Username should only contain alphabets';
+      return AppRouter.navKey.currentContext!.tr('username_should_only_contain_alphabets');
     }
     return null;
   }
   String? validateGeneralField({required String fieldName, required int minStrLen }) {
     if (trim().isEmpty) return '$fieldName is required';
     if (trim().length < minStrLen) return '$fieldName must be at least $minStrLen characters';
-   
+
     return null;
   }
   
 
   /// ✅ Email validation
   String? validateEmail() {
-    if (trim().isEmpty) return 'Email is required';
+    if (trim().isEmpty) return AppRouter.navKey.currentContext!.tr('email_is_required');
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    if (!emailRegex.hasMatch(trim())) return 'Enter a valid email address';
+    if (!emailRegex.hasMatch(trim())) return AppRouter.navKey.currentContext!.tr('enter_a_valid_email_address');
     return null;
   }
 
   /// ✅ Password validation
   String? validatePassword() {
-    if (trim().isEmpty) return 'Password is required';
-    if (trim().length < 6) return 'Password must be at least 6 characters';
+    if (trim().isEmpty) return AppRouter.navKey.currentContext!.tr('password_is_required');
+    if (trim().length < 6) return AppRouter.navKey.currentContext!.tr('password_must_be_at_least_6_characters');
     // final hasLetter = contains(RegExp(r'[A-Za-z]'));
     // final hasNumber = contains(RegExp(r'[0-9]'));
     // if (!hasLetter || !hasNumber) {
@@ -83,36 +84,36 @@ extension StringValidation on String {
 
   /// ✅ Confirm password
   String? validateConfirmPassword(String originalPassword) {
-    if (trim().isEmpty) return 'Confirm password is required';
-    if (this != originalPassword) return 'Passwords do not match';
+    if (trim().isEmpty) return AppRouter.navKey.currentContext!.tr('confirm_password_is_required');
+    if (this != originalPassword) return AppRouter.navKey.currentContext!.tr('passwords_do_not_match');
     return null;
   }
 
   /// ✅ Phone number validation (accepts only digits, 10-15 length)
-  
+
   String? validatePhoneNumber() {
     final input = trim();
-    if (input.isEmpty) return 'Phone number is required';
+    if (input.isEmpty) return AppRouter.navKey.currentContext!.tr('phone_number_is_required');
 
     final regex = RegExp(r'^[0-9]{10,15}$'); // ✅ only 10–15 digits
     if (!regex.hasMatch(input)) {
-      return 'Enter a valid phone number (10-15 digits)';
+      return AppRouter.navKey.currentContext!.tr('enter_a_valid_phone_number_10_15_digits');
     }
     return null;
   }
   /// ✅ Weight validation
  String? validateWeight() {
-  if (trim().isEmpty) return 'Weight is required';
+  if (trim().isEmpty) return AppRouter.navKey.currentContext!.tr('weight_is_required');
 
   // ✅ Only numbers with optional decimal part
   final weightRegex = RegExp(r'^\d+(\.\d+)?$');
   if (!weightRegex.hasMatch(trim())) {
-    return 'Enter a valid weight (numbers only, e.g. 70 or 70.5)';
+    return AppRouter.navKey.currentContext!.tr('enter_a_valid_weight_numbers_only_e_g_70_or_70_5');
   }
 
   final value = double.tryParse(trim());
   if (value == null || value < 30 || value > 300) {
-    return 'Weight must be between 30 and 300';
+    return AppRouter.navKey.currentContext!.tr('weight_must_be_between_30_and_300');
   }
 
   return null;
@@ -120,33 +121,33 @@ extension StringValidation on String {
 
   /// ✅ Weight validation
 String? validateHeight() {
-  if (trim().isEmpty) return 'Height is required';
+  if (trim().isEmpty) return AppRouter.navKey.currentContext!.tr('height_is_required');
 
   final heightRegex = RegExp(r'^\d+(\.\d+)?$');
   if (!heightRegex.hasMatch(trim())) {
-    return 'Enter a valid height (e.g. 5.6)';
+    return AppRouter.navKey.currentContext!.tr('enter_a_valid_height_e_g_5_6');
   }
 
   final value = double.tryParse(trim());
   if (value == null || value < 3.0 || value > 8.0) {
-    return 'Height must be between 3.0 and 8.0 feet';
+    return AppRouter.navKey.currentContext!.tr('height_must_be_between_3_0_and_8_0_feet');
   }
 
   return null;
 }
 String? validateCurrentDiscount() {
   final value = double.tryParse(trim());
-  if (value == null) return 'Discount is required';
+  if (value == null) return AppRouter.navKey.currentContext!.tr('discount_is_required');
 
   // ✅ Ensure it’s within a reasonable range (0–100%)
   if (value < 0 || value > 100) {
-    return 'Discount must be between 0 and 100';
+    return AppRouter.navKey.currentContext!.tr('discount_must_be_between_0_and_100');
   }
 
   return null; // ✅ Valid discount
 }
 String? validateDate() {
-  if (trim().isEmpty) return 'Date is required';
+  if (trim().isEmpty) return AppRouter.navKey.currentContext!.tr('date_is_required');
 
   try {
     final date = DateTime.tryParse(trim());
@@ -157,16 +158,16 @@ String? validateDate() {
 
     // ✅ Optional: disallow past or unrealistic future dates
     if (date.isBefore(DateTime(now.year, now.month, now.day))) {
-      return 'Date cannot be in the past';
+      return AppRouter.navKey.currentContext!.tr('date_cannot_be_in_the_past');
     }
 
     if (date.isAfter(DateTime(now.year + 2))) {
-      return 'Date is too far in the future';
+      return AppRouter.navKey.currentContext!.tr('date_is_too_far_in_the_future');
     }
 
     return null; // ✅ Valid date
   } catch (e) {
-    return 'Enter a valid date (e.g. 2025-10-08)';
+    return AppRouter.navKey.currentContext!.tr('enter_a_valid_date');
   }
 }
 

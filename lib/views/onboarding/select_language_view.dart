@@ -36,7 +36,7 @@ class _SelectLanguageViewState extends ConsumerState<SelectLanguageView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SelectLanguageWidget(
-              title: "English (Default)",
+              title: context.tr("english_default"),
               icon: Assets.engFlagIcon,
               isSelect: lang == "en",
               onTap: () {
@@ -47,7 +47,7 @@ class _SelectLanguageViewState extends ConsumerState<SelectLanguageView> {
             ),
             10.ph,
             SelectLanguageWidget(
-              title: "Spanish",
+              title: context.tr("spanish"),
               icon: Assets.spainFlagIcon,
               isSelect: lang == "es",
               onTap: () {

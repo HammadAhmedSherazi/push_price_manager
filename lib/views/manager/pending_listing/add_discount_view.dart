@@ -256,7 +256,7 @@ class _AddDiscountViewState extends ConsumerState<AddDiscountView> {
             ),
           ),
 
-          title: "Add Discount",
+          title: context.tr("add_discount"),
           child: Form(
             key: _formKey,
             child: ListView(

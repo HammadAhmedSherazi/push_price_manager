@@ -227,7 +227,7 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
                           children: [
                             UserProfileWidget(radius: 45.r, imageUrl: user.profileImage),
                             5.ph,
-                            Text(user.username, style: context.textStyle.headlineMedium!.copyWith(fontSize: 18.sp)),
+                            Text(user.fullName, style: context.textStyle.headlineMedium!.copyWith(fontSize: 18.sp)),
                             Text(user.email, style: context.textStyle.bodyMedium),
                           ],
                         ),

@@ -89,40 +89,40 @@ _opacity = Tween<double>(begin: 0, end: 1).animate(
         ),
       ),
     ), 
-    SlideTransition(position: _imageOffset, child: FadeTransition(opacity: _opacity, child: RichText(
+SlideTransition(position: _imageOffset, child: FadeTransition(opacity: _opacity, child: RichText(
               textAlign: TextAlign.center,
   text: TextSpan(
-    
+
     style: context.textStyle.displayMedium!.copyWith(
       fontSize: 32.sp,
-      
+
     ),
-    
+
     children: [
-      TextSpan(text: "Let’s Find The "),
+      TextSpan(text: context.tr("lets_find_the")),
       TextSpan(
-        text: "Best",
+        text: context.tr("best"),
         style: context.textStyle.displayMedium!.copyWith(
           color: AppColors.secondaryColor,
           fontSize: 32.sp,
-      
+
     ),
       ),
-      TextSpan(text: " & "),
+      TextSpan(text: context.tr("and")),
       TextSpan(
-        text: "Healthy Grocery",
+        text: context.tr("healthy_grocery"),
         style: context.textStyle.displayMedium!.copyWith(
           color: AppColors.secondaryColor,
           fontSize: 32.sp,
-      
+
     ),
       ),
-     
+
     ],
   ),
 ),),),
-SlideTransition(position: _imageOffset, child: FadeTransition(opacity: _opacity, child: Text("Lorem ipsum dolor sit amet consectetur adipiscing elit odio, mattis quam tortor taciti aenean luctus nullam enim, dui praesent ad dapibus tempus natoque.", style: context.textStyle.titleMedium, textAlign: TextAlign.center,),
-           
+SlideTransition(position: _imageOffset, child: FadeTransition(opacity: _opacity, child: Text(context.tr("lorem_ipsum_description"), style: context.textStyle.titleMedium, textAlign: TextAlign.center,),
+
 ),),
              Spacer(),
             CustomButtonWidget(title: context.tr("get_started"), onPressed: (){

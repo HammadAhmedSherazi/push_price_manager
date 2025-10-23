@@ -69,7 +69,7 @@ class _ProfileViewState extends State<ProfileView> {
                       10.ph,
                         ProfileTitleWidget(
                           title: context.tr("name"),
-                          value: user.username,
+                          value: user.fullName,
                         ),
                        ProfileTitleWidget(
                           title: context.tr("email_address"),

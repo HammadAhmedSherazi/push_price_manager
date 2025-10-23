@@ -1,4 +1,5 @@
 import 'package:push_price_manager/utils/extension.dart';
+
 import '../../export_all.dart';
 
 class TutorialView extends StatefulWidget {
@@ -29,7 +30,7 @@ class _TutorialViewState extends State<TutorialView> {
             ),
             child: Image.asset(Assets.tutorilaGif),
           ),
-          Padding(padding: EdgeInsetsGeometry.all(20), child: Text("Lorem ipsum dolor sit amet consectetur adipiscing elit odio, mattis quam tortor taciti aenean luctus nullam enim, dui praesent ad dapibus tempus natoque a. Rh", textAlign: TextAlign.center ,style: context.textStyle.titleMedium ,),)
+          Padding(padding: EdgeInsets.all(20), child: Text(context.tr("tutorial_description"), textAlign: TextAlign.center ,style: context.textStyle.titleMedium ,),)
         ],
       ));
   }

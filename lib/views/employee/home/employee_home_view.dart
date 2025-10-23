@@ -46,7 +46,7 @@ class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
               Expanded(
                 child: Consumer(
                   builder: (context, ref, child) {
-                    final userName = ref.watch(authProvider.select((e)=>e.staffInfo))?.username ?? "";
+                    final userName = ref.watch(authProvider.select((e)=>e.staffInfo))?.fullName ?? "";
                     return Text(
                       userName.toUpperCase(),
                       style: context.textStyle.displayMedium,
