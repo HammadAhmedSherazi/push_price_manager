@@ -89,13 +89,15 @@ class AuthProvider  extends Notifier<AuthState> {
           getStoresApiRes: ApiResponse.completed(response),
         );
         List temp = response['assigned_stores'] ?? [];
+        final List<StoreSelectDataModel> tempStoreList = List.from(
+            temp.map((e) => StoreSelectDataModel.fromJson(e)),
+          );
         // if (temp.isNotEmpty) {
         state = state.copyWith(
           selectedStores: [],
           staffInfo: StaffModel.fromJson(response['staff_info'] ?? { "staff_id": 2, "username": "abcmanager", "email": "naheedmanager@example.com", "full_name": "Jerry Mick", "phone_number": "+15123123", "profile_image": "https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg", "role_type": "MANAGER", "chain_id": 1 } ),
-          myStores: List.from(
-            temp.map((e) => StoreSelectDataModel.fromJson(e)),
-          ),
+          myStores: tempStoreList,
+          stores: tempStoreList
         );
         // }
       } else {

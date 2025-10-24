@@ -55,7 +55,7 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
                 child: Consumer(
                   builder: (context, ref, child) {
-                    final data = ref.watch(authProvider.select((e)=>(e.staffInfo, e.myStores)));
+                    final data = ref.watch(authProvider.select((e)=>(e.staffInfo, e.stores)));
                     final user = data.$1!;
                     final stores = data.$2!;
                     return Column(

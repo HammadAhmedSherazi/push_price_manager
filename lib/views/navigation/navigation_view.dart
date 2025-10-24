@@ -115,6 +115,7 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
 
       MenuDataModel(title: context.tr("profile"), icon: Assets.menuProfileIcon, onTap: () {
         AppRouter.back();
+        ref.read(authProvider.notifier).getMyStores();
         ref.read(navigationProvider.notifier).setIndex(3);
       }),
       MenuDataModel(title: context.tr("settings"), icon: Assets.menuSettingIcon, onTap: () => AppRouter.push(SettingView())),
@@ -140,6 +141,7 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
       // }),
       MenuDataModel(title: context.tr("profile"), icon: Assets.menuProfileIcon, onTap: () {
         AppRouter.back();
+        ref.read(authProvider.notifier).getMyStores();
         ref.read(navigationProvider.notifier).setIndex(3);
       }),
       MenuDataModel(title: context.tr("settings"), icon: Assets.menuSettingIcon, onTap: () => AppRouter.push(SettingView())),
@@ -284,6 +286,9 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
             currentIndex: selectedIndex,
             onTap: (index) {
               ref.read(navigationProvider.notifier).setIndex(index);
+              if(index == 3){
+                 ref.read(authProvider.notifier).getMyStores();
+              }
             },
           );
         },

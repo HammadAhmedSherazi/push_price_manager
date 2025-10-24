@@ -8,6 +8,7 @@ class AuthState {
   final UserDataModel? userData;
   final List<StoreSelectDataModel>? myStores;
   final List<StoreSelectDataModel>? selectedStores;
+  final List<StoreSelectDataModel>? stores;
   final StaffModel? staffInfo;
   final List<CategoryDataModel>? categories;
   final int? categoriesSkip;
@@ -17,6 +18,7 @@ class AuthState {
     required this.getCategoriesApiResponse,
     this.userData,
     this.myStores,
+    this.stores,
     this.selectedStores,
     this.staffInfo,
     this.categories,
@@ -29,6 +31,7 @@ class AuthState {
     ApiResponse? getCategoriesApiResponse,
     UserDataModel? userData,
     List<StoreSelectDataModel>? myStores,
+    List<StoreSelectDataModel>? stores,
     List<StoreSelectDataModel>? selectedStores,
     StaffModel? staffInfo,
     List<CategoryDataModel>? categories,
@@ -40,6 +43,7 @@ class AuthState {
     userData: userData ?? this.userData,
     staffInfo: staffInfo ?? this.staffInfo,
     myStores: myStores ?? this.myStores,
+    stores: stores ?? this.stores,
     selectedStores: selectedStores ?? this.selectedStores,
     categories: categories ?? this.categories,
     categoriesSkip: categoriesSkip ?? this.categoriesSkip,
