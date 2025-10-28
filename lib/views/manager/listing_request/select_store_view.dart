@@ -244,12 +244,12 @@ class StoreCardWidget extends StatelessWidget {
             //   '4.0',
             //   style: context.textStyle.titleSmall!.copyWith(color: textColor),
             // ),
-            // Text(
-            //   data.storeLocation,
-            //   style: context.textStyle.titleSmall!.copyWith(color: textColor),
-            //   maxLines: 1,
-            //   textAlign: TextAlign.center,
-            // ),
+            Text(
+              data.storeLocation,
+              style: context.textStyle.titleSmall!.copyWith(color: textColor),
+              maxLines: 1,
+              textAlign: TextAlign.center,
+            ),
             Spacer(),
             data.isSelected
                 ? Expanded(

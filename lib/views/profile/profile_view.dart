@@ -72,15 +72,17 @@ class _ProfileViewState extends State<ProfileView> {
                           value: user.fullName,
                         ),
                        ProfileTitleWidget(
-                          title: context.tr("email_address"),
-                          value: user.email,
+                          title: context.tr("username"),
+                          value: user.username,
                         ),
                         ProfileTitleWidget(
                           title: context.tr("phone_number"),
                           value: user.phoneNumber,
                         ),
                         ProfileTitleWidget(
-                          title: AppConstant.userType == UserType.manager? context.tr("staff_id") : context.tr("employee_id"),
+                          title: 
+                          // AppConstant.userType == UserType.manager? context.tr("staff_id") :
+                           context.tr("employee_id"),
                           value: user.staffId.toString(),
                         ),
                         if(AppConstant.userType == UserType.manager)...[
