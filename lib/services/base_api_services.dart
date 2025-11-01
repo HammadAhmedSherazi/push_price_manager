@@ -1,6 +1,6 @@
 abstract class BaseApiServices {
   // //DEV URL
-  static String baseURL = "http://107.22.148.22:8000/";
+  static String baseURL = "https://appaice.com/";
   // static String baseURL =   "http://192.168.18.182:4001/graphql";
 
   // static String weatherAppId = "28a9b26783d5b53ed2f25d7dd7717889";

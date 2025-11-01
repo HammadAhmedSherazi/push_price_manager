@@ -23,7 +23,7 @@ class _ProfileViewState extends State<ProfileView> {
         height: double.infinity,
         child: Stack(
           // alignment: Alignment.center,
-          clipBehavior: Clip.none,
+          // clipBehavior: Clip.none,
           children: [
            
             SizedBox(
@@ -50,6 +50,7 @@ class _ProfileViewState extends State<ProfileView> {
               top: 200.h,
               child: Container(
                 width: context.screenwidth,
+                height: context.screenheight * 0.7,
                 padding: EdgeInsets.symmetric(
                   horizontal: AppTheme.horizontalPadding
                 ),
@@ -58,8 +59,12 @@ class _ProfileViewState extends State<ProfileView> {
                     final data = ref.watch(authProvider.select((e)=>(e.staffInfo, e.stores)));
                     final user = data.$1!;
                     final stores = data.$2!;
-                    return Column(
-                    mainAxisSize: MainAxisSize.min,
+                    return ListView(
+                      padding: EdgeInsets.zero.copyWith(
+                        bottom: 100.r
+                      ),
+                      physics: BouncingScrollPhysics(),
+                    // mainAxisSize: MainAxisSize.min,
                     children: [
                       Row(
                         children: [
@@ -98,7 +103,7 @@ class _ProfileViewState extends State<ProfileView> {
                       ProfileTitleWidget(title: context.tr("store_address"), value: stores[i].storeLocation, showOutline: false,),
                       ProfileTitleWidget(title: context.tr("operational_hours"), value: stores[i].storeOperationalHours, showOutline: false,),
                       
-
+                    
                      ]
                       
                                  
