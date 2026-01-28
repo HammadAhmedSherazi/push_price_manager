@@ -15,10 +15,12 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
 
   final ScrollController scrollController = ScrollController();
   final ScrollController drawerScrollController = ScrollController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+    AppRouter.registerScaffoldKey(_scaffoldKey);
 
     // scrollController.addListener(() {
     //   final direction = scrollController.position.userScrollDirection;
@@ -29,7 +31,13 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
     //   }
     // });
   }
-  
+
+  @override
+  void dispose() {
+    AppRouter.unregisterScaffoldKey(_scaffoldKey);
+    super.dispose();
+  }
+
   List<BottomDataModel> _getBottomNavItems(BuildContext context) {
     return AppConstant.userType == UserType.employee ? [
       BottomDataModel(title: context.tr("home"), icon: Assets.home, child: EmployeeHomeView(scrollController: scrollController ,)),
@@ -146,7 +154,7 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
       }),
       MenuDataModel(title: context.tr("settings"), icon: Assets.menuSettingIcon, onTap: () => AppRouter.push(SettingView())),
       MenuDataModel(title: context.tr("tutorial"), icon: Assets.menuTutorialIcon, onTap: () {
-        AppRouter.push(TutorialView());
+        AppRouter.push(TutorialView(isOnboarding: false));
       }),
       MenuDataModel(title: context.tr("help_and_feedback"), icon: Assets.menuHelpIcon, onTap: () => AppRouter.push(HelpFeedbackView())),
     ];
@@ -157,7 +165,7 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
     final menuData = _getMenuData(context);
     final bottomNavItems = _getBottomNavItems(context);
     return Scaffold(
-      key: AppRouter.scaffoldkey,
+      key: _scaffoldKey,
       drawerEnableOpenDragGesture: false,
       extendBody: true,
       drawer: SafeArea(
@@ -222,15 +230,15 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
                   Consumer(
                     builder: (context, ref, child) {
 
-                      final user = ref.watch(authProvider.select((e)=>e.staffInfo))!;
+                      final user = ref.watch(authProvider.select((e)=>e.staffInfo));
                       return Center(
                         child: Column(
                           spacing: 7,
                           children: [
-                            UserProfileWidget(radius: 45.r, imageUrl: user.profileImage),
+                            UserProfileWidget(radius: 45.r, imageUrl: user?.profileImage ?? ""),
                             5.ph,
-                            Text(user.fullName, style: context.textStyle.headlineMedium!.copyWith(fontSize: 18.sp)),
-                            Text(user.email, style: context.textStyle.bodyMedium),
+                            Text(user?.fullName ?? "----", style: context.textStyle.headlineMedium!.copyWith(fontSize: 18.sp)),
+                            Text(user?.email ?? "----", style: context.textStyle.bodyMedium),
                           ],
                         ),
                       );

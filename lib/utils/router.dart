@@ -3,7 +3,19 @@ import 'package:flutter/services.dart';
 
 class AppRouter {
   static GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
-  static  GlobalKey<ScaffoldState> scaffoldkey = GlobalKey();
+  static GlobalKey<ScaffoldState>? _scaffoldKey;
+
+  /// Current scaffold key - set by NavigationView when it mounts, cleared when it disposes.
+  /// Prevents "Duplicate GlobalKey" when multiple NavigationView instances exist briefly.
+  static GlobalKey<ScaffoldState>? get scaffoldkey => _scaffoldKey;
+
+  static void registerScaffoldKey(GlobalKey<ScaffoldState> key) {
+    _scaffoldKey = key;
+  }
+
+  static void unregisterScaffoldKey(GlobalKey<ScaffoldState> key) {
+    if (_scaffoldKey == key) _scaffoldKey = null;
+  }
 
   static void back() {
     Navigator.of(navKey.currentContext!).pop();

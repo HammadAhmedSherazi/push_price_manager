@@ -58,10 +58,10 @@ class CustomAppBarWidget extends StatelessWidget implements PreferredSize {
 
                           if (AppRouter
                                   .scaffoldkey
-                                  .currentState
+                                  ?.currentState
                                   ?.isDrawerOpen !=
                               true) {
-                            AppRouter.scaffoldkey.currentState?.openDrawer();
+                            AppRouter.scaffoldkey?.currentState?.openDrawer();
                           }
                         },
                         child: CircleAvatar(

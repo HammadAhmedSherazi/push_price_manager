@@ -1,10 +1,14 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:push_price_manager/utils/extension.dart';
 
 import '../../export_all.dart';
 
 class TutorialView extends StatefulWidget {
-  bool? isOnboarding;
-  TutorialView({super.key, this.isOnboarding = true});
+  final bool isOnboarding;
+  const TutorialView({
+    super.key,
+    this.isOnboarding = true,
+  });
 
   @override
   State<TutorialView> createState() => _TutorialViewState();
