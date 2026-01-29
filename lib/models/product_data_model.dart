@@ -29,18 +29,29 @@ class ProductDataModel {
 
   factory ProductDataModel.fromJson(Map<String, dynamic> json) {
     return ProductDataModel(
-      id: json['product_id'] ?? -1,
-      title: json['product_name'] ?? '',
-      description: json['product_description'] ?? '',
-      image: json['product_image'] ?? '',
-      price: (json['base_price'] as num?) ?? 0,
+      id: json['product_id'] ?? json['id'] ?? -1,
+      title: json['product_name'] ?? json['title'] ?? '',
+      description: json['product_description'] ?? json['description'] ?? '',
+      image: json['product_image'] ?? json['image'] ?? '',
+      price: (json['base_price'] as num?) ?? (json['price'] as num?) ?? 0,
       discounted_price: (json['discounted_price'] as num?) ?? 0,
 
-      category: json['category'] != null ? CategoryDataModel.fromJson(json['category']) : null,
-      chainId: json['chain_id'] ?? -1,
-      createdAt: DateTime.tryParse(json['created_at']) ?? DateTime.now(),
-      store: json['store']!= null ?StoreDataModel.fromJson(json['store']) :StoreDataModel(),
-      stores: json['stores'] != null ? (json['stores'] as List).map((e)=> StoreDataModel.fromJson(e)).toList() : []
+      category: json['category'] != null && json['category'] is Map<String, dynamic>
+          ? CategoryDataModel.fromJson(json['category'] as Map<String, dynamic>)
+          : null,
+      chainId: json['chain_id'] ?? json['chainId'],
+      createdAt: json['created_at'] != null && json['created_at'] != '' 
+          ? DateTime.tryParse(json['created_at'].toString()) 
+          : null,
+      store: json['store'] != null && json['store'] is Map<String, dynamic>
+          ? StoreDataModel.fromJson(json['store'] as Map<String, dynamic>)
+          : const StoreDataModel(),
+      stores: json['stores'] != null && json['stores'] is List
+          ? (json['stores'] as List)
+              .where((e) => e != null && e is Map<String, dynamic>)
+              .map((e) => StoreDataModel.fromJson(e as Map<String, dynamic>))
+              .toList()
+          : []
     );
   }
 

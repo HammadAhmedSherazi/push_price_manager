@@ -21,8 +21,8 @@ class StoreDataModel {
       storeName: json['store_name'] ?? '',
       storeLocation: json['store_location'] ?? '',
       storeOperationalHours: json['store_operational_hours'] ?? '',
-      assignedAt: json['assigned_at'] != null
-          ? DateTime.tryParse(json['assigned_at'])
+      assignedAt: json['assigned_at'] != null && json['assigned_at'] != ''
+          ? DateTime.tryParse(json['assigned_at'].toString())
           : null,
       chainId: json['chain_id'] ?? 0,
     );
@@ -56,8 +56,8 @@ class StoreSelectDataModel extends StoreDataModel {
       storeName: json['store_name'] ?? '',
       storeLocation: json['store_location'] ?? '',
       storeOperationalHours: json['store_operational_hours'] ?? '',
-      assignedAt: json['assigned_at'] != null
-          ? DateTime.tryParse(json['assigned_at'])
+      assignedAt: json['assigned_at'] != null && json['assigned_at'] != ''
+          ? DateTime.tryParse(json['assigned_at'].toString())
           : null,
       chainId: json['chain_id'] ?? 0,
       isSelected: false

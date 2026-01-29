@@ -22,8 +22,12 @@ class CategoryDataModel {
       title: json['category_name'] ?? json['title'] ?? '',
       icon: json['category_image_link'] ?? json['icon'] ?? '',
       chainId: json['chain_id'],
-      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
-      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
+      createdAt: json['created_at'] != null && json['created_at'] != '' 
+          ? DateTime.tryParse(json['created_at'].toString()) 
+          : null,
+      updatedAt: json['updated_at'] != null && json['updated_at'] != '' 
+          ? DateTime.tryParse(json['updated_at'].toString()) 
+          : null,
       isSelect: false
     );
   }

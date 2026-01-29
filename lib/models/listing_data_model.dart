@@ -29,7 +29,7 @@ class ListingModel {
   final bool autoApplyForNextBatch;
   final Manager manager;
   final StoreDataModel store;
-  final ProductDataModel? product;
+  final ProductDataModel product;
   final UserDataModel? employee;
  final List<CalenderDataModel> ? schedule;
   final List<StoreDataModel>? stores;
@@ -59,7 +59,7 @@ class ListingModel {
     this.autoApplyForNextBatch = false,
     this.manager = const Manager(),
     this.store = const StoreDataModel(),
-    this.product,
+    this.product = const ProductDataModel(title: '', description: '', image: '', price: 0),
     this.employee,
     this.saveDiscountForListing = false,
     this.stores = const [],
@@ -99,9 +99,11 @@ ListingModel.fromJson(Map<String, dynamic> json)
           ? DateTime.tryParse(json['go_live_date'])
           : null,
       listingId = json['listing_id'] ?? 0,
-      weightedItemsPrices = json['weighted_items_prices'] != null
+      weightedItemsPrices = json['weighted_items_prices'] != null && json['weighted_items_prices'] is List
           ? List.from(
-              (json['weighted_items_prices'] as List).map((e) => e.toDouble()))
+              (json['weighted_items_prices'] as List)
+                  .where((e) => e != null)
+                  .map((e) => (e as num).toDouble()))
           : [],
       saveDiscountForFuture = json['save_discount_for_future'] ?? false,
       saveDiscountForListing = json['save_duration_for_listing'] ?? false,
@@ -115,22 +117,29 @@ ListingModel.fromJson(Map<String, dynamic> json)
       store = json['store'] != null
           ? StoreDataModel.fromJson(json['store'])
           : const StoreDataModel(),
-      product = json['product'] != null
-          ? ProductDataModel.fromJson(json['product'])
-          : null,
+      product = json['product'] != null && json['product'] is Map<String, dynamic>
+          ? ProductDataModel.fromJson(json['product'] as Map<String, dynamic>)
+          : const ProductDataModel(
+              title: '',
+              description: '',
+              image: '',
+              price: 0,
+            ),
       employee = json['employee'] != null
           ? UserDataModel.fromJson(json['employee'])
           : null,
-    schedule = json['weekly_schedule'] != null
+    schedule = json['weekly_schedule'] != null && json['weekly_schedule'] is Map
     ? (json['weekly_schedule'] as Map<String, dynamic>)
     .entries
-    .where((entry) => entry.value != null)
+    .where((entry) => entry.value != null && entry.value is Map<String, dynamic>)
     .map((entry) =>
         CalenderDataModel.fromJson(entry.key, entry.value as Map<String, dynamic>))
     .toList()
-    : [],  stores = json['stores'] != null
-          ? List.from(
-              (json['stores'] as List).map((e) => StoreDataModel.fromJson(e)))
+    : [],  stores = json['stores'] != null && json['stores'] is List
+          ? (json['stores'] as List)
+              .where((e) => e != null && e is Map<String, dynamic>)
+              .map((e) => StoreDataModel.fromJson(e as Map<String, dynamic>))
+              .toList()
           : []
    
           ;
