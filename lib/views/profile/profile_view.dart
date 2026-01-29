@@ -90,7 +90,7 @@ class _ProfileViewState extends State<ProfileView> {
                            context.tr("employee_id"),
                           value: user.staffId.toString(),
                         ),
-                        if(AppConstant.userType == UserType.manager)...[
+                        if(AppConstant.userType == UserType.manager && stores.isNotEmpty)...[
                             10.ph,
                          Row(
                         children: [
@@ -108,7 +108,7 @@ class _ProfileViewState extends State<ProfileView> {
                       
                                  
                         ],
-                        if(AppConstant.userType == UserType.employee)...[
+                        if(AppConstant.userType == UserType.employee && stores.isNotEmpty)...[
                             ProfileTitleWidget(title: context.tr("store_branch_code_name"), value: stores.first.storeName),
                       ProfileTitleWidget(title: context.tr("store_address"), value: stores.first.storeLocation),
                       ProfileTitleWidget(title: context.tr("operational_hours"), value: stores.first.storeOperationalHours),
