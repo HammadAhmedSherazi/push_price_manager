@@ -1,6 +1,18 @@
 import 'export_all.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+Widget _getInitialChild(SharedPreferenceManager prefs, WidgetRef ref) {
+  final token = prefs.getToken();
+  final hasValidToken = token != null && token.isNotEmpty;
+  if (hasValidToken) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(authProvider.notifier).restoreUserFromCache();
+    });
+    return const NavigationView();
+  }
+  if (prefs.getStartedCheck()) return const LoginView();
+  return const OnboardingView();
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,7 +79,7 @@ class MyApp extends ConsumerWidget {
         );
       },
       useInheritedMediaQuery: true,
-      child: prefs.getStartedCheck()?LoginView() :OnboardingView(),
+      child: _getInitialChild(prefs, ref),
     );
   }
 }

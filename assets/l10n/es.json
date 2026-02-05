@@ -56,6 +56,8 @@
   "add_new_address": "Agregar nueva dirección",
   "logout": "Cerrar sesión",
   "are_you_sure_you_want_to_logout": "¿Está seguro de que desea cerrar sesión?",
+  "exit_app": "Salir de la aplicación",
+  "are_you_sure_to_exit_app": "¿Está seguro de que desea salir de la aplicación?",
   "cancel": "Cancelar",
   "my_favorites": "Mis favoritos",
   "my_orders": "Mis pedidos",

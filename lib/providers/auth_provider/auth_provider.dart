@@ -159,6 +159,17 @@ class AuthProvider  extends Notifier<AuthState> {
 
   }
 
+  /// Restore user from cache (e.g. on app reopen when token exists).
+  void restoreUserFromCache() {
+    final userData = SharedPreferenceManager.sharedInstance.getUserData();
+    if (userData == null || userData.isEmpty) return;
+    userSet();
+    if (state.userData != null) {
+      AppConstant.userType =
+          state.userData!.roleType == "EMPLOYEE" ? UserType.employee : UserType.manager;
+    }
+  }
+
   FutureOr<void> getCategories({
     required int limit,
     required int skip,

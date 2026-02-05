@@ -1,4 +1,4 @@
-
+import 'package:flutter/services.dart';
 import 'package:push_price_manager/utils/extension.dart';
 
 import '../../export_all.dart';
@@ -104,6 +104,55 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
     );
   }
 
+  void showExitAppDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          backgroundColor: const Color(0xFFF2F7FA),
+          child: Padding(
+            padding: EdgeInsets.all(AppTheme.horizontalPadding),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(context.tr('exit_app'), style: context.textStyle.displayMedium!.copyWith(fontSize: 18.sp)),
+                10.ph,
+                Text(
+                  context.tr('are_you_sure_to_exit_app'),
+                  textAlign: TextAlign.center,
+                  style: context.textStyle.bodyMedium!.copyWith(color: Colors.grey),
+                ),
+                30.ph,
+                Row(
+                  spacing: 20,
+                  children: [
+                    Expanded(
+                      child: CustomOutlineButtonWidget(
+                        title: context.tr("cancel"),
+                        onPressed: () => AppRouter.back(),
+                      ),
+                    ),
+                    Expanded(
+                      child: CustomButtonWidget(
+                        title: context.tr("exit_app"),
+                        onPressed: () {
+                          AppRouter.back();
+                          SystemNavigator.pop();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
  
 
   List<MenuDataModel> _getMenuData(BuildContext context) {
@@ -164,7 +213,13 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
   Widget build(BuildContext context) {
     final menuData = _getMenuData(context);
     final bottomNavItems = _getBottomNavItems(context);
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        showExitAppDialog(context);
+      },
+      child: Scaffold(
       key: _scaffoldKey,
       drawerEnableOpenDragGesture: false,
       extendBody: true,
@@ -312,6 +367,7 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
       //     },
       //   ),
       // ),
+    ),
     );
   }
 }
