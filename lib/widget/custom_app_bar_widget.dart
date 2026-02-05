@@ -83,19 +83,7 @@ class CustomAppBarWidget extends StatelessWidget implements PreferredSize {
                   ),
                 ),
 
-                SizedBox(
-                  width: context.screenwidth * 0.15,
-                  child: GestureDetector(
-                    onTap: () {
-                      AppRouter.push(NotificationView());
-                    },
-                    child: CircleAvatar(
-                      backgroundColor: Color.fromRGBO(234, 241, 255, 0.6),
-                      radius: 20.r,
-                      child: SvgPicture.asset(Assets.notificationIcon),
-                    ),
-                  ),
-                ),
+                SizedBox(width: context.screenwidth * 0.15),
               ],
             ),
             ...children,
