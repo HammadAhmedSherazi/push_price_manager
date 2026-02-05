@@ -56,10 +56,7 @@ class AuthProvider  extends Notifier<AuthState> {
     } catch (e) {
       if (!ref.mounted) return;
       // Show error message for exceptions
-      Helper.showMessage(
-        AppRouter.navKey.currentContext!,
-        message: AppRouter.navKey.currentContext!.tr("something_went_wrong_try_again"),
-      );
+    
       state = state.copyWith(loginApiResponse: ApiResponse.error());
     }
   }

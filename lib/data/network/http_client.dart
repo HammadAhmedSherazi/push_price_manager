@@ -461,6 +461,8 @@ class MyHttpClient extends BaseApiServices {
         
         Helper.showMessage( AppRouter.navKey.currentContext!,message: msg);
         
+
+        
         if(msg == "Invalid token"){
          if (SharedPreferenceManager.sharedInstance.getRefreshToken() != null &&
             SharedPreferenceManager.sharedInstance.getRefreshToken() != "") {
@@ -471,13 +473,11 @@ class MyHttpClient extends BaseApiServices {
           // SharedPreferenceManager.sharedInstance.clearRefreshToken();
           // SharedPreferenceManager.sharedInstance.clearToken();
           SharedPreferenceManager.sharedInstance.clearAll();
-
           AppRouter.pushAndRemoveUntil(const LoginView());
           Helper.showMessage( AppRouter.navKey.currentContext!,message: AppRouter.navKey.currentContext!.tr("please_login_again"));
         }
         else {
           SharedPreferenceManager.sharedInstance.clearAll();
-
           AppRouter.pushAndRemoveUntil(const LoginView());
           Helper.showMessage( AppRouter.navKey.currentContext!,message: AppRouter.navKey.currentContext!.tr("please_login_again"));
         } 
