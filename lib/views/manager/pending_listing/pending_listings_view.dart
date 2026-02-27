@@ -194,7 +194,7 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
     final list = AppConstant.userType == UserType.employee ? data.$3 : data.$4;
     return Scaffold(
       appBar: CustomAppBarWidget(
-        height: context.screenheight * 0.22,
+        height: 200,
         backgroundColor: Colors.transparent,
         radius: 0.0,
         title: AppConstant.userType == UserType.employee
@@ -204,96 +204,10 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
         children: [
           15.ph,
           Expanded(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 15.r, vertical: 8.r),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: AppColors.primaryAppBarColor,
-                borderRadius: BorderRadius.circular(30.r),
-              ),
-              child: Column(
-                spacing: 8,
-                children: [
-                  for (int i = 0; i < types.length; i += 2)
-                    Expanded(
-                      child: Row(
-                        spacing: 8,
-                        children: [
-                          // First item in the row
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                selectChip(i);
-                              },
-                              child: Container(
-                                // margin: EdgeInsets.only(bottom: 8),
-                                // padding: EdgeInsets.symmetric(vertical: 12),
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: selectIndex == i
-                                      ? AppColors.primaryColor
-                                      : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(30.r),
-                                  border: selectIndex == i
-                                      ? null
-                                      : Border.all(
-                                          color: AppColors.borderColor,
-                                        ),
-                                ),
-                                child: Text(
-                                  context.tr(types[i]),
-                                  style: selectIndex == i
-                                      ? context.textStyle.displaySmall!
-                                            .copyWith(color: Colors.white)
-                                      : context.textStyle.bodySmall!.copyWith(
-                                          color: AppColors.primaryTextColor,
-                                        ),
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          // Second item in the row (check if it exists)
-                          if (i + 1 < types.length)
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  selectChip(i + 1);
-                                },
-                                child: Container(
-                                  // margin: EdgeInsets.only(bottom: 8),
-                                  // padding: EdgeInsets.symmetric(vertical: 12),
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: selectIndex == i + 1
-                                        ? AppColors.primaryColor
-                                        : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(30.r),
-                                    border: selectIndex == i + 1
-                                        ? null
-                                        : Border.all(
-                                            color: AppColors.borderColor,
-                                          ),
-                                  ),
-                                  child: Text(
-                                    context.tr(types[i + 1]),
-                                    style: selectIndex == i + 1
-                                        ? context.textStyle.displaySmall!
-                                              .copyWith(color: Colors.white)
-                                        : context.textStyle.bodySmall!.copyWith(
-                                            color: AppColors.primaryTextColor,
-                                          ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          else
-                            Expanded(child: SizedBox()), // Filler if odd number
-                        ],
-                      ),
-                    ),
-                ],
-              ),
+            child: ProductTypeFilterChipsWidget(
+              types: types,
+              selectedIndex: selectIndex,
+              onSelect: selectChip,
             ),
           ),
         ],

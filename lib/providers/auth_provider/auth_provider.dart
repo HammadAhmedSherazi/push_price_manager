@@ -81,22 +81,20 @@ class AuthProvider  extends Notifier<AuthState> {
       if (!ref.mounted) return;
 
       // Add condition check
-      if (response != null && !(response is Map && response.containsKey('detail'))) {
+      if (response != null && response is Map && !response.containsKey('detail')) {
         state = state.copyWith(
           getStoresApiRes: ApiResponse.completed(response),
         );
-        List temp = response['assigned_stores'] ?? [];
-        final List<StoreSelectDataModel> tempStoreList = List.from(
-            temp.map((e) => StoreSelectDataModel.fromJson(e)),
-          );
-        // if (temp.isNotEmpty) {
+        final List temp = response['assigned_stores'] ?? [];
+        final List<StoreSelectDataModel> tempStoreList = temp.isNotEmpty
+            ? List.from(temp.map((e) => StoreSelectDataModel.fromJson(e)))
+            : [];
         state = state.copyWith(
           selectedStores: [],
           staffInfo: StaffModel.fromJson(response['staff_info'] ?? { "staff_id": 2, "username": "abcmanager", "email": "naheedmanager@example.com", "full_name": "Jerry Mick", "phone_number": "+15123123", "profile_image": "https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg", "role_type": "MANAGER", "chain_id": 1 } ),
           myStores: tempStoreList,
           stores: tempStoreList
         );
-        // }
       } else {
         // Show error message if condition is false
         Helper.showMessage(

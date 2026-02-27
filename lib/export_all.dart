@@ -90,6 +90,7 @@ export './widget/custom_error_widget.dart';
 export './widget/show_empty_item_diaplay_widget.dart';
 export './widget/time_range_selector_widget.dart';
 export './widget/category_display_generic_widget.dart';
+export './widget/product_type_filter_chips_widget.dart';
 
 //MODELS
 export './models/category_data_model.dart';
