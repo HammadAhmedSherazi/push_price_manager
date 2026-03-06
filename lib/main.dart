@@ -13,7 +13,7 @@ Widget _getInitialChild(SharedPreferenceManager prefs, WidgetRef ref) {
   if (prefs.getStartedCheck()) return const LoginView();
   return const OnboardingView();
 }
-
+//Hammad Dev
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
