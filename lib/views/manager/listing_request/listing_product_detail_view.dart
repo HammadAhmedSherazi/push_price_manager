@@ -87,10 +87,12 @@ class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailV
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      listItem.product!.title,
-                      style: context.textStyle.displayMedium!.copyWith(
-                        fontSize: 16.sp,
+                    Expanded(
+                      child: Text(
+                        listItem.product!.title,
+                        style: context.textStyle.displayMedium!.copyWith(
+                          fontSize: 16.sp,
+                        ),
                       ),
                     ),
                     // Text(data.createdAt!.toReadableString(), style: context.textStyle.bodySmall),

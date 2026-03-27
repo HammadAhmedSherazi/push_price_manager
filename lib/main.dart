@@ -32,6 +32,8 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentLocale = ref.watch(localeProvider);
     final prefs = SharedPreferenceManager.sharedInstance;
+     final hasSystemBottomInset = MediaQuery.viewPaddingOf(context).bottom > 0;
+       
     //Set the fit size (Find your UI design, look at the dimensions of the device screen and fill it in,unit in dp)
     return ScreenUtilInit(
       designSize: const Size(360, 690),
@@ -44,10 +46,8 @@ class MyApp extends ConsumerWidget {
           color: Colors.white,
           child: SafeArea(
             top: false,
-            bottom: false,
-            minimum: EdgeInsets.only(
-            bottom: MediaQuery.of(context).padding.bottom
-          ),
+            bottom: hasSystemBottomInset,
+            
             child: MaterialApp(
               navigatorKey: AppRouter.navKey,
               localizationsDelegates: const [

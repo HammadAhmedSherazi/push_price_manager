@@ -1,4 +1,5 @@
 
+import 'package:flutter/services.dart';
 import 'package:push_price_manager/utils/extension.dart';
 
 import '../../../export_all.dart';
@@ -61,6 +62,15 @@ class _ListingProductViewState extends State<ListingProductView> {
   void initState() {
     dateTextController = TextEditingController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    dateTextController?.dispose();
+    for (final controller in priceControllers) {
+      controller?.dispose();
+    }
+    super.dispose();
   }
 
   @override
@@ -203,6 +213,21 @@ class _ListingProductViewState extends State<ListingProductView> {
                       ...List.generate(
                         priceControllers.length,
                         (index) => TextFormField(
+                          controller: priceControllers[index],
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d*\.?\d*$'),
+                            ),
+                          ],
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter a price";
+                            }
+                            return null;
+                          },
                           onTapOutside: (event) {
                             FocusScope.of(context).unfocus();
                           },
@@ -287,6 +312,14 @@ class _ListingProductViewState extends State<ListingProductView> {
                       priceControllers.length,
                       (index) => TextFormField(
                         controller: priceControllers[index],
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d*\.?\d*$'),
+                          ),
+                        ],
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Please enter a price";
