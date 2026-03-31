@@ -176,7 +176,7 @@ class PendingListingSection extends ConsumerWidget {
                   },
                 );
               },
-              child: ProductDisplayBoxWidget(data: products[index].product!),
+              child: ProductDisplayBoxWidget(data: products[index].product),
             ),
           ),
         ),
@@ -268,7 +268,7 @@ class LiveListingSection extends StatelessWidget {
                     );
                   },
                   child: ProductDisplayBoxWidget(
-                    data: products[index].product!,
+                    data: products[index].product,
                   ),
                   //
                 ),

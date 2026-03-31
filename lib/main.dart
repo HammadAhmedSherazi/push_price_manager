@@ -32,8 +32,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentLocale = ref.watch(localeProvider);
     final prefs = SharedPreferenceManager.sharedInstance;
-     final hasSystemBottomInset = MediaQuery.viewPaddingOf(context).bottom > 0;
-       
+
     //Set the fit size (Find your UI design, look at the dimensions of the device screen and fill it in,unit in dp)
     return ScreenUtilInit(
       designSize: const Size(360, 690),
@@ -41,7 +40,9 @@ class MyApp extends ConsumerWidget {
       splitScreenMode: true,
     
       // Use builder only if you need to use library outside ScreenUtilInit context
-      builder: (_ , child) {
+      builder: (context, child) {
+        final hasSystemBottomInset =
+            (MediaQuery.maybeOf(context)?.viewPadding.bottom ?? 0) > 0;
         return Container(
           color: Colors.white,
           child: SafeArea(

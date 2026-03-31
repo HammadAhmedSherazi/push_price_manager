@@ -170,7 +170,7 @@ class _SeeAllProductViewState extends ConsumerState<SeeAllProductView> {
                   }
                 },
                 child: 
-                ProductDisplayBoxWidget(data: list[index].product!,)
+                ProductDisplayBoxWidget(data: list[index].product,)
               ),
             );
           },

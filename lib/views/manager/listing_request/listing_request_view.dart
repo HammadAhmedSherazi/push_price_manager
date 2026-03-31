@@ -127,19 +127,10 @@ class _ListingRequestViewState extends ConsumerState<ListingRequestView> {
       bottomButtonText: context.tr("scan"),
       onButtonTap: ()async{
                   final providerVM = ref.watch(productProvider);
-                  String? res = await SimpleBarcodeScanner.scanBarcode(
+                  String? res = await BarcodeScannerScreen.scan(
                       context,
-                      cameraFace: CameraFace.front,
-                      barcodeAppBar:  BarcodeAppBar(
-                        appBarTitle: "${context.tr("scan")} ${context.tr("barcode")}",
-                        centerTitle: false,
-                        enableBackButton: true,
-                        backButtonIcon: Icon(Icons.arrow_back_ios),
-                      ),
-                      isShowFlashIcon: true,
-                      delayMillis: 100,
-                      
-                   
+                      appBarTitle: "${context.tr("scan")} ${context.tr("barcode")}",
+                      showFlash: true,
                     );
                    
                     if(providerVM.getProductReponse.status != Status.loading && res != null){

@@ -271,7 +271,7 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                         },
                       );
                     },
-                    data: item.product!,
+                    data: item.product,
                   );
                 },
               ),

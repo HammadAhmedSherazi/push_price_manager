@@ -10,7 +10,8 @@ export 'package:fl_chart/fl_chart.dart';
 export 'dart:math';
 export 'package:shared_preferences/shared_preferences.dart';
 export 'package:flutter_riverpod/flutter_riverpod.dart';
-export 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
+export 'package:mobile_scanner/mobile_scanner.dart';
+export './widget/barcode_scanner_screen.dart';
 
 
 //VIEWS

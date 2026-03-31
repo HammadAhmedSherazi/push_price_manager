@@ -221,7 +221,7 @@ class _EmployeeListRequestViewState
                       AppRouter.push(
                         ListingProductDetailView(
                           isRequest: true,
-                          data: ListingModel(product: item.product!),
+                          data: ListingModel(product: item.product),
                         ),
                         fun: () {
                           fetchProduct(skip: 0);
@@ -234,7 +234,7 @@ class _EmployeeListRequestViewState
                       //   ),
                       // );
                     },
-                    data: item.product!,
+                    data: item.product,
                   );
                 },
               ),

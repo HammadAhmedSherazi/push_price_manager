@@ -10,7 +10,6 @@ class ScanView extends StatefulWidget {
 }
 
 class _ScanViewState extends State<ScanView> {
-   BarcodeViewController? controller;
   String result = '';
   @override
   Widget build(BuildContext context) {
@@ -31,19 +30,10 @@ class _ScanViewState extends State<ScanView> {
               final providerVM = ref.watch(productProvider);
               return GestureDetector(
                 onTap: ()async{
-                  String? res = await SimpleBarcodeScanner.scanBarcode(
+                  String? res = await BarcodeScannerScreen.scan(
                       context,
-                      cameraFace: CameraFace.front,
-                      barcodeAppBar: const BarcodeAppBar(
-                        appBarTitle: 'Test',
-                        centerTitle: false,
-                        enableBackButton: true,
-                        backButtonIcon: Icon(Icons.arrow_back_ios),
-                      ),
-                      isShowFlashIcon: true,
-                      delayMillis: 100,
-                      
-                   
+                      appBarTitle: 'Test',
+                      showFlash: true,
                     );
                    
                     if(providerVM.getProductReponse.status != Status.loading && res != null){

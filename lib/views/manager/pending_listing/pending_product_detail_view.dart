@@ -174,7 +174,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 DisplayNetworkImage(
-                  imageUrl: listItem.product!.image,
+                  imageUrl: listItem.product.image,
                   width: 60.r,
                   height: 60.r,
                 ),
@@ -192,7 +192,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      listItem.product!.title,
+                      listItem.product.title,
                       style: context.textStyle.displayMedium!.copyWith(
                         fontSize: 16.sp,
                       ),
@@ -206,7 +206,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                 10.ph,
                 ProductTitleWidget(
                   title: context.tr("category"),
-                  value: "${listItem.product?.category?.title}",
+                  value: "${listItem.product.category?.title}",
                 ),
                 ProductTitleWidget(
                   title: context.tr("store"),
@@ -218,7 +218,7 @@ class _PendingProductDetailViewState extends ConsumerState<PendingProductDetailV
                 // ),
                 ProductTitleWidget(
                   title: context.tr("regular_price"),
-                  value: "\$${listItem.product?.price?.toStringAsFixed(2)}",
+                  value: "\$${listItem.product.price?.toStringAsFixed(2)}",
                 ),
                 ProductTitleWidget(title: context.tr("listing_type"), value: Helper.getTypeTitle(listItem.listingType)),
                 if (type.toLowerCase().contains("best") ||

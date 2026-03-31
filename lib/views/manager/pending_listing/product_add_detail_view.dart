@@ -55,19 +55,19 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
   void initState() {
     selectType = widget.type;
     productTitleController = TextEditingController(
-      text: widget.data.product!.title,
+      text: widget.data.product.title,
     );
     productDescriptionController = TextEditingController(
-      text: widget.data.product!.description,
+      text: widget.data.product.description,
     );
     productPriceController = TextEditingController(
-      text: widget.data.product!.price!.toStringAsFixed(2),
+      text: widget.data.product.price!.toStringAsFixed(2),
     );
     storeTitleController = TextEditingController(
       text: widget.data.store.storeName,
     );
     productCategoryTitleController = TextEditingController(
-      text: widget.data.product?.category?.title,
+      text: widget.data.product.category?.title,
     );
     quantity = widget.data.quantity;
     bestByDate = widget.data.bestByDate;
@@ -242,7 +242,7 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   DisplayNetworkImage(
-                    imageUrl: widget.data.product!.image,
+                    imageUrl: widget.data.product.image,
                     width: 60.r,
                     height: 60.r,
                   ),

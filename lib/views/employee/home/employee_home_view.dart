@@ -174,7 +174,7 @@ class ListingRequestSection extends ConsumerWidget {
                     
                   );
                 },
-                child: ProductDisplayBoxWidget(data: item.product!),
+                child: ProductDisplayBoxWidget(data: item.product),
               );
             },
           ),
@@ -265,7 +265,7 @@ class ProductListingSection extends ConsumerWidget {
                     },
                   );
                 },
-                child: ProductDisplayBoxWidget(data: item.product!),
+                child: ProductDisplayBoxWidget(data: item.product),
               );
             },
           ),

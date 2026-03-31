@@ -29,7 +29,7 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
  List<InfoDataModel> getInfoList(String selectedType) {
   if (selectedType ==  "Best By Products") {
     return [
-      InfoDataModel(title: context.tr("discounted_price"), description: "\$${listData.product?.discounted_price}"),
+      InfoDataModel(title: context.tr("discounted_price"), description: "\$${listData.product.discounted_price}"),
 
       InfoDataModel(title: context.tr("listing_type"), description: selectedType),
       InfoDataModel(title: context.tr("best_by_date"), description: Helper.selectDateFormat(listData.bestByDate)),
@@ -41,7 +41,7 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
     ];
   } else if (selectedType == "Instant Sales") {
     return [
-      InfoDataModel(title: context.tr("discounted_price"), description: "\$${listData.product?.discounted_price}"),
+      InfoDataModel(title: context.tr("discounted_price"), description: "\$${listData.product.discounted_price}"),
       InfoDataModel(title: context.tr("listing_type"), description: selectedType),
       InfoDataModel(title: context.tr("product_quantity"), description: "${listData.quantity}"),
       InfoDataModel(title: context.tr("current_discount"), description: "${listData.currentDiscount}%"),
@@ -62,7 +62,7 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
      ];
   } else {
     return [
-      InfoDataModel(title: context.tr("discounted_price"), description: "\$${listData.product?.discounted_price}"),
+      InfoDataModel(title: context.tr("discounted_price"), description: "\$${listData.product.discounted_price}"),
       InfoDataModel(title: context.tr("listing_type"), description: selectedType),
       InfoDataModel(title: context.tr("product_quantity"), description: "${listData.quantity}"),
       InfoDataModel(title: context.tr("current_discount"), description: "${listData.currentDiscount}%"),
@@ -176,7 +176,7 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                DisplayNetworkImage(imageUrl: listData.product!.image, width: 60.r, height: 60.r,)
+                DisplayNetworkImage(imageUrl: listData.product.image, width: 60.r, height: 60.r,)
               ],
             ),
           ),
@@ -191,7 +191,7 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      listData.product!.title,
+                      listData.product.title,
                       style: context.textStyle.displayMedium!.copyWith(
                         fontSize: 16.sp,
                       ),
@@ -200,12 +200,12 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
                   ],
                 ),
                 10.ph,
-                ProductTitleWidget(title: context.tr("category"), value: "${listData.product?.category?.title}"),
+                ProductTitleWidget(title: context.tr("category"), value: "${listData.product.category?.title}"),
                 ProductTitleWidget(
                   title: context.tr("store"),
                   value: storeNames,
                 ),
-                ProductTitleWidget(title: context.tr("regular_price"), value: "\$${listData.product?.price}"),
+                ProductTitleWidget(title: context.tr("regular_price"), value: "\$${listData.product.price}"),
 
                 ...List.generate(getInfoList(Helper.getTypeTitle(listData.listingType)).length, (index)=> ProductTitleWidget(
                   title: getInfoList(Helper.getTypeTitle(listData.listingType))[index].title,

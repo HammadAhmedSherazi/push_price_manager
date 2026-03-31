@@ -25,7 +25,7 @@ class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailV
   Widget build(BuildContext context) {
     final listItem = ref.watch(productProvider.select((state) => state.listItem)) ?? widget.data ;
     
-    final storeNames = AppConstant.userType == UserType.employee? listItem.product!.store!.storeName: listItem.product!.stores!
+    final storeNames = AppConstant.userType == UserType.employee? listItem.product.store!.storeName: listItem.product.stores!
     .map((e) => e.storeName)
     .join(', ');
     return CustomScreenTemplate(
@@ -45,7 +45,7 @@ class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailV
         else{
           AppRouter.push(SelectListingTypeView(),settings: RouteSettings(
             arguments: {
-              "product_id": listItem.product!.id!
+              "product_id": listItem.product.id!
             }
           ));
         }
@@ -54,7 +54,7 @@ class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailV
        else{
          AppRouter.push(SelectListingTypeView(), settings: RouteSettings(
             arguments: {
-              "product_id": listItem.product!.id!
+              "product_id": listItem.product.id!
             }
           ));
        }
@@ -73,7 +73,7 @@ class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailV
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                DisplayNetworkImage(imageUrl: listItem.product!.image, height: 60.r, width: 60.r,),
+                DisplayNetworkImage(imageUrl: listItem.product.image, height: 60.r, width: 60.r,),
               ],
             ),
           ),
@@ -89,7 +89,7 @@ class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailV
                   children: [
                     Expanded(
                       child: Text(
-                        listItem.product!.title,
+                        listItem.product.title,
                         style: context.textStyle.displayMedium!.copyWith(
                           fontSize: 16.sp,
                         ),
@@ -99,13 +99,13 @@ class _ListingProductDetailViewState extends ConsumerState<ListingProductDetailV
                   ],
                 ),
                 10.ph,
-                 if(listItem.product!.stores!.isNotEmpty || listItem.product!.store!.storeName.isNotEmpty || (listItem.listingType != "" && listItem.store.storeName.isNotEmpty)  )...[ ProductTitleWidget(
+                 if(listItem.product.stores!.isNotEmpty || listItem.product.store!.storeName.isNotEmpty || (listItem.listingType != "" && listItem.store.storeName.isNotEmpty)  )...[ ProductTitleWidget(
                   title: context.tr("store"),
                   value:listItem.listingType != "" ?listItem.store.storeName :storeNames,
                 ),],
-                ProductTitleWidget(title: context.tr("category"), value: "${widget.data.product?.category?.title}"),
+                ProductTitleWidget(title: context.tr("category"), value: "${widget.data.product.category?.title}"),
                 
-                ProductTitleWidget(title: context.tr("regular_price"), value: "\$${widget.data.product?.price!.toStringAsFixed(2)}"),
+                ProductTitleWidget(title: context.tr("regular_price"), value: "\$${widget.data.product.price!.toStringAsFixed(2)}"),
 
                 if(listItem.listingType != "")...[
                   ProductTitleWidget(

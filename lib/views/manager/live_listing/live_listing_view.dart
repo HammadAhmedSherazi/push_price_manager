@@ -253,7 +253,7 @@ class _LiveListingViewState extends ConsumerState<LiveListingView> {
                 itemBuilder: (context, index) {
                   final item = providerVM.listLiveProducts![index];
                   return ProductDisplayWidget(
-                    data: item.product!,
+                    data: item.product,
                     onTap: () {
                       AppRouter.push(
                         ProductLiveListingDetailView(data: item),
