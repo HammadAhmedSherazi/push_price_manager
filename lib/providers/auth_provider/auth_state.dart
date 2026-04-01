@@ -5,6 +5,7 @@ class AuthState {
   final ApiResponse loginApiResponse;
   final ApiResponse getStoresApiRes;
   final ApiResponse getCategoriesApiResponse;
+  final ApiResponse submitFeedbackApiResponse;
   final UserDataModel? userData;
   final List<StoreSelectDataModel>? myStores;
   final List<StoreSelectDataModel>? selectedStores;
@@ -16,6 +17,7 @@ class AuthState {
     required this.loginApiResponse,
     required this.getStoresApiRes,
     required this.getCategoriesApiResponse,
+    required this.submitFeedbackApiResponse,
     this.userData,
     this.myStores,
     this.stores,
@@ -29,6 +31,7 @@ class AuthState {
     ApiResponse? loginApiResponse,
     ApiResponse? getStoresApiRes,
     ApiResponse? getCategoriesApiResponse,
+    ApiResponse? submitFeedbackApiResponse,
     UserDataModel? userData,
     List<StoreSelectDataModel>? myStores,
     List<StoreSelectDataModel>? stores,
@@ -40,6 +43,7 @@ class AuthState {
     loginApiResponse: loginApiResponse ?? this.loginApiResponse,
     getStoresApiRes:  getStoresApiRes ?? this.getStoresApiRes,
     getCategoriesApiResponse: getCategoriesApiResponse ?? this.getCategoriesApiResponse,
+    submitFeedbackApiResponse: submitFeedbackApiResponse ?? this.submitFeedbackApiResponse,
     userData: userData ?? this.userData,
     staffInfo: staffInfo ?? this.staffInfo,
     myStores: myStores ?? this.myStores,

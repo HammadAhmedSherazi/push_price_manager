@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:push_price_manager/data/network/api_response.dart';
 import 'package:push_price_manager/export_all.dart';
@@ -12,6 +13,7 @@ class AuthProvider  extends Notifier<AuthState> {
       loginApiResponse: ApiResponse.undertermined(),
       getStoresApiRes: ApiResponse.undertermined(),
       getCategoriesApiResponse: ApiResponse.undertermined(),
+      submitFeedbackApiResponse: ApiResponse.undertermined(),
       myStores: [],
       selectedStores: [],
       categories: [],
@@ -222,6 +224,96 @@ class AuthProvider  extends Notifier<AuthState> {
             : ApiResponse.undertermined(),
       );
     }
+  }
+
+   FutureOr<void> submitFeedback({
+    required String subject,
+    required String description,
+    List<File> images = const [],
+  }) async {
+    if (!ref.mounted) return;
+    try {
+      state = state.copyWith(
+        submitFeedbackApiResponse: ApiResponse.loading(),
+      );
+
+      List<File> filesToUpload = [];
+      if (images.isNotEmpty) {
+        for (final file in images) {
+          if (!ref.mounted) return;
+          final compressed = await Helper.compressImage(file);
+          if (compressed != null) {
+            filesToUpload.add(compressed);
+          } else {
+            if (!ref.mounted) return;
+            Helper.showMessage(
+              AppRouter.navKey.currentContext!,
+              message: AppRouter.navKey.currentContext!.tr(
+                "failed_to_compress_image",
+              ),
+            );
+            state = state.copyWith(
+              submitFeedbackApiResponse: ApiResponse.error(),
+            );
+            return;
+          }
+        }
+      }
+
+      if (!ref.mounted) return;
+
+      final body = <String, dynamic>{
+        "subject": subject,
+        "description": description,
+        "files": filesToUpload.isEmpty ? null : filesToUpload,
+      };
+      if (body["files"] == null) body.remove("files");
+
+      final response = await MyHttpClient.instance.post(
+        ApiEndpoints.feedbacks,
+        body,
+        isMultipartRequest: true,
+        variableName: "images",
+      );
+
+      if (!ref.mounted) return;
+
+      if (response != null &&
+          !(response is Map && response.containsKey('detail'))) {
+        state = state.copyWith(
+          submitFeedbackApiResponse: ApiResponse.completed(response),
+        );
+      } else {
+        Helper.showMessage(
+          AppRouter.navKey.currentContext!,
+          message: (response is Map && response.containsKey('detail'))
+              ? response['detail'] as String
+              : AppRouter.navKey.currentContext!.tr(
+                  "something_went_wrong_try_again",
+                ),
+        );
+        state = state.copyWith(
+          submitFeedbackApiResponse: ApiResponse.error(),
+        );
+      }
+    } catch (e) {
+      if (!ref.mounted) return;
+      Helper.showMessage(
+        AppRouter.navKey.currentContext!,
+        message: AppRouter.navKey.currentContext!.tr(
+          "something_went_wrong_try_again",
+        ),
+      );
+      state = state.copyWith(
+        submitFeedbackApiResponse: ApiResponse.error(),
+      );
+    }
+  }
+
+  void resetSubmitFeedbackResponse() {
+    state = state.copyWith(
+      submitFeedbackApiResponse: ApiResponse.undertermined(),
+    );
   }
 }
 final authProvider = NotifierProvider<AuthProvider, AuthState>(

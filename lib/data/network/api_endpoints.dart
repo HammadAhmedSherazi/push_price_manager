@@ -1,6 +1,8 @@
 class ApiEndpoints {
   static const String adminStaff = "admin/staff/";
+  static const String user = "users/";
   static const String login = "${adminStaff}login";
+  static const String feedbacks = "${user}feedbacks";
   static const String getProducts = "admin/products/";
   static const String getCatrgories = "${getProducts}categories";
   static const String getEmployeeDataBaseProducts = "${getProducts}employee-product-database";
