@@ -150,20 +150,21 @@ class AuthProvider  extends Notifier<AuthState> {
   }
 
   void userSet() {
-
-    Map<String, dynamic> userJson =
-        jsonDecode(SharedPreferenceManager.sharedInstance.getUserData()!);
-
-   state = state.copyWith(userData: UserDataModel.fromJson(userJson));
-
-
+    if (!ref.mounted) return;
+    final raw = SharedPreferenceManager.sharedInstance.getUserData();
+    if (raw == null || raw.isEmpty) return;
+    final Map<String, dynamic> userJson = jsonDecode(raw) as Map<String, dynamic>;
+    state = state.copyWith(userData: UserDataModel.fromJson(userJson));
   }
 
-  /// Restore user from cache (e.g. on app reopen when token exists).
+  /// Restore user from cache (cold start and optional resume refresh).
+  /// Safe to call when [Notifier]'s [ref] is still mounted.
   void restoreUserFromCache() {
+    if (!ref.mounted) return;
     final userData = SharedPreferenceManager.sharedInstance.getUserData();
     if (userData == null || userData.isEmpty) return;
     userSet();
+    if (!ref.mounted) return;
     if (state.userData != null) {
       AppConstant.userType =
           state.userData!.roleType == "EMPLOYEE" ? UserType.employee : UserType.manager;

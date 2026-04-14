@@ -190,10 +190,13 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      listData.product.title,
-                      style: context.textStyle.displayMedium!.copyWith(
-                        fontSize: 16.sp,
+                    Expanded(
+                      child: Text(
+                        listData.product.title,
+                        style: context.textStyle.displayMedium!.copyWith(
+                          fontSize: 16.sp,
+                        ),
+                   
                       ),
                     ),
                     // Text("Today 3:45pm", style: context.textStyle.bodySmall),
