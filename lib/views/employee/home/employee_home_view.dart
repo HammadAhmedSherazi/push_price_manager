@@ -27,7 +27,7 @@ class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBarWidget(
-        height: context.screenheight * 0.15,
+        height: context.homeAppBarHeight,
         title: context.tr("home"),
         children: [
           Row(
@@ -36,7 +36,7 @@ class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
                 builder: (context, ref, child) {
                   final userImage = ref.watch(authProvider.select((e)=>e.staffInfo))?.profileImage ?? "";
                   return UserProfileWidget(
-                    radius: 18.r,
+                    radius: 18,
                     imageUrl: userImage,
                     borderWidth: 1.4,
                   );
@@ -89,7 +89,7 @@ class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
 
         },
         child: ListView(
-          padding: EdgeInsets.all(AppTheme.horizontalPadding),
+          padding: context.tabScrollPadding,
           physics: AlwaysScrollableScrollPhysics(),
           controller: widget.scrollController,
           children: [ListingRequestSection(), 30.ph, ProductListingSection()],
@@ -149,7 +149,7 @@ class ListingRequestSection extends ConsumerWidget {
           ],
         ),
          SizedBox(
-          height: 125.h,
+          height: context.productCarouselHeight,
           child: AsyncStateHandler(
             padding: EdgeInsets.zero,
             status: response.status,
@@ -238,7 +238,7 @@ class ProductListingSection extends ConsumerWidget {
           ],
         ),
         SizedBox(
-          height: 125.h,
+          height: context.productCarouselHeight,
           child: AsyncStateHandler(
             padding: EdgeInsets.zero,
             status: response.status,

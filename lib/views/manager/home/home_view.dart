@@ -31,7 +31,7 @@ class _HomeViewConsumerState extends ConsumerState<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBarWidget(
-        height: context.screenheight * 0.15,
+        height: context.homeAppBarHeight,
         title: context.tr("home"),
         children: [
           Row(
@@ -43,7 +43,7 @@ class _HomeViewConsumerState extends ConsumerState<HomeView> {
                   )?.profileImage ?? "";
 
                   return UserProfileWidget(
-                    radius: 18.r,
+                    radius: 18,
                     imageUrl: userImage,
                     borderWidth: 1.4,
                   );
@@ -96,7 +96,7 @@ class _HomeViewConsumerState extends ConsumerState<HomeView> {
         },
         child: ListView(
           physics: AlwaysScrollableScrollPhysics(),
-          padding: EdgeInsets.all(AppTheme.horizontalPadding),
+          padding: context.tabScrollPadding,
           controller: widget.scrollController,
           children: [PendingListingSection(), 30.ph, LiveListingSection()],
         ),
@@ -153,7 +153,7 @@ class PendingListingSection extends ConsumerWidget {
           ],
         ),
         SizedBox(
-          height: 125.h,
+          height: context.productCarouselHeight,
           child: AsyncStateHandler(
             padding: EdgeInsets.zero,
             status: response.status,
@@ -245,7 +245,7 @@ class LiveListingSection extends StatelessWidget {
               ],
             ),
             SizedBox(
-              height: 125.h,
+              height: context.productCarouselHeight,
               child: AsyncStateHandler(
                 dataList: products,
                 status: response.status,

@@ -9,7 +9,7 @@ class StoreDisplayGenericWidget extends StatefulWidget {
   final List<StoreDataModel> stores;
   final Function(StoreDataModel store) onTap;
   final VoidCallback onRetryFun;
-  final VoidCallback? onScrollFun; // 👈 optional scroll callback
+  final VoidCallback? onScrollFun;
 
   const StoreDisplayGenericWidget({
     super.key,
@@ -51,51 +51,52 @@ class _StoreDisplayGenericWidgetState extends State<StoreDisplayGenericWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final itemWidth = context.isTablet ? context.responsiveWidth(0.10) : 80.w;
+
     return SizedBox(
-      height: 85.h,
+      height: context.isTablet ? 96.ih : 85.h,
       child: AsyncStateHandler(
         status: widget.response.status,
         dataList: widget.stores,
         onRetry: widget.onRetryFun,
         itemBuilder: null,
-        customSuccessWidget: GridView.builder(
-          controller: _scrollController, // 👈 added controller
-          padding: EdgeInsets.zero,
+        customSuccessWidget: ListView.separated(
+          controller: _scrollController,
           scrollDirection: Axis.horizontal,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1, // Single horizontal row
-            mainAxisSpacing: 2.r,
-            crossAxisSpacing: 5.r,
-            childAspectRatio: 1.2,
-          ),
+          padding: EdgeInsets.zero,
           itemCount: widget.stores.length,
+          separatorBuilder: (_, __) => SizedBox(width: 8.iw),
           itemBuilder: (context, index) {
             final store = widget.stores[index];
-            final isSelected = widget.selectedStoreIds.contains(store.storeId);
-      
-            return GestureDetector(
-              onTap: () => widget.onTap(store),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CircleAvatar(
-                    radius: 30.r,
-                    backgroundColor: isSelected
-                        ? null
-                        : AppColors.primaryAppBarColor,
-                    child: Image.asset(
-                      Assets.store,
-                      width: 40,
-                      height: 40,
+            final isSelected =
+                widget.selectedStoreIds.contains(store.storeId);
+
+            return SizedBox(
+              width: itemWidth,
+              child: GestureDetector(
+                onTap: () => widget.onTap(store),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CircleAvatar(
+                      radius: 28.iw,
+                      backgroundColor: isSelected
+                          ? null
+                          : AppColors.primaryAppBarColor,
+                      child: Image.asset(
+                        Assets.store,
+                        width: 36,
+                        height: 36,
+                      ),
                     ),
-                  ),
-                  Text(
-                    store.storeName,
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                    style: context.textStyle.bodyMedium,
-                  ),
-                ],
+                    Text(
+                      store.storeName,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      style: context.textStyle.bodyMedium,
+                    ),
+                  ],
+                ),
               ),
             );
           },

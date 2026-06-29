@@ -19,7 +19,7 @@ class _UserFavoriteProductDetailViewState extends State<UserFavoriteProductDetai
       children: [
         Container(
             padding: EdgeInsets.all(30.r),
-            height: context.screenheight * 0.18,
+            height: context.productDetailBannerHeight,
             color: AppColors.primaryAppBarColor,
             child: Image.asset(Assets.groceryBag),
           ),

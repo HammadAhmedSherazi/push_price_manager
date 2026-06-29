@@ -9,7 +9,8 @@ class OnboardingView extends StatefulWidget {
   State<OnboardingView> createState() => _OnboardingViewState();
 }
 
-class _OnboardingViewState extends State<OnboardingView> with SingleTickerProviderStateMixin{
+class _OnboardingViewState extends State<OnboardingView>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _logoOffset;
   late Animation<Offset> _imageOffset;
@@ -23,32 +24,19 @@ class _OnboardingViewState extends State<OnboardingView> with SingleTickerProvid
       duration: const Duration(milliseconds: 800),
     );
 
-    // _logoOffset = Tween<Offset>(
-    //   begin: const Offset(0, -0.5),
-    //   end: Offset.zero,
-    // ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+    _logoOffset = Tween<Offset>(
+      begin: const Offset(-1.0, 0.0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
-    // _imageOffset = Tween<Offset>(
-    //   begin: const Offset(0, 0.5),
-    //   end: Offset.zero,
-    // ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+    _imageOffset = Tween<Offset>(
+      begin: const Offset(-1.0, 0.0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
-    // _opacity = Tween<double>(begin: 0, end: 1).animate(
-    //   CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    // );
-  _logoOffset = Tween<Offset>(
-  begin: const Offset(-1.0, 0.0), // From left
-  end: Offset.zero,
-).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
-
-_imageOffset = Tween<Offset>(
-  begin: const Offset(-1.0, 0.0), // From left
-  end: Offset.zero,
-).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
-
-_opacity = Tween<double>(begin: 0, end: 1).animate(
-  CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-);
+    _opacity = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+    );
     _controller.forward();
   }
 
@@ -60,82 +48,113 @@ _opacity = Tween<double>(begin: 0, end: 1).animate(
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = context.isTablet;
+    final imageHeight = isTablet
+        ? min(context.screenheight * 0.28, 220.ih)
+        : 285.ih;
+    final titleFontSize = isTablet ? 24.sp : 32.sp;
+    final topPadding = isTablet ? 24.r : 50.r;
+
     return Scaffold(
-      
-      body: Container(
-        padding:  EdgeInsets.fromLTRB(AppTheme.horizontalPadding, 50.r, AppTheme.horizontalPadding, 10.r),
-        width: double.infinity,
-        height: double.infinity,
-        child: Column(
-          spacing: 10.h,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SlideTransition(
-      position: _logoOffset,
-      child: FadeTransition(
-        opacity: _opacity,
-        child: AppLogoWidget(),
-      ),
-    ),
-    SlideTransition(
-      position: _imageOffset,
-      child: FadeTransition(
-        opacity: _opacity,
-        child: Image.asset(
-          Assets.onBoardingImage,
-          width: double.infinity,
-          height: 285.r,
-          fit: BoxFit.cover,
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+            context.pageHorizontalPadding,
+            topPadding,
+            context.pageHorizontalPadding,
+            10.r,
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    spacing: 10.h,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SlideTransition(
+                        position: _logoOffset,
+                        child: FadeTransition(
+                          opacity: _opacity,
+                          child: const AppLogoWidget(),
+                        ),
+                      ),
+                      SlideTransition(
+                        position: _imageOffset,
+                        child: FadeTransition(
+                          opacity: _opacity,
+                          child: Image.asset(
+                            Assets.onBoardingImage,
+                            width: double.infinity,
+                            height: imageHeight,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                      SlideTransition(
+                        position: _imageOffset,
+                        child: FadeTransition(
+                          opacity: _opacity,
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              style: context.textStyle.displayMedium!.copyWith(
+                                fontSize: titleFontSize,
+                              ),
+                              children: [
+                                TextSpan(text: context.tr("lets_find_the")),
+                                TextSpan(
+                                  text: context.tr("best"),
+                                  style: context.textStyle.displayMedium!
+                                      .copyWith(
+                                    color: AppColors.secondaryColor,
+                                    fontSize: titleFontSize,
+                                  ),
+                                ),
+                                TextSpan(text: context.tr("and")),
+                                TextSpan(
+                                  text: context.tr("healthy_grocery"),
+                                  style: context.textStyle.displayMedium!
+                                      .copyWith(
+                                    color: AppColors.secondaryColor,
+                                    fontSize: titleFontSize,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      SlideTransition(
+                        position: _imageOffset,
+                        child: FadeTransition(
+                          opacity: _opacity,
+                          child: Text(
+                            context.tr("lorem_ipsum_description"),
+                            style: context.textStyle.titleMedium,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              12.ph,
+              CustomButtonWidget(
+                title: context.tr("get_started"),
+                onPressed: () {
+                  final prefs = SharedPreferenceManager.sharedInstance;
+                  prefs.storeGetStarted(true);
+                  AppRouter.pushReplacement(const SelectLanguageView());
+                },
+              ),
+            ],
+          ),
         ),
       ),
-    ), 
-SlideTransition(position: _imageOffset, child: FadeTransition(opacity: _opacity, child: RichText(
-              textAlign: TextAlign.center,
-  text: TextSpan(
-
-    style: context.textStyle.displayMedium!.copyWith(
-      fontSize: 32.sp,
-
-    ),
-
-    children: [
-      TextSpan(text: context.tr("lets_find_the")),
-      TextSpan(
-        text: context.tr("best"),
-        style: context.textStyle.displayMedium!.copyWith(
-          color: AppColors.secondaryColor,
-          fontSize: 32.sp,
-
-    ),
-      ),
-      TextSpan(text: context.tr("and")),
-      TextSpan(
-        text: context.tr("healthy_grocery"),
-        style: context.textStyle.displayMedium!.copyWith(
-          color: AppColors.secondaryColor,
-          fontSize: 32.sp,
-
-    ),
-      ),
-
-    ],
-  ),
-),),),
-SlideTransition(position: _imageOffset, child: FadeTransition(opacity: _opacity, child: Text(context.tr("lorem_ipsum_description"), style: context.textStyle.titleMedium, textAlign: TextAlign.center,),
-
-),),
-             Spacer(),
-            CustomButtonWidget(title: context.tr("get_started"), onPressed: (){
-              final prefs = SharedPreferenceManager.sharedInstance;
-               prefs.storeGetStarted(true);
-              AppRouter.pushReplacement(SelectLanguageView());
-              
-              
-            })
-
-          ],
-        ),
-      ) ,
     );
   }
 }

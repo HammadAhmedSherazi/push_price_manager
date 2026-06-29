@@ -1,5 +1,7 @@
 //PACKAGE
-export 'package:flutter_screenutil/flutter_screenutil.dart';
+export './utils/responsive.dart';
+export './utils/responsive_scope.dart';
+export './widget/responsive_layout_widget.dart';
 export 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 export 'package:flutter_svg/flutter_svg.dart';
 export 'package:cached_network_image/cached_network_image.dart';

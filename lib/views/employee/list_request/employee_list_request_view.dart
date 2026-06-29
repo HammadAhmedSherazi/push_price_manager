@@ -150,7 +150,7 @@ class _EmployeeListRequestViewState
     final providerVM = ref.watch(productProvider);
     return Scaffold(
       appBar: CustomAppBarWidget(
-        height: 200,
+        height: context.filterTabAppBarHeight,
         backgroundColor: Colors.transparent,
         radius: 0.0,
         title: context.tr("listing_requests"),
@@ -173,7 +173,7 @@ class _EmployeeListRequestViewState
           children: [
             Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: AppTheme.horizontalPadding,
+                horizontal: context.pageHorizontalPadding,
               ),
               child: CustomSearchBarWidget(
                 controller: _searchTextEditController,
@@ -211,9 +211,9 @@ class _EmployeeListRequestViewState
                   fetchProduct(skip: 0);
                 },
                 scrollController: _scrollController,
-                padding: EdgeInsets.all(
-                  AppTheme.horizontalPadding,
-                ).copyWith(bottom: 100.r),
+                padding: context.pagePadding.copyWith(
+                  bottom: context.scrollBottomPadding,
+                ),
                 itemBuilder: (context, index) {
                   final item = providerVM.listRequestproducts![index];
                   return ProductDisplayWidget(

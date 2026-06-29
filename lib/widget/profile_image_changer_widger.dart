@@ -96,9 +96,10 @@ class _ProfileImageChangerState extends State<ProfileImageChanger> {
       clipBehavior: Clip.none,
       children: [
 
-      widget.profileUrl == null ?  Container(
-          height: 108.r,
-          width: 108.r,
+      widget.profileUrl == null
+          ? Container(
+              height: 108.iw,
+              width: 108.iw,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
@@ -114,7 +115,7 @@ class _ProfileImageChangerState extends State<ProfileImageChanger> {
             ) ,
           ),
           
-        ) : UserProfileWidget(radius: 50.r, imageUrl: widget.profileUrl ?? ""),
+        ) : UserProfileWidget(radius: 50, imageUrl: widget.profileUrl ?? ""),
         
         Positioned(
           bottom: 0,
@@ -122,8 +123,8 @@ class _ProfileImageChangerState extends State<ProfileImageChanger> {
           child: GestureDetector(
             onTap: _pickImage,
             child: Container(
-              width: 40.r,
-              height: 40.r,
+              width: 40.iw,
+              height: 40.iw,
               decoration: BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
@@ -133,7 +134,11 @@ class _ProfileImageChangerState extends State<ProfileImageChanger> {
             ),
               ),
               
-              child:  Icon(Icons.camera_alt, color: AppColors.secondaryColor, size: 25.r,),
+              child: Icon(
+                Icons.camera_alt,
+                color: AppColors.secondaryColor,
+                size: 25.iw,
+              ),
             ),
           ),
         ),

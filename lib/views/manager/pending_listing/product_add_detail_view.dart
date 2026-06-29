@@ -236,15 +236,15 @@ class _ProductAddDetailViewState extends State<ProductAddDetailView> {
           children: [
             Container(
               padding: EdgeInsets.all(30.r),
-              height: context.screenheight * 0.18,
+              height: context.productDetailBannerHeight,
               color: AppColors.primaryAppBarColor,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   DisplayNetworkImage(
                     imageUrl: widget.data.product.image,
-                    width: 60.r,
-                    height: 60.r,
+                    width: 60,
+                    height: 60,
                   ),
                 ],
               ),

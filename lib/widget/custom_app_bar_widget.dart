@@ -2,7 +2,7 @@ import 'package:push_price_manager/utils/extension.dart';
 
 import '../export_all.dart';
 
-class CustomAppBarWidget extends StatelessWidget implements PreferredSize {
+class CustomAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final double height;
   final String title;
   final List<Widget> children;
@@ -20,73 +20,87 @@ class CustomAppBarWidget extends StatelessWidget implements PreferredSize {
 
   @override
   Widget build(BuildContext context) {
+    final actionSize = 40.iw;
+    final titleSideInset = actionSize + 8.iw;
+
     return PreferredSize(
       preferredSize: Size.fromHeight(height),
       child: Container(
         padding: EdgeInsets.only(
-          top: 40.r,
-          left: AppTheme.horizontalPadding,
-          right: AppTheme.horizontalPadding,
-          bottom: 20.r,
+          top: 32.ih,
+          left: context.pageHorizontalPadding,
+          right: context.pageHorizontalPadding,
+          bottom: context.isTablet ? 16.ih : 12.ih,
         ),
         width: double.infinity,
-        height: double.infinity,
-
+        height: height,
         decoration: BoxDecoration(
           color: backgroundColor ?? AppColors.primaryAppBarColor,
           borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(radius ?? 35.r),
+            bottom: Radius.circular(radius ?? 35.iw),
           ),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              children: [
-                SizedBox(
-                  width: context.screenwidth * 0.15,
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () async {
-                          // AppRouter.closeKeyboard();
-                          AppRouter.closeKeyboard();
-                          await Future.delayed(
-                            const Duration(milliseconds: 150),
-                          );
+            SizedBox(
+              height: actionSize,
+              child: Stack(
+                alignment: Alignment.center,
+                clipBehavior: Clip.none,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                      onTap: () async {
+                        AppRouter.closeKeyboard();
+                        await Future.delayed(
+                          const Duration(milliseconds: 150),
+                        );
 
-                          if (AppRouter
-                                  .scaffoldkey
-                                  ?.currentState
-                                  ?.isDrawerOpen !=
-                              true) {
-                            AppRouter.scaffoldkey?.currentState?.openDrawer();
-                          }
-                        },
-                        child: CircleAvatar(
-                          backgroundColor: Color.fromRGBO(234, 241, 255, 0.6),
-                          radius: 20.r,
-                          child: SvgPicture.asset(Assets.menuNavIcon),
-                        ),
+                        if (AppRouter
+                                .scaffoldkey
+                                ?.currentState
+                                ?.isDrawerOpen !=
+                            true) {
+                          AppRouter.scaffoldkey?.currentState?.openDrawer();
+                        }
+                      },
+                      child: CircleAvatar(
+                        backgroundColor:
+                            const Color.fromRGBO(234, 241, 255, 0.6),
+                        radius: 20.iw,
+                        child: SvgPicture.asset(Assets.menuNavIcon),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-
-                Expanded(
-                  child: Text(
-                    title,
-                    style: context.textStyle.displayMedium,
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: titleSideInset),
+                    child: Text(
+                      title,
+                      style: context.textStyle.displayMedium,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-
-                SizedBox(width: context.screenwidth * 0.15),
-              ],
+                  SizedBox(width: actionSize),
+                ],
+              ),
             ),
-            ...children,
+            if (children.isNotEmpty) ...[
+              SizedBox(height: 6.ih),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: children,
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
@@ -95,7 +109,4 @@ class CustomAppBarWidget extends StatelessWidget implements PreferredSize {
 
   @override
   Size get preferredSize => Size.fromHeight(height);
-
-  @override
-  Widget get child => throw UnimplementedError();
 }

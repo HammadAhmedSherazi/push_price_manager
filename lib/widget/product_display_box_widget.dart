@@ -18,13 +18,13 @@ class ProductDisplayBoxWidget extends StatelessWidget {
       vertical: 15.r
     ),
     height: double.infinity,
-    width: context.screenwidth * 0.35,
+    width: context.responsiveWidth(0.35),
     decoration: AppTheme.productBoxDecoration,
     child:  Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       spacing: 3,
       children: [
-        DisplayNetworkImage(imageUrl: data.image, width: 40.r, height: 40.r,),
+        DisplayNetworkImage(imageUrl: data.image, width: 40, height: 40),
         
         5.ph,
         Row(

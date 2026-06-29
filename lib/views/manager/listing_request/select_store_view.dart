@@ -115,7 +115,7 @@ class _SelectStoreViewState extends ConsumerState<SelectStoreView> {
             ),
             10.ph,
             SizedBox(
-              height: context.screenheight * 0.199,
+              height: context.productDetailBannerHeight,
               width: context.screenwidth,
               child: GridView.builder(
                 scrollDirection: Axis.horizontal,

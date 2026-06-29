@@ -25,7 +25,7 @@ class ProductDisplayWidget extends StatelessWidget {
       child: Row(
         spacing: 10,
         children: [
-          DisplayNetworkImage(imageUrl: data.image,width: 57.r, height: 57.r,),
+          DisplayNetworkImage(imageUrl: data.image, width: 57, height: 57),
           Expanded(child: Column(
             spacing: 10,
             crossAxisAlignment: CrossAxisAlignment.start,

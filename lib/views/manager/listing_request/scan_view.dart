@@ -43,7 +43,7 @@ class _ScanViewState extends State<ScanView> {
                               }
                 },
                 child: Container(
-                  height: context.screenheight * 0.42,
+            height: context.scanPreviewHeight,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20.r),

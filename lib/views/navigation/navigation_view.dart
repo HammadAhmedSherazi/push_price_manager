@@ -58,10 +58,15 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
       barrierDismissible: true,
       builder: (context) {
         return Dialog(
+          insetPadding: EdgeInsets.symmetric(
+            horizontal: context.isTablet ? 48 : 24,
+          ),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           backgroundColor: const Color(0xFFF2F7FA),
-          child: Padding(
-            padding: EdgeInsets.all(AppTheme.horizontalPadding),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: context.dialogMaxWidth),
+            child: Padding(
+            padding: EdgeInsets.all(context.pageHorizontalPadding),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -99,6 +104,7 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
               ],
             ),
           ),
+          ),
         );
       },
     );
@@ -110,10 +116,15 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
       barrierDismissible: true,
       builder: (context) {
         return Dialog(
+          insetPadding: EdgeInsets.symmetric(
+            horizontal: context.isTablet ? 48 : 24,
+          ),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           backgroundColor: const Color(0xFFF2F7FA),
-          child: Padding(
-            padding: EdgeInsets.all(AppTheme.horizontalPadding),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: context.dialogMaxWidth),
+            child: Padding(
+            padding: EdgeInsets.all(context.pageHorizontalPadding),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -147,6 +158,7 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
                 ),
               ],
             ),
+          ),
           ),
         );
       },
@@ -227,7 +239,7 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
         top: true,
         bottom: false,
         child: Drawer(
-          width: context.screenwidth * 0.8,
+          width: context.drawerWidth,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.horizontal(right: Radius.circular(30.r)),
           ),
@@ -240,13 +252,13 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
                 child: GestureDetector(
                   onTap: () => Navigator.pop(context),
                   child: Container(
-                    height: 30.r,
-                    width: 30.r,
+                    height: 30.iw,
+                    width: 30.iw,
                     decoration: BoxDecoration(
                       color: AppColors.secondaryColor,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(Icons.close, size: 18.r, color: Colors.white),
+                    child: Icon(Icons.close, size: 18.iw, color: Colors.white),
                   ),
                 ),
               ),
@@ -262,7 +274,7 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
                       borderRadius: BorderRadius.horizontal(right: Radius.circular(50.r)),
                     ),
                     height: 45.h,
-                    width: context.screenwidth * 0.48,
+                    width: context.responsiveWidth(0.48),
                     child: Row(
                       spacing: 20,
                       children: [
@@ -290,7 +302,7 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
                         child: Column(
                           spacing: 7,
                           children: [
-                            UserProfileWidget(radius: 45.r, imageUrl: user?.profileImage ?? ""),
+                            UserProfileWidget(radius: 45, imageUrl: user?.profileImage ?? ""),
                             5.ph,
                             Text(user?.fullName ?? "----", style: context.textStyle.headlineMedium!.copyWith(fontSize: 18.sp)),
                             Text(user?.email ?? "----", style: context.textStyle.bodyMedium),
@@ -300,7 +312,7 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
                     }
                   ),
                   SizedBox(
-                    height: context.screenheight * 0.48,
+                    height: context.responsiveHeight(0.48),
                     child: Scrollbar(
                       trackVisibility: true,
                       thumbVisibility: true,

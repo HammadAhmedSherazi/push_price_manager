@@ -171,12 +171,12 @@ class _ProductLiveListingDetailViewState extends ConsumerState<ProductLiveListin
         children: [
           Container(
             padding: EdgeInsets.all(30.r),
-            height: context.screenheight * 0.18,
+            height: context.productDetailBannerHeight,
             color: AppColors.primaryAppBarColor,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                DisplayNetworkImage(imageUrl: listData.product.image, width: 60.r, height: 60.r,)
+                DisplayNetworkImage(imageUrl: listData.product.image, width: 60, height: 60)
               ],
             ),
           ),

@@ -31,7 +31,6 @@ void syncUserTypeFromPrefs(SharedPreferenceManager prefs) {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferenceManager.init();
-  await ScreenUtil.ensureScreenSize();
 
   runApp(
     const ProviderScope(child: MyApp()),
@@ -113,52 +112,45 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    ResponsiveScope.update(context);
     final currentLocale = ref.watch(localeProvider);
     final prefs = SharedPreferenceManager.sharedInstance;
+    final hasSystemBottomInset =
+        (MediaQuery.maybeOf(context)?.viewPadding.bottom ?? 0) > 0;
 
-    return ScreenUtilInit(
-      designSize: const Size(360, 690),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: (context, child) {
-        final hasSystemBottomInset =
-            (MediaQuery.maybeOf(context)?.viewPadding.bottom ?? 0) > 0;
-        return Container(
-          color: Colors.white,
-          child: SafeArea(
-            top: false,
-            bottom: Platform.isAndroid ? hasSystemBottomInset : false,
-            child: MaterialApp(
-              navigatorKey: AppRouter.navKey,
-              localizationsDelegates: const [
-                LocalizationService.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: const [
-                Locale('en', ''),
-                Locale('es', ''),
-              ],
-              locale: currentLocale,
-              debugShowCheckedModeBanner: false,
-              title: 'Push Price Store',
-              theme: AppTheme.lightTheme,
-              builder: (context, child) {
-                return MediaQuery(
-                  data: MediaQuery.of(context).copyWith(
-                    textScaler: const TextScaler.linear(1.0),
-                  ),
-                  child: child!,
-                );
-              },
-              home: child,
-            ),
-          ),
-        );
-      },
-      useInheritedMediaQuery: true,
-      child: initialHomeFromPrefs(prefs),
+    return Container(
+      color: Colors.white,
+      child: SafeArea(
+        top: false,
+        bottom: Platform.isAndroid ? hasSystemBottomInset : false,
+        child: MaterialApp(
+          navigatorKey: AppRouter.navKey,
+          localizationsDelegates: const [
+            LocalizationService.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en', ''),
+            Locale('es', ''),
+          ],
+          locale: currentLocale,
+          debugShowCheckedModeBanner: false,
+          title: 'Push Price Store',
+          theme: AppTheme.lightTheme,
+          builder: (context, child) {
+            ResponsiveScope.update(context);
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(
+                textScaler: const TextScaler.linear(1.0),
+              ),
+              child: ResponsiveLayout(child: child!),
+            );
+          },
+          home: initialHomeFromPrefs(prefs),
+        ),
+      ),
     );
   }
 }

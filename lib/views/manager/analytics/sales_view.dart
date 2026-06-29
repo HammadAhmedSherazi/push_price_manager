@@ -190,7 +190,7 @@ class _SalesViewState extends State<SalesView> {
         ),
         20.ph,
         SizedBox(
-          height: context.screenheight * 0.25,
+          height: context.chartSectionHeight,
           width: double.infinity,
           child: LineChart(_buildChartData()),
         ),
@@ -247,7 +247,7 @@ class _SalesViewState extends State<SalesView> {
         ),
         20.ph,
         SizedBox(
-          height: context.screenheight * 0.25,
+          height: context.chartSectionHeight,
           width: double.infinity,
           child: FinancialChart(),
         ),

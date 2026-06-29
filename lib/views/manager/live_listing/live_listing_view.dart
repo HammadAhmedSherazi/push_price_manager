@@ -187,7 +187,7 @@ class _LiveListingViewState extends ConsumerState<LiveListingView> {
     final providerVM = ref.watch(productProvider);
     return Scaffold(
       appBar: CustomAppBarWidget(
-        height: 200,
+        height: context.filterTabAppBarHeight,
         backgroundColor: Colors.transparent,
         radius: 0.0,
         title: context.tr("live_listing_select_product"),
@@ -210,7 +210,7 @@ class _LiveListingViewState extends ConsumerState<LiveListingView> {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: AppTheme.horizontalPadding,
+                horizontal: context.pageHorizontalPadding,
               ),
               child: CustomSearchBarWidget(
                 hintText: context.tr("search_product"),
@@ -247,9 +247,9 @@ class _LiveListingViewState extends ConsumerState<LiveListingView> {
                 onRetry: () {
                   fetchProduct(skip: 0);
                 },
-                padding: EdgeInsets.all(
-                  AppTheme.horizontalPadding,
-                ).copyWith(bottom: 100.r),
+                padding: context.pagePadding.copyWith(
+                  bottom: context.scrollBottomPadding,
+                ),
                 itemBuilder: (context, index) {
                   final item = providerVM.listLiveProducts![index];
                   return ProductDisplayWidget(

@@ -24,6 +24,75 @@ extension ThemeExtension on BuildContext {
 
   double get screenwidth => MediaQuery.of(this).size.width;
   double get screenheight => MediaQuery.of(this).size.height;
+
+  bool get isTablet =>
+      MediaQuery.sizeOf(this).shortestSide >= Responsive.tabletBreakpoint;
+
+  bool get isLargeTablet =>
+      MediaQuery.sizeOf(this).shortestSide >= Responsive.largeTabletBreakpoint;
+
+  double get layoutWidth => screenwidth;
+
+  double responsiveWidth(double fraction) => screenwidth * fraction;
+
+  double responsiveHeight(double fraction) => screenheight * fraction;
+
+  int gridCrossAxisCount({int mobile = 3}) {
+    if (!isTablet) return mobile;
+    if (isLargeTablet) return mobile + 3;
+    return mobile + 2;
+  }
+
+  double get pageHorizontalPadding =>
+      isTablet ? 24.r : AppTheme.horizontalPadding;
+
+  double get drawerWidth {
+    if (!isTablet) return screenwidth * 0.8;
+    return min(420.0, screenwidth * 0.55);
+  }
+
+  double get dialogMaxWidth => isTablet ? 480.0 : double.infinity;
+
+  double get categoryItemWidth => responsiveWidth(isTablet ? 0.11 : 0.17);
+
+  double get homeAppBarHeight =>
+      responsiveHeight(isTablet ? 0.18 : 0.15);
+
+  double get filterTabAppBarHeight =>
+      responsiveHeight(isTablet ? 0.24 : 0.29);
+
+  double get tabAppBarTitleHeight =>
+      responsiveHeight(isTablet ? 0.14 : 0.12);
+
+  double get innerAppBarHeight =>
+      responsiveHeight(isTablet ? 0.14 : 0.12);
+
+  double get productDetailBannerHeight =>
+      responsiveHeight(isTablet ? 0.16 : 0.18);
+
+  double get scanPreviewHeight =>
+      responsiveHeight(isTablet ? 0.38 : 0.42);
+
+  double get tutorialImageHeight =>
+      responsiveHeight(isTablet ? 0.32 : 0.37);
+
+  double get chartSectionHeight =>
+      responsiveHeight(isTablet ? 0.22 : 0.25);
+
+  double get productCarouselHeight => isTablet ? 140.ih : 125.h;
+
+  EdgeInsets get pagePadding => EdgeInsets.all(pageHorizontalPadding);
+
+  EdgeInsets get tabScrollPadding =>
+      pagePadding.copyWith(bottom: scrollBottomPadding);
+
+  double get bottomNavBarHeight => 56.ih + 12.ih;
+
+  double get bottomNavBottomPadding =>
+      MediaQuery.viewPaddingOf(this).bottom + (isTablet ? 12.ih : 8.ih);
+
+  double get scrollBottomPadding =>
+      bottomNavBarHeight + bottomNavBottomPadding + 16.ih;
 }
 extension StringExtension on String {
   String toTitleCase() {

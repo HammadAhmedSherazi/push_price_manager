@@ -52,16 +52,19 @@ class AsyncStateHandler<T> extends StatelessWidget {
           ],
         );
       }
-      if(customSuccessWidget != null && itemBuilder == null){
-        return customSuccessWidget!;
+      if (itemBuilder == null) {
+        return customSuccessWidget ?? const SizedBox.shrink();
       }
 
       return  ListView.separated(
         scrollDirection: scrollDirection,
         controller: scrollController,
-        // shrinkWrap: true,
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: padding ?? const EdgeInsets.symmetric(horizontal: 16),
+        padding: padding ??
+            EdgeInsets.symmetric(
+              horizontal: context.pageHorizontalPadding,
+              vertical: 10.ih,
+            ),
         itemBuilder: (context, index) {
           if (status == Status.loadingMore && index == dataList.length) {
             return const CustomLoadingWidget();
@@ -69,11 +72,13 @@ class AsyncStateHandler<T> extends StatelessWidget {
             return itemBuilder!(context, index);
           }
         },
-        separatorBuilder: (context, index) =>scrollDirection == Axis.vertical ? const SizedBox(height: 16): 10.pw,
+        separatorBuilder: (context, index) => scrollDirection == Axis.vertical
+            ? const SizedBox(height: 16)
+            : SizedBox(width: context.isTablet ? 12.iw : 10.w),
         itemCount: status == Status.loadingMore ? dataList.length + 1 : dataList.length,
       );
     }
 
-    return const SizedBox.shrink(); // Fallback
+    return const SizedBox.shrink();
   }
 }

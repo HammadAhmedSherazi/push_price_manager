@@ -194,7 +194,7 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
     final list = AppConstant.userType == UserType.employee ? data.$3 : data.$4;
     return Scaffold(
       appBar: CustomAppBarWidget(
-        height: 200,
+        height: context.filterTabAppBarHeight,
         backgroundColor: Colors.transparent,
         radius: 0.0,
         title: AppConstant.userType == UserType.employee
@@ -220,7 +220,7 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: AppTheme.horizontalPadding,
+                horizontal: context.pageHorizontalPadding,
               ),
               child: CustomSearchBarWidget(
                 hintText: context.tr("search_product"),
@@ -257,9 +257,9 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
                   fetchProduct(skip: 0);
                 },
                 scrollController: _scrollController,
-                padding: EdgeInsets.all(
-                  AppTheme.horizontalPadding,
-                ).copyWith(bottom: 100.r),
+                padding: context.pagePadding.copyWith(
+                  bottom: context.scrollBottomPadding,
+                ),
                 itemBuilder: (context, index) {
                   final item = list[index];
                   return ProductDisplayWidget(

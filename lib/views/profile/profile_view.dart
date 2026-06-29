@@ -27,8 +27,8 @@ class _ProfileViewState extends State<ProfileView> {
           children: [
            
             SizedBox(
-              height:context.screenheight * 0.19 ,
-              child: CustomAppBarWidget(height: context.screenheight * 0.15, title: context.tr("profile"), children: [])),
+            height: context.tabAppBarTitleHeight,
+              child: CustomAppBarWidget(height: context.tabAppBarTitleHeight, title: context.tr("profile"), children: [])),
             Positioned(
               top: 90.r,
               child: SizedBox(
@@ -39,7 +39,7 @@ class _ProfileViewState extends State<ProfileView> {
                     Consumer(
                       builder: (context, ref, child) {
                         final image = ref.watch(authProvider.select((e)=>e.staffInfo!.profileImage));
-                        return UserProfileWidget(radius: 45.r, imageUrl:image,);
+                        return UserProfileWidget(radius: 45, imageUrl: image);
                       }
                     ),
                   ],
@@ -50,7 +50,7 @@ class _ProfileViewState extends State<ProfileView> {
               top: 200.h,
               child: Container(
                 width: context.screenwidth,
-                height: context.screenheight * 0.7,
+                height: context.responsiveHeight(context.isTablet ? 0.62 : 0.7),
                 padding: EdgeInsets.symmetric(
                   horizontal: AppTheme.horizontalPadding
                 ),

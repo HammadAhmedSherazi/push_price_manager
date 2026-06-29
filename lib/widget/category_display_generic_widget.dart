@@ -9,7 +9,7 @@ class CategoryDisplayGenericWidget extends StatefulWidget {
   final List<CategoryDataModel> categories;
   final Function(CategoryDataModel category) onTap;
   final VoidCallback onRetryFun;
-  final VoidCallback? onScrollFun; // 👈 optional scroll callback
+  final VoidCallback? onScrollFun;
 
   const CategoryDisplayGenericWidget({
     super.key,
@@ -34,7 +34,6 @@ class _CategoryDisplayGenericWidgetState
   void initState() {
     super.initState();
 
-    // 👇 Trigger callback when user scrolls near the end
     if (widget.onScrollFun != null) {
       _scrollController.addListener(() {
         if (_scrollController.position.pixels >=
@@ -53,51 +52,63 @@ class _CategoryDisplayGenericWidgetState
 
   @override
   Widget build(BuildContext context) {
+    final itemWidth = context.categoryItemWidth;
+    final itemCount = widget.response.status == Status.loadingMore
+        ? widget.categories.length + 1
+        : widget.categories.length;
+
     return SizedBox(
-      height: 85.h,
+      height: context.isTablet ? 96.ih : 85.h,
       child: AsyncStateHandler(
         status: widget.response.status,
         dataList: widget.categories,
         onRetry: widget.onRetryFun,
         itemBuilder: null,
-        customSuccessWidget: GridView.builder(
-          controller: _scrollController, // 👈 added controller
-          padding: EdgeInsets.zero,
+        customSuccessWidget: ListView.separated(
+          controller: _scrollController,
           scrollDirection: Axis.horizontal,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1, // Single horizontal row
-            mainAxisSpacing: 2.r,
-            crossAxisSpacing: 5.r,
-            childAspectRatio: 1.2,
-          ),
-          itemCount: widget.response.status == Status.loadingMore ? widget.categories.length + 1: widget.categories.length,
+          padding: EdgeInsets.zero,
+          itemCount: itemCount,
+          separatorBuilder: (_, __) => SizedBox(width: 8.iw),
           itemBuilder: (context, index) {
+            if (widget.response.status == Status.loadingMore &&
+                widget.categories.length == index) {
+              return SizedBox(
+                width: itemWidth,
+                child: const Center(child: CustomLoadingWidget()),
+              );
+            }
+
             final category = widget.categories[index];
-            final isSelected = widget.selectedCategoryIds?.contains(category.id) ?? false;
-      
-            return widget.response.status == Status.loadingMore && widget.categories.length == index ? CustomLoadingWidget(): GestureDetector(
-              onTap: () => widget.onTap(category),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CircleAvatar(
-                    radius: 30.r,
-                    backgroundColor: isSelected
-                        ? null
-                        : AppColors.primaryAppBarColor,
-                    child: DisplayNetworkImage(
-                      width: 30.r,
-                      height: 30.r,
-                      imageUrl: category.icon,
+            final isSelected =
+                widget.selectedCategoryIds?.contains(category.id) ?? false;
+
+            return SizedBox(
+              width: itemWidth,
+              child: GestureDetector(
+                onTap: () => widget.onTap(category),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CircleAvatar(
+                      radius: 28.iw,
+                      backgroundColor: isSelected
+                          ? null
+                          : AppColors.primaryAppBarColor,
+                      child: DisplayNetworkImage(
+                        width: 30,
+                        height: 30,
+                        imageUrl: category.icon,
+                      ),
                     ),
-                  ),
-                  Text(
-                    category.title,
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                    style: context.textStyle.bodyMedium,
-                  ),
-                ],
+                    Text(
+                      category.title,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      style: context.textStyle.bodyMedium,
+                    ),
+                  ],
+                ),
               ),
             );
           },

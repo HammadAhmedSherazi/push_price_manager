@@ -75,7 +75,7 @@ class _SelectProductViewState extends State<SelectProductView> {
             ),
             10.ph,
             SizedBox(
-              height: context.screenheight * 0.179,
+              height: context.productDetailBannerHeight,
               width: context.screenwidth,
               child: GridView.builder(
                 scrollDirection: Axis.horizontal,
