@@ -26,6 +26,7 @@ class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppBarWidget(
         height: context.homeAppBarHeight,
         title: context.tr("home"),
@@ -50,31 +51,35 @@ class _EmployeeHomeViewState extends ConsumerState<EmployeeHomeView> {
                     return Text(
                       userName.toUpperCase(),
                       style: context.textStyle.displayMedium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     );
                   }
                 ),
               ),
 
               CustomButtonWidget(
-                height: 30.h,
-                width: 112.w,
+                fitContent: true,
+                height: 30.ih,
                 title: "",
                 onPressed: () {
                   AppRouter.push(ListingRequestView());
                 },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.add),
-                    Expanded(
-                      child: Text(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.iw),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.add, size: 16.iw, color: Colors.white),
+                      4.pw,
+                      Text(
                         context.tr("list_product"),
                         style: context.textStyle.bodySmall!.copyWith(
                           color: Colors.white,
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],

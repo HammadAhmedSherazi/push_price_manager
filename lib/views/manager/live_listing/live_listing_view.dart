@@ -186,6 +186,7 @@ class _LiveListingViewState extends ConsumerState<LiveListingView> {
   Widget build(BuildContext context) {
     final providerVM = ref.watch(productProvider);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppBarWidget(
         height: context.filterTabAppBarHeight,
         backgroundColor: Colors.transparent,

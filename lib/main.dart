@@ -115,14 +115,13 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
     ResponsiveScope.update(context);
     final currentLocale = ref.watch(localeProvider);
     final prefs = SharedPreferenceManager.sharedInstance;
-    final hasSystemBottomInset =
-        (MediaQuery.maybeOf(context)?.viewPadding.bottom ?? 0) > 0;
+    final hasSystemBottomInset = MediaQuery.viewPaddingOf(context).bottom > 0;
 
     return Container(
       color: Colors.white,
       child: SafeArea(
         top: false,
-        bottom: Platform.isAndroid ? hasSystemBottomInset : false,
+        bottom: Platform.isIOS ? false : hasSystemBottomInset,
         child: MaterialApp(
           navigatorKey: AppRouter.navKey,
           localizationsDelegates: const [

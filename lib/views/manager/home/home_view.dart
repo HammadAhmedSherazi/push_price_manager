@@ -30,6 +30,7 @@ class _HomeViewConsumerState extends ConsumerState<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppBarWidget(
         height: context.homeAppBarHeight,
         title: context.tr("home"),
@@ -50,35 +51,43 @@ class _HomeViewConsumerState extends ConsumerState<HomeView> {
                 },
               ),
               10.pw,
-              Consumer(
-                builder: (context, ref, child) {
-                  final userName = ref.watch(
-                    authProvider.select((e) => e.staffInfo) ,
-                  )?.fullName ?? "";
-                  return Text(
-                    userName.toUpperCase(),
-                    style: context.textStyle.displayMedium,
-                  );
-                },
+              Expanded(
+                child: Consumer(
+                  builder: (context, ref, child) {
+                    final userName = ref.watch(
+                      authProvider.select((e) => e.staffInfo),
+                    )?.fullName ?? "";
+                    return Text(
+                      userName.toUpperCase(),
+                      style: context.textStyle.displayMedium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    );
+                  },
+                ),
               ),
-              Spacer(),
               CustomButtonWidget(
-                height: 30.h,
-                width: 120.w,
+                fitContent: true,
+                height: 30.ih,
                 title: "",
                 onPressed: () {
                   AppRouter.push(ListingRequestView());
                 },
-                child: Row(
-                  children: [
-                    Icon(Icons.add),
-                    Text(
-                      context.tr("listing_request"),
-                      style: context.textStyle.bodySmall!.copyWith(
-                        color: Colors.white,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.iw),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.add, size: 16.iw, color: Colors.white),
+                      4.pw,
+                      Text(
+                        context.tr("listing_request"),
+                        style: context.textStyle.bodySmall!.copyWith(
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],

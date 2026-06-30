@@ -193,6 +193,7 @@ class _PendingListingViewState extends ConsumerState<PendingListingView> {
         : data.$2;
     final list = AppConstant.userType == UserType.employee ? data.$3 : data.$4;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppBarWidget(
         height: context.filterTabAppBarHeight,
         backgroundColor: Colors.transparent,

@@ -34,6 +34,7 @@ class ResponsiveScope {
     if (!isTablet) {
       return _screenSize.width / Responsive.designWidth;
     }
+    // Full-width tablet: grow with screen but not as fast as raw width ratio.
     return sqrt(_screenSize.shortestSide / Responsive.designWidth);
   }
 

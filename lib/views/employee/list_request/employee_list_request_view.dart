@@ -149,6 +149,7 @@ class _EmployeeListRequestViewState
   Widget build(BuildContext context) {
     final providerVM = ref.watch(productProvider);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppBarWidget(
         height: context.filterTabAppBarHeight,
         backgroundColor: Colors.transparent,

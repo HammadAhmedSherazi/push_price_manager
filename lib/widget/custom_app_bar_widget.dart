@@ -27,10 +27,10 @@ class CustomAppBarWidget extends StatelessWidget implements PreferredSizeWidget 
       preferredSize: Size.fromHeight(height),
       child: Container(
         padding: EdgeInsets.only(
-          top: 32.ih,
+          top: 36.ih,
           left: context.pageHorizontalPadding,
           right: context.pageHorizontalPadding,
-          bottom: context.isTablet ? 16.ih : 12.ih,
+          bottom: context.isTablet ? 18.ih : 14.ih,
         ),
         width: double.infinity,
         height: height,
@@ -89,15 +89,12 @@ class CustomAppBarWidget extends StatelessWidget implements PreferredSizeWidget 
               ),
             ),
             if (children.isNotEmpty) ...[
-              SizedBox(height: 6.ih),
+              SizedBox(height: 8.ih),
               Expanded(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: children,
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: children,
                 ),
               ),
             ],

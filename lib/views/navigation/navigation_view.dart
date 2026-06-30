@@ -43,12 +43,12 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
       BottomDataModel(title: context.tr("home"), icon: Assets.home, child: EmployeeHomeView(scrollController: scrollController ,)),
       BottomDataModel(title: context.tr("listing_requests"), icon: Assets.productRequestIcon, child: EmployeeListRequestView(scrollController: scrollController,)),
       BottomDataModel(title: context.tr("product_listing"), icon: Assets.productListingIcon, child: PendingListingView(scrollController: scrollController,)),
-      BottomDataModel(title: context.tr("profile"), icon: Assets.profile, child: ProfileView()),
+      BottomDataModel(title: context.tr("profile"), icon: Assets.profile, child: const ProfileView(key: ValueKey('profile_tab'))),
     ] :[
       BottomDataModel(title: context.tr("home"), icon: Assets.home, child: HomeView(scrollController: scrollController ,)),
       BottomDataModel(title: context.tr("pending_listings"), icon: Assets.pendingListing, child: PendingListingView(scrollController: scrollController,)),
       BottomDataModel(title: context.tr("live_listings"), icon: Assets.liveListing, child: LiveListingView(scrollController: scrollController,)),
-      BottomDataModel(title: context.tr("profile"), icon: Assets.profile, child: ProfileView()),
+      BottomDataModel(title: context.tr("profile"), icon: Assets.profile, child: const ProfileView(key: ValueKey('profile_tab'))),
     ];
   }
 
@@ -233,6 +233,7 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
       },
       child: Scaffold(
       key: _scaffoldKey,
+      resizeToAvoidBottomInset: false,
       drawerEnableOpenDragGesture: false,
       extendBody: true,
       drawer: SafeArea(
@@ -349,7 +350,10 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
       body: Consumer(
         builder: (context, ref, child) {
           final selectedIndex = ref.watch(navigationProvider);
-          return bottomNavItems[selectedIndex].child;
+          return IndexedStack(
+            index: selectedIndex,
+            children: bottomNavItems.map((item) => item.child).toList(),
+          );
         },
       ),
 

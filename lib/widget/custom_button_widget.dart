@@ -14,6 +14,7 @@ class CustomButtonWidget extends StatelessWidget {
   final BoxBorder? border;
   final bool? isElevated;
   final bool? isEnabled;
+  final bool fitContent;
 
   const CustomButtonWidget(
       {super.key,
@@ -28,12 +29,13 @@ class CustomButtonWidget extends StatelessWidget {
       this.isLoad = false,
       this.radius,
       this.border,
-      this.width});
+      this.width,
+      this.fitContent = false});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width ?? double.infinity,
+      width: fitContent ? width : (width ?? double.infinity),
       decoration: BoxDecoration(
         border: border,
           color:  color == null ? context.colors.primary : null,
